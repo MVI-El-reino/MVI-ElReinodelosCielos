@@ -1,16 +1,21 @@
-// Variable global para almacenar todas las canciones en memoria
+// ==========================================
+// 1. VARIABLES GLOBALES DE MEMORIA
+// ==========================================
 let inventarioCanciones = [];
 let listaDominical = [];
 let cancionActualId = null; 
 let viendoListaDominical = false;
+let pasosActuales = 0; // Controla cuántos semitonos hemos subido o bajado
 
-// 1. Cargar las canciones en cuanto la página esté lista
+// ==========================================
+// 2. INICIALIZACIÓN Y LECTURA DE DATOS
+// ==========================================
 document.addEventListener('DOMContentLoaded', () => {
     fetch('canciones.json')
         .then(respuesta => respuesta.json())
         .then(datos => {
-            inventarioCanciones = datos; // Guardamos los datos del JSON
-            mostrarLista(inventarioCanciones); // Dibujamos la lista en pantalla
+            inventarioCanciones = datos;
+            mostrarLista(inventarioCanciones);
         })
         .catch(error => {
             console.error("Error al cargar el repertorio:", error);
@@ -18,7 +23,114 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 });
 
-// 2. Función para inyectar las canciones en el HTML
+// ==========================================
+// 3. MOTOR MATEMÁTICO DE TRANSPOSICIÓN MUSICAL
+// ==========================================
+function transponerNota(nota, pasos) {
+    const escala = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+    const equivalencias = {'Db':'C#', 'Eb':'D#', 'Gb':'F#', 'Ab':'G#', 'Bb':'A#'};
+    
+    // Convertimos bemoles a sostenidos para simplificar la matemática
+    let notaNormalizada = equivalencias[nota] || nota;
+    let indice = escala.indexOf(notaNormalizada);
+    
+    // Si no reconoce la nota (ej. un error de tipeo en el JSON), la devuelve igual
+    if (indice === -1) return nota; 
+    
+    let nuevoIndice = (indice + pasos) % 12;
+    if (nuevoIndice < 0) nuevoIndice += 12; // Manejo circular para negativos
+    
+    return escala[nuevoIndice];
+}
+
+function transponerAcordeStr(acordeCrudo, pasos) {
+    if (pasos === 0) return acordeCrudo;
+    // Expresión regular inteligente: Extrae solo la letra de la nota (A-G) y su alteración (# o b)
+    // Ignorando los sufijos como "m", "sus4", "7", etc.
+    const regexNota = /([A-G][#b]?)/g;
+    return acordeCrudo.replace(regexNota, (match) => transponerNota(match, pasos));
+}
+
+function transponerLetraCruda(letraCruda, pasos) {
+    if (pasos === 0) return letraCruda;
+    // Busca todo lo que esté entre corchetes y le aplica la transposición
+    const regexCorchetes = /\[([^\]]+)\]/g;
+    return letraCruda.replace(regexCorchetes, (match, acorde) => {
+        return `[${transponerAcordeStr(acorde, pasos)}]`;
+    });
+}
+
+// ==========================================
+// 4. MOTOR DE FORMATO VISUAL (ACORDES SOBRE LETRA)
+// ==========================================
+function procesarLetraYAcordes(letraCruda) {
+    const lineasCrudas = letraCruda.split('\n');
+    let htmlFinal = '';
+
+    lineasCrudas.forEach(lineaRaw => {
+        if (lineaRaw.trim() === "") {
+            htmlFinal += '<br>';
+            return;
+        }
+
+        if (lineaRaw.trim().startsWith('[') && lineaRaw.trim().endsWith(']')) {
+            htmlFinal += `<span class="marcador-seccion">${lineaRaw.trim()}</span>`;
+            return;
+        }
+
+        if (lineaRaw.includes('[')) {
+            let lineaAcordesHTML = '';
+            let lineaLetrasHTML = '';
+            let caracteresAcordes = 0;
+            let caracteresLetras = 0;
+
+            let partes = lineaRaw.split('[');
+
+            partes.forEach((parte, index) => {
+                if (index === 0) {
+                    lineaLetrasHTML += parte;
+                    caracteresLetras += parte.length;
+                } else {
+                    let subPartes = parte.split(']');
+                    let acorde = subPartes[0];
+                    let textoDespues = subPartes[1] || "";
+
+                    let espaciosFaltantes = caracteresLetras - caracteresAcordes;
+                    if (espaciosFaltantes > 0) {
+                        lineaAcordesHTML += ' '.repeat(espaciosFaltantes);
+                        caracteresAcordes += espaciosFaltantes;
+                    }
+
+                    lineaAcordesHTML += `<span class="acorde-formateado">${acorde}</span>`;
+                    caracteresAcordes += acorde.length;
+
+                    lineaLetrasHTML += textoDespues;
+                    caracteresLetras += textoDespues.length;
+                }
+            });
+
+            htmlFinal += `
+                <div class="bloque-linea">
+                    <pre class="linea-acordes">${lineaAcordesHTML}</pre>
+                    <pre class="linea-letras">${lineaLetrasHTML}</pre>
+                </div>`;
+        } else {
+            htmlFinal += `<div class="bloque-linea"><pre class="linea-letras">${lineaRaw}</pre></div>`;
+        }
+    });
+
+    return htmlFinal;
+}
+
+// ==========================================
+// 5. RENDERIZADO DE LA INTERFAZ
+// ==========================================
+function obtenerCancionActual() {
+    return viendoListaDominical 
+        ? listaDominical.find(c => c.id === cancionActualId) 
+        : inventarioCanciones.find(c => c.id === cancionActualId);
+}
+
 function mostrarLista(canciones, esListaDominical = false) {
     const contenedor = document.getElementById('contenedor-lista');
     contenedor.innerHTML = ''; 
@@ -34,18 +146,26 @@ function mostrarLista(canciones, esListaDominical = false) {
         li.style.cursor = 'pointer';
         li.dataset.id = cancion.id; 
 
-        // Si estamos viendo la lista dominical, agregamos el botón de borrar
         if (esListaDominical) {
             const btnEliminar = document.createElement('button');
             btnEliminar.textContent = "✖";
             btnEliminar.className = "btn-eliminar";
             
             btnEliminar.addEventListener('click', (e) => {
-                e.stopPropagation(); // Evita que se abra la canción al hacer clic en borrar
-                // Filtramos la lista para quitar esta canción
+                e.stopPropagation(); 
                 listaDominical = listaDominical.filter(c => c.id !== cancion.id);
-                mostrarLista(listaDominical, true); // Recargamos la vista
-                // Actualizamos el contador real (oculto en este momento)
+                mostrarLista(listaDominical, true); 
+                document.getElementById('btn-ver-lista').textContent = `Volver al Repertorio (${listaDominical.length})`;
+                
+                if (listaDominical.length === 0) {
+                    document.getElementById('btn-exportar-pdf').style.display = 'none';
+                    // Limpiamos visor si borramos la canción que estábamos viendo
+                    if(cancionActualId === cancion.id) {
+                        document.getElementById('titulo-cancion').textContent = 'Selecciona una alabanza';
+                        document.getElementById('controles-tono').style.display = 'none';
+                        document.getElementById('letra-cancion').innerHTML = '';
+                    }
+                }
             });
             li.appendChild(btnEliminar);
         }
@@ -57,132 +177,86 @@ function mostrarLista(canciones, esListaDominical = false) {
         contenedor.appendChild(li);
     });
 }
-// 3. El Motor de Búsqueda (Filtro en tiempo real)
-const buscador = document.getElementById('buscador');
 
-buscador.addEventListener('input', (evento) => {
-    // Convertimos lo que el usuario escribe a minúsculas para evitar errores de mayúsculas
-    const textoBusqueda = evento.target.value.toLowerCase();
-    
-    // Filtramos el arreglo original
-    const cancionesFiltradas = inventarioCanciones.filter(cancion => 
-        cancion.titulo.toLowerCase().includes(textoBusqueda)
-    );
-    
-    // Volvemos a dibujar la lista solo con los resultados que coinciden
-    mostrarLista(cancionesFiltradas);
-});
-
-// Variable para guardar el tono actual en pantalla (para la transposición futura)
-let tonoActualDesplegado = null;
-
-// 4. Función para mostrar la canción seleccionada (NUEVA VERSIÓN PROFESIONAL)
-function mostrarCancion(id) {
-    // 1. Buscamos la canción en nuestro arreglo en memoria
-    const cancion = inventarioCanciones.find(c => c.id === id);
+function renderizarVisorDerecho() {
+    const cancion = obtenerCancionActual();
     if (!cancion) return;
-    cancionActualId = id;
-    tonoActualDesplegado = cancion.tono_original; // Guardamos el tono inicial
 
-    // 2. Actualizamos la interfaz básica
+    // Transponemos el título del tono y la letra en base a los pasos actuales
+    let tonoMostrado = transponerAcordeStr(cancion.tono_original, pasosActuales);
+    let letraTranspuesta = transponerLetraCruda(cancion.letra, pasosActuales);
+
     document.getElementById('titulo-cancion').textContent = cancion.titulo;
     document.getElementById('controles-tono').style.display = 'flex';
-    document.getElementById('tono-actual').innerHTML = `Tono: <span style="color:#E67E22;">${cancion.tono_original}</span>`;
-    
-    // 3. Obtenemos el contenedor de la letra
-    const contenedorLetra = document.getElementById('letra-cancion');
-    contenedorLetra.innerHTML = ''; // Limpiamos lo anterior
-
-    // 4. EL ALGORITMO DE FORMATEO PROFESIONAL
-    // Dividimos la canción en líneas físicas
-    const lineasCrudas = cancion.letra.split('\n');
-    let htmlFinal = '';
-
-    lineasCrudas.forEach(lineaRaw => {
-        // A. Si es una línea vacía, agregamos un salto
-        if (lineaRaw.trim() === "") {
-            htmlFinal += '<br>';
-            return;
-        }
-
-        // B. Si es un marcador de sección (ej: [Intro]), lo estilizamos especial
-        if (lineaRaw.trim().startsWith('[') && lineaRaw.trim().endsWith(']')) {
-            htmlFinal += `<span class="marcador-seccion">${lineaRaw.trim()}</span>`;
-            return;
-        }
-
-        // C. Procesar línea con acordes intercalados (ej: [G]Dios está a[C]quí...)
-        if (lineaRaw.includes('[')) {
-            let lineaAcordesHTML = '';
-            let lineaLetrasHTML = '';
-            let indiceActualEnLetraLimpia = 0;
-
-            // Esta expresión regular busca pares de [Acorde]Texto
-            const regex = /\[([^\]]+)\]([^\[]*)/g;
-            let coincidencia;
-            let huboCoincidencias = false;
-
-            while ((coincidencia = regex.exec(lineaRaw)) !== null) {
-                huboCoincidencias = true;
-                const acorde = coincidencia[1]; // El texto dentro de []
-                const textoDespues = coincidencia[2]; // El texto hasta el siguiente [ o final
-
-                // Calculamos cuántos espacios necesitamos para alinear el acorde
-                // sobre la sílaba correcta de la línea de texto limpia.
-                // Usamos '\xa0' que es un "Non-breaking space" para garantizar alineación en HTML.
-                const espaciosNecesarios = Math.max(0, indiceActualEnLetraLimpia - lineaAcordesHTML.replace(/<[^>]*>/g, '').length);
-                lineaAcordesHTML += '\xa0'.repeat(espaciosNecesarios);
-
-                // Agregamos el acorde formateado en naranja
-                lineaAcordesHTML += `<span class="acorde-formateado">${acorde}</span>`;
-                
-                // Agregamos el texto a la línea de letra
-                lineaLetrasHTML += textoDespues;
-
-                // Actualizamos el índice de referencia
-                indiceActualEnLetraLimpia = lineaLetrasHTML.length;
-            }
-
-            // Si el regex no capturó todo (ej: si la línea empieza con texto antes del primer [), 
-            // este algoritmo necesita un pequeño ajuste manual aquí, pero para la estructura estándar 
-            // que me mostraste, funciona perfecto.
-            
-            // Construimos el bloque final de doble línea
-            htmlFinal += `
-                <div class="bloque-linea">
-                    <pre class="linea-acordes">${lineaAcordesHTML}</pre>
-                    <pre class="linea-letras">${lineaLetrasHTML}</pre>
-                </div>`;
-        
-        } else {
-            // D. Si es una línea de solo texto (sin acordes), la mostramos simple
-            htmlFinal += `<div class="bloque-linea"><pre class="linea-letras">${lineaRaw}</pre></div>`;
-        }
-    });
-
-    // 5. Inyectamos todo el HTML generado de una sola vez
-    contenedorLetra.innerHTML = htmlFinal;
+    document.getElementById('tono-actual').innerHTML = `Tono: <span style="color:#E67E22;">${tonoMostrado}</span>`;
+    document.getElementById('letra-cancion').innerHTML = procesarLetraYAcordes(letraTranspuesta);
 }
 
-// 5. Lógica para "Añadir a lista dominical"
+function mostrarCancion(id) {
+    cancionActualId = id; 
+    pasosActuales = 0; // Reseteamos la transposición al cambiar de canción
+    renderizarVisorDerecho();
+}
+
+// ==========================================
+// 6. EVENTOS DE BOTONES E INTERACTIVIDAD
+// ==========================================
+
+// Buscador
+document.getElementById('buscador').addEventListener('input', (evento) => {
+    const texto = evento.target.value.toLowerCase();
+    const filtradas = inventarioCanciones.filter(c => c.titulo.toLowerCase().includes(texto));
+    mostrarLista(filtradas, false);
+});
+
+// Botones de Transposición (+1 Tono / -1 Tono)
+document.getElementById('subir-tono').addEventListener('click', () => {
+    if (!cancionActualId) return;
+    if (viendoListaDominical) {
+        // Si estamos en la lista del domingo, guardamos el cambio permanentemente en el arreglo
+        let cancionGuardada = listaDominical.find(c => c.id === cancionActualId);
+        cancionGuardada.tono_original = transponerAcordeStr(cancionGuardada.tono_original, 1);
+        cancionGuardada.letra = transponerLetraCruda(cancionGuardada.letra, 1);
+    } else {
+        pasosActuales += 1;
+    }
+    renderizarVisorDerecho();
+});
+
+document.getElementById('bajar-tono').addEventListener('click', () => {
+    if (!cancionActualId) return;
+    if (viendoListaDominical) {
+        let cancionGuardada = listaDominical.find(c => c.id === cancionActualId);
+        cancionGuardada.tono_original = transponerAcordeStr(cancionGuardada.tono_original, -1);
+        cancionGuardada.letra = transponerLetraCruda(cancionGuardada.letra, -1);
+    } else {
+        pasosActuales -= 1;
+    }
+    renderizarVisorDerecho();
+});
+
+// Añadir a lista dominical
 const btnAgregar = document.getElementById('btn-agregar-lista');
 btnAgregar.addEventListener('click', () => {
-    if (cancionActualId === null) return;
+    if (cancionActualId === null || viendoListaDominical) return;
     
-    // Verificamos que no esté repetida
     const yaExiste = listaDominical.find(c => c.id === cancionActualId);
     if (!yaExiste) {
-        const cancion = inventarioCanciones.find(c => c.id === cancionActualId);
-        listaDominical.push(cancion);
+        const cancionBase = inventarioCanciones.find(c => c.id === cancionActualId);
         
-        // Actualizamos el texto del botón del encabezado
-        if (!viendoListaDominical) {
-            document.getElementById('btn-ver-lista').textContent = `Ver mi lista dominical (${listaDominical.length})`;
-        }
+        // Creamos una copia que guarda el tono exacto que el músico eligió en pantalla
+        const cancionClonada = {
+            id: cancionBase.id,
+            titulo: cancionBase.titulo,
+            tono_original: transponerAcordeStr(cancionBase.tono_original, pasosActuales),
+            letra: transponerLetraCruda(cancionBase.letra, pasosActuales)
+        };
         
-        // Pequeño efecto visual para confirmar
+        listaDominical.push(cancionClonada);
+        
+        document.getElementById('btn-ver-lista').textContent = `Ver mi lista dominical (${listaDominical.length})`;
         btnAgregar.textContent = "¡Añadida!";
-        btnAgregar.style.backgroundColor = "#2ecc71"; // Verde éxito
+        btnAgregar.style.backgroundColor = "#2ecc71"; 
         setTimeout(() => {
             btnAgregar.textContent = "Añadir a lista dominical";
             btnAgregar.style.backgroundColor = "var(--dorado)";
@@ -192,29 +266,65 @@ btnAgregar.addEventListener('click', () => {
     }
 });
 
-// 6. Lógica para alternar vistas (Repertorio vs Lista Dominical)
+// Alternar entre Repertorio Global y Lista Dominical
 const btnVerLista = document.getElementById('btn-ver-lista');
+const btnExportarPDF = document.getElementById('btn-exportar-pdf');
+
 btnVerLista.addEventListener('click', () => {
-    viendoListaDominical = !viendoListaDominical; // Cambiamos el interruptor
+    viendoListaDominical = !viendoListaDominical; 
     const tituloSeccion = document.querySelector('#lista-canciones h2');
     
     if (viendoListaDominical) {
-        // Entramos a modo Lista Dominical
-        btnVerLista.textContent = "Volver al Repertorio";
+        btnVerLista.textContent = `Volver al Repertorio (${listaDominical.length})`;
         btnVerLista.style.backgroundColor = "var(--blanco)";
         tituloSeccion.textContent = "Mi Lista Dominical";
+        btnAgregar.style.display = 'none'; // Ocultar botón de añadir
         mostrarLista(listaDominical, true);
+        
+        if(listaDominical.length > 0 && btnExportarPDF) btnExportarPDF.style.display = 'inline-block';
+        
     } else {
-        // Volvemos al Repertorio normal
         btnVerLista.textContent = `Ver mi lista dominical (${listaDominical.length})`;
         btnVerLista.style.backgroundColor = "var(--dorado)";
         tituloSeccion.textContent = "Repertorio Disponible";
+        btnAgregar.style.display = 'inline-block'; // Mostrar botón de añadir
+        if (btnExportarPDF) btnExportarPDF.style.display = 'none';
         
-        // Respetamos lo que haya en el buscador al volver
         const textoBusqueda = document.getElementById('buscador').value.toLowerCase();
-        const cancionesFiltradas = inventarioCanciones.filter(cancion => 
-            cancion.titulo.toLowerCase().includes(textoBusqueda)
-        );
-        mostrarLista(cancionesFiltradas, false);
+        const filtradas = inventarioCanciones.filter(c => c.titulo.toLowerCase().includes(textoBusqueda));
+        mostrarLista(filtradas, false);
     }
+    
+    // Limpiar el visor derecho al cambiar de modo para evitar confusiones
+    cancionActualId = null;
+    document.getElementById('titulo-cancion').textContent = 'Selecciona una alabanza';
+    document.getElementById('controles-tono').style.display = 'none';
+    document.getElementById('letra-cancion').innerHTML = '';
 });
+
+// Botón de Exportación a PDF
+if (btnExportarPDF) {
+    btnExportarPDF.addEventListener('click', () => {
+        if (listaDominical.length === 0) return;
+
+        const areaAnterior = document.getElementById('area-impresion-pdf');
+        if (areaAnterior) areaAnterior.remove();
+
+        const areaImpresion = document.createElement('div');
+        areaImpresion.id = 'area-impresion-pdf';
+
+        listaDominical.forEach(cancion => {
+            const divCancion = document.createElement('div');
+            divCancion.className = 'cancion-pdf';
+            divCancion.innerHTML = `
+                <h2>${cancion.titulo}</h2>
+                <div class="tono-pdf">Tono para la alabanza: ${cancion.tono_original}</div>
+                <pre>${procesarLetraYAcordes(cancion.letra)}</pre>
+            `;
+            areaImpresion.appendChild(divCancion);
+        });
+
+        document.body.appendChild(areaImpresion);
+        window.print();
+    });
+}
