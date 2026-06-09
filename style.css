@@ -261,18 +261,23 @@ main {
 /* =========================================
    CONFIGURACIÓN EXCLUSIVA PARA EL PDF (IMPRESIÓN)
 ========================================= */
+/* =========================================
+   CONFIGURACIÓN EXCLUSIVA PARA EL PDF (IMPRESIÓN)
+========================================= */
 @media print {
-    /* 1. Ocultamos toda la interfaz de la página web */
-    body, header, main, #lista-canciones, #controles-tono, .btn-eliminar {
+    /* 1. Ocultamos toda la interfaz web, pero dejamos el Body activo */
+    header, main {
         display: none !important;
     }
 
-    /* 2. Hacemos que el contenedor del PDF ocupe toda la hoja */
+    /* 2. Mostramos exclusivamente el contenedor generado para el PDF */
     #area-impresion-pdf {
         display: block !important;
         background-color: #ffffff !important;
         color: #000000 !important;
         width: 100%;
+        margin: 0;
+        padding: 0;
     }
 
     /* 3. Estilo de cada canción dentro del PDF */
@@ -286,7 +291,7 @@ main {
     }
 
     .cancion-pdf h2 {
-        color: #0A192F !important; /* Azul marino para el título */
+        color: #0A192F !important; /* Azul marino */
         font-size: 24pt;
         border-bottom: 2px solid #D4AF37;
         padding-bottom: 5px;
@@ -303,27 +308,27 @@ main {
     /* 4. Ajuste de tamaño para que quepa en UNA SOLA HOJA */
     .cancion-pdf pre {
         font-family: 'Courier New', Courier, monospace !important;
-        font-size: 11pt; /* Tamaño óptimo para hojas Letter/A4 */
+        font-size: 11pt; 
         line-height: 1.3;
         white-space: pre;
+        margin: 0;
     }
 
     .cancion-pdf .linea-acordes {
-        color: #E67E22 !important; /* Mantiene los acordes naranjas en el PDF */
+        color: #E67E22 !important; /* Naranja en PDF */
         font-weight: bold;
         margin: 0;
     }
 
     .cancion-pdf .linea-letras {
-        color: #000000 !important;
+        color: #000000 !important; /* Letra negra */
         margin: 0;
     }
 }
 
-/* Estilo auxiliar para ocultar el contenedor en la pantalla normal */
+/* Ocultar el contenedor en la vista normal de la web */
 #area-impresion-pdf {
     display: none;
 }
-
 
 
