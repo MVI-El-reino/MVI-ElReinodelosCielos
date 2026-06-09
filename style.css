@@ -195,11 +195,11 @@ main {
 /* La línea que solo tiene los acordes */
 .linea-acordes {
     display: block;
-    min-height: 1.2em; /* Mantiene el espacio aunque no haya acorde */
-    color: #E67E22; /* Tono Naranja profesional similar al logo/imagen */
+    min-height: 1.2em;
+    color: #E67E22;
     font-weight: bold;
-    /* Evitar que se peguen los acordes si no hay letra abajo */
     white-space: pre; 
+    margin: 0; /* ¡ESTO QUITA EL ESPACIO GIGANTE! */
 }
 
 /* La línea que solo tiene la letra limpia */
@@ -207,8 +207,8 @@ main {
     display: block;
     color: var(--negro);
     white-space: pre;
+    margin: 0; /* ¡ESTO TAMBIÉN! */
 }
-
 /* Estilo para las secciones como [Intro] o [Coro] */
 .marcador-seccion {
     color: #555;
