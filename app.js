@@ -349,3 +349,28 @@ if (btnExportarPDF) {
         }, 100);
     });
 }
+
+// ==========================================
+// 8. MODO VISTA EXPANDIDA (MAXIMIZAR)
+// ==========================================
+const btnPantallaCompleta = document.getElementById('btn-pantalla-completa');
+
+if(btnPantallaCompleta) {
+    // Le ponemos un texto inicial más adecuado
+    btnPantallaCompleta.textContent = "⛶ Expandir vista";
+
+    btnPantallaCompleta.addEventListener('click', () => {
+        const body = document.body;
+        // Alternamos la clase que expande el diseño
+        body.classList.toggle('modo-expandido');
+        
+        // Cambiamos el aspecto del botón dependiendo de si está expandido o no
+        if (body.classList.contains('modo-expandido')) {
+            btnPantallaCompleta.textContent = "✖ Contraer vista";
+            btnPantallaCompleta.style.backgroundColor = "#ff4c4c"; // Se pone rojo para salir
+        } else {
+            btnPantallaCompleta.textContent = "⛶ Expandir vista";
+            btnPantallaCompleta.style.backgroundColor = "var(--azul-marino)"; // Vuelve a azul
+        }
+    });
+}
