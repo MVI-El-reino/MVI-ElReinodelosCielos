@@ -331,3 +331,28 @@ main {
     display: none;
 }
 
+/* =========================================
+   SISTEMA DE DOBLE COLUMNA PARA CANCIONES LARGAS
+========================================= */
+.letra-doble-columna {
+    column-count: 2;
+    column-gap: 50px; /* Espacio entre las dos columnas */
+    column-rule: 1px dashed #cccccc; /* Una línea sutil separando las columnas */
+}
+
+/* REGLA VITAL: Evita que el acorde y la letra se separen al cambiar de columna */
+.bloque-linea {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.2rem;
+}
+
+/* En las pantallas pequeñas de celulares, forzamos a que vuelva a ser 1 sola columna para que se pueda leer */
+@media (max-width: 768px) {
+    .letra-doble-columna {
+        column-count: 1;
+    }
+}
+
