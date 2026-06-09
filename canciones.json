@@ -10,5 +10,23 @@
     "titulo": "Cuan Grande es Él",
     "tono_original": "A",
     "letra": "Señor mi [A]Dios, al contemplar los [D]cielos\nEl firma[A]mento y las es[E]trellas [A]mil\nAl oír tu [A]voz en los potentes [D]truenos\nY ver bri[A]llar al [E]sol en su ce[A]nit"
+  },
+  {
+    "id": 3,
+    "titulo": "Renuévame - Marcos Witt",
+    "tono_original": "D",
+    "letra": "[D]Renuéva[G]me, [A]Señor Je[D]sús\n[G]Ya no [Em]quiero ser i[A]gual\n[D]Renuéva[G]me, [A]Señor Je[D]sús\n[G]Pon en [Em]mí tu cora[A]zón\n\n[Coro]\nPorque [D]todo lo que [F#m]hay dentro de [Bm]mí\n[G]Necesita ser cam[Em]biado Se[A]ñor\nPorque [D]todo lo que [F#m]hay dentro de mi cora[Bm]zón\n[G]Necesi[A]ta más de [D]Ti"
+  },
+  {
+    "id": 4,
+    "titulo": "No Hay Lugar Más Alto - Miel San Marcos",
+    "tono_original": "A",
+    "letra": "[A]A tus pies, arde mi cora[E]zón\nA tus pies, entre[F#m]go lo que [D]soy\n[A]Es el lugar, de mi seguri[E]dad\nDonde na[F#m]die, me puede seña[D]lar\n\n[D]Me perdonas[E]te, me acercas[F#m]te a tu pre[A]sencia\n[D]Me levan[E]taste, y hoy me [F#m]postro ado[E]rar\n\n[Coro]\nNo hay lugar más [A]alto, más grande\nQue estar a tus [E]pies, que estar a tus [F#m]pies\nNo hay lugar más [D]alto, más grande\nQue estar a tus [A]pies, que estar a tus [E]pies"
+  },
+  {
+    "id": 5,
+    "titulo": "Tu Fidelidad - Marcos Witt",
+    "tono_original": "D",
+    "letra": "Tu fideli[D]dad es grande\nTu fideli[Bm]dad incompara[Em]ble es\nNadie como [A]Tú, bendi[G]to [A]Dios\n[G]Grande es tu fideli[D]dad"
   }
 ]
