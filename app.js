@@ -326,17 +326,24 @@ if (btnExportarPDF) {
         listaDominical.forEach(cancion => {
             const divCancion = document.createElement('div');
             divCancion.className = 'cancion-pdf';
+            
+            // INTELIGENCIA DE COLUMNAS PARA EL PDF
+            const numeroDeLineas = cancion.letra.split('\n').length;
+            const claseColumna = numeroDeLineas > 25 ? 'letra-doble-columna' : '';
+
+            // NOTA: Cambiamos la etiqueta <pre> por <div> para que las columnas funcionen perfecto
             divCancion.innerHTML = `
                 <h2>${cancion.titulo}</h2>
                 <div class="tono-pdf">Tono para la alabanza: ${cancion.tono_original}</div>
-                <pre>${procesarLetraYAcordes(cancion.letra)}</pre>
+                <div class="${claseColumna}" style="font-family: 'Courier New', Courier, monospace; font-size: 11pt;">
+                    ${procesarLetraYAcordes(cancion.letra)}
+                </div>
             `;
             areaImpresion.appendChild(divCancion);
         });
 
         document.body.appendChild(areaImpresion);
 
-        // Retraso estratégico de 100ms para asegurar que el HTML se dibuje en pantalla
         setTimeout(() => {
             window.print();
         }, 100);
