@@ -302,7 +302,7 @@ btnVerLista.addEventListener('click', () => {
     document.getElementById('letra-cancion').innerHTML = '';
 });
 
-// Botón de Exportación a PDF
+// 7. PROGRAMACIÓN DEL BOTÓN DE EXPORTACIÓN A PDF
 if (btnExportarPDF) {
     btnExportarPDF.addEventListener('click', () => {
         if (listaDominical.length === 0) return;
@@ -325,6 +325,10 @@ if (btnExportarPDF) {
         });
 
         document.body.appendChild(areaImpresion);
-        window.print();
+
+        // Retraso estratégico de 100ms para asegurar que el HTML se dibuje en pantalla
+        setTimeout(() => {
+            window.print();
+        }, 100);
     });
 }
