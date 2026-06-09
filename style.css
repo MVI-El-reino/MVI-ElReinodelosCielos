@@ -178,20 +178,28 @@ main {
    ESTILO PARA LA LETRA PROFESIONAL
 ----------------------------------------- */
 #letra-cancion {
-    /* Forzamos fuente Monospace para alineación perfecta */
     font-family: 'Courier New', Courier, Menlo, monospace;
     font-size: 1.2rem;
-    line-height: 1.2; /* Unir un poco la línea de acorde y letra */
-    white-space: pre; /* Vital para respetar espacios manuales si los hay */
+    line-height: 1.2;
+    width: 100%;
+    /* ¡OJO! Aquí eliminamos el 'white-space: pre' que bloqueaba las columnas */
 }
 
-/* Contenedor para cada par (Línea Acordes + Línea Letra) */
+/* SISTEMA DE DOBLE COLUMNA */
+.letra-doble-columna {
+    column-count: 2;
+    column-gap: 40px; /* Espacio entre las dos columnas */
+    column-rule: 1px dashed #cccccc; /* Línea divisoria al centro */
+}
+
+/* El secreto para que el texto fluya perfecto en columnas */
 .bloque-linea {
-    margin-bottom: 1.2rem; /* Espacio entre cada par de líneas */
-    display: flex;
-    flex-direction: column;
+    display: inline-block; /* Cambiamos flex por inline-block para evitar bugs de Chrome */
+    width: 100%;
+    margin-bottom: 1.2rem;
+    break-inside: avoid; /* Evita que el acorde quede en una columna y la letra en otra */
+    page-break-inside: avoid;
 }
-
 /* La línea que solo tiene los acordes */
 .linea-acordes {
     display: block;
