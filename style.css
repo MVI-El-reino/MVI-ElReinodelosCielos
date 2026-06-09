@@ -261,37 +261,37 @@ main {
 /* =========================================
    CONFIGURACIÓN EXCLUSIVA PARA EL PDF (IMPRESIÓN)
 ========================================= */
-/* =========================================
-   CONFIGURACIÓN EXCLUSIVA PARA EL PDF (IMPRESIÓN)
-========================================= */
 @media print {
-    /* 1. Ocultamos toda la interfaz web, pero dejamos el Body activo */
+    /* 1. RESET VITAL: Liberamos el tamaño del body para que genere las hojas necesarias */
+    body {
+        display: block !important;
+        height: auto !important;
+        background-color: #ffffff !important;
+    }
+
+    /* 2. Ocultamos toda la interfaz web */
     header, main {
         display: none !important;
     }
 
-    /* 2. Mostramos exclusivamente el contenedor generado para el PDF */
+    /* 3. Mostramos el contenedor generado para el PDF */
     #area-impresion-pdf {
         display: block !important;
-        background-color: #ffffff !important;
-        color: #000000 !important;
         width: 100%;
         margin: 0;
         padding: 0;
     }
 
-    /* 3. Estilo de cada canción dentro del PDF */
+    /* 4. Estilo de cada canción dentro del PDF */
     .cancion-pdf {
-        /* Fuerza a que la siguiente canción empiece estrictamente en una hoja nueva */
         break-after: page;
         page-break-after: always; 
-        
         padding: 20px;
         background-color: #ffffff !important;
     }
 
     .cancion-pdf h2 {
-        color: #0A192F !important; /* Azul marino */
+        color: #0A192F !important;
         font-size: 24pt;
         border-bottom: 2px solid #D4AF37;
         padding-bottom: 5px;
@@ -305,7 +305,7 @@ main {
         margin-bottom: 15px;
     }
 
-    /* 4. Ajuste de tamaño para que quepa en UNA SOLA HOJA */
+    /* 5. Ajuste de tamaño de fuente y márgenes */
     .cancion-pdf pre {
         font-family: 'Courier New', Courier, monospace !important;
         font-size: 11pt; 
@@ -315,13 +315,13 @@ main {
     }
 
     .cancion-pdf .linea-acordes {
-        color: #E67E22 !important; /* Naranja en PDF */
+        color: #E67E22 !important;
         font-weight: bold;
         margin: 0;
     }
 
     .cancion-pdf .linea-letras {
-        color: #000000 !important; /* Letra negra */
+        color: #000000 !important;
         margin: 0;
     }
 }
@@ -330,5 +330,4 @@ main {
 #area-impresion-pdf {
     display: none;
 }
-
 
