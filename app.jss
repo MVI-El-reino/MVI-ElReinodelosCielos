@@ -35,9 +35,8 @@ function mostrarLista(canciones) {
         li.dataset.id = cancion.id; 
 
         // Preparamos el evento de clic (lo conectaremos en el siguiente paso)
-        li.addEventListener('click', () => {
-            console.log("El usuario hizo clic en la canción ID:", cancion.id);
-            // Aquí irá la función para mostrar la letra en la sección derecha
+       li.addEventListener('click', () => {
+            mostrarCancion(cancion.id);
         });
 
         contenedor.appendChild(li);
