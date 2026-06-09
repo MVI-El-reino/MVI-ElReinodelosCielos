@@ -1,5 +1,8 @@
 // Variable global para almacenar todas las canciones en memoria
 let inventarioCanciones = [];
+let listaDominical = [];
+let cancionActualId = null; 
+let viendoListaDominical = false;
 
 // 1. Cargar las canciones en cuanto la página esté lista
 document.addEventListener('DOMContentLoaded', () => {
@@ -16,33 +19,44 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // 2. Función para inyectar las canciones en el HTML
-function mostrarLista(canciones) {
+function mostrarLista(canciones, esListaDominical = false) {
     const contenedor = document.getElementById('contenedor-lista');
-    contenedor.innerHTML = ''; // Limpiamos el texto de "Cargando canciones..."
+    contenedor.innerHTML = ''; 
 
     if (canciones.length === 0) {
-        contenedor.innerHTML = '<li>No se encontraron alabanzas.</li>';
+        contenedor.innerHTML = esListaDominical ? '<li style="color:gray; text-align:center;">Tu lista está vacía.</li>' : '<li>No se encontraron alabanzas.</li>';
         return;
     }
 
-    // Recorremos el arreglo y creamos un elemento <li> por cada canción
     canciones.forEach(cancion => {
         const li = document.createElement('li');
         li.textContent = cancion.titulo;
-        li.style.cursor = 'pointer'; // Cambia el cursor para indicar que es un botón
-        
-        // Guardamos el ID oculto en el HTML para usarlo después
+        li.style.cursor = 'pointer';
         li.dataset.id = cancion.id; 
 
-        // Preparamos el evento de clic (lo conectaremos en el siguiente paso)
-       li.addEventListener('click', () => {
+        // Si estamos viendo la lista dominical, agregamos el botón de borrar
+        if (esListaDominical) {
+            const btnEliminar = document.createElement('button');
+            btnEliminar.textContent = "✖";
+            btnEliminar.className = "btn-eliminar";
+            
+            btnEliminar.addEventListener('click', (e) => {
+                e.stopPropagation(); // Evita que se abra la canción al hacer clic en borrar
+                // Filtramos la lista para quitar esta canción
+                listaDominical = listaDominical.filter(c => c.id !== cancion.id);
+                mostrarLista(listaDominical, true); // Recargamos la vista
+                // Actualizamos el contador real (oculto en este momento)
+            });
+            li.appendChild(btnEliminar);
+        }
+
+        li.addEventListener('click', () => {
             mostrarCancion(cancion.id);
         });
 
         contenedor.appendChild(li);
     });
 }
-
 // 3. El Motor de Búsqueda (Filtro en tiempo real)
 const buscador = document.getElementById('buscador');
 
@@ -67,7 +81,7 @@ function mostrarCancion(id) {
     // 1. Buscamos la canción en nuestro arreglo en memoria
     const cancion = inventarioCanciones.find(c => c.id === id);
     if (!cancion) return;
-
+    cancionActualId = id;
     tonoActualDesplegado = cancion.tono_original; // Guardamos el tono inicial
 
     // 2. Actualizamos la interfaz básica
@@ -149,3 +163,58 @@ function mostrarCancion(id) {
     // 5. Inyectamos todo el HTML generado de una sola vez
     contenedorLetra.innerHTML = htmlFinal;
 }
+
+// 5. Lógica para "Añadir a lista dominical"
+const btnAgregar = document.getElementById('btn-agregar-lista');
+btnAgregar.addEventListener('click', () => {
+    if (cancionActualId === null) return;
+    
+    // Verificamos que no esté repetida
+    const yaExiste = listaDominical.find(c => c.id === cancionActualId);
+    if (!yaExiste) {
+        const cancion = inventarioCanciones.find(c => c.id === cancionActualId);
+        listaDominical.push(cancion);
+        
+        // Actualizamos el texto del botón del encabezado
+        if (!viendoListaDominical) {
+            document.getElementById('btn-ver-lista').textContent = `Ver mi lista dominical (${listaDominical.length})`;
+        }
+        
+        // Pequeño efecto visual para confirmar
+        btnAgregar.textContent = "¡Añadida!";
+        btnAgregar.style.backgroundColor = "#2ecc71"; // Verde éxito
+        setTimeout(() => {
+            btnAgregar.textContent = "Añadir a lista dominical";
+            btnAgregar.style.backgroundColor = "var(--dorado)";
+        }, 1500);
+    } else {
+        alert("Esta alabanza ya está en tu lista del domingo.");
+    }
+});
+
+// 6. Lógica para alternar vistas (Repertorio vs Lista Dominical)
+const btnVerLista = document.getElementById('btn-ver-lista');
+btnVerLista.addEventListener('click', () => {
+    viendoListaDominical = !viendoListaDominical; // Cambiamos el interruptor
+    const tituloSeccion = document.querySelector('#lista-canciones h2');
+    
+    if (viendoListaDominical) {
+        // Entramos a modo Lista Dominical
+        btnVerLista.textContent = "Volver al Repertorio";
+        btnVerLista.style.backgroundColor = "var(--blanco)";
+        tituloSeccion.textContent = "Mi Lista Dominical";
+        mostrarLista(listaDominical, true);
+    } else {
+        // Volvemos al Repertorio normal
+        btnVerLista.textContent = `Ver mi lista dominical (${listaDominical.length})`;
+        btnVerLista.style.backgroundColor = "var(--dorado)";
+        tituloSeccion.textContent = "Repertorio Disponible";
+        
+        // Respetamos lo que haya en el buscador al volver
+        const textoBusqueda = document.getElementById('buscador').value.toLowerCase();
+        const cancionesFiltradas = inventarioCanciones.filter(cancion => 
+            cancion.titulo.toLowerCase().includes(textoBusqueda)
+        );
+        mostrarLista(cancionesFiltradas, false);
+    }
+});
