@@ -140,7 +140,7 @@ main {
     color: var(--negro);
     border: 2px solid var(--dorado);
     border-radius: 8px;
-    padding: 25px;
+    padding: 30px; /* Un poco más de espacio */
     display: flex;
     flex-direction: column;
     overflow-y: auto;
@@ -152,14 +152,16 @@ main {
     border-bottom: 2px solid var(--dorado);
     padding-bottom: 10px;
     margin-bottom: 20px;
-    font-size: 2rem;
+    font-size: 2.2rem;
+    font-weight: 800;
 }
 
 #controles-tono {
+    /* Mantenemos el estilo de antes, está bien */
     background-color: var(--gris-fondo);
     padding: 12px;
     border-radius: 6px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     display: flex;
     gap: 15px;
     align-items: center;
@@ -172,14 +174,50 @@ main {
     font-size: 1.1rem;
 }
 
+/* -----------------------------------------
+   ESTILO PARA LA LETRA PROFESIONAL
+----------------------------------------- */
 #letra-cancion {
-    /* La fuente Monospace es vital para que los acordes se alineen perfecto sobre la letra */
-    font-family: 'Courier New', Courier, monospace; 
-    font-size: 1.15rem;
-    line-height: 1.8;
-    white-space: pre-wrap; 
+    /* Forzamos fuente Monospace para alineación perfecta */
+    font-family: 'Courier New', Courier, Menlo, monospace;
+    font-size: 1.2rem;
+    line-height: 1.2; /* Unir un poco la línea de acorde y letra */
+    white-space: pre; /* Vital para respetar espacios manuales si los hay */
 }
 
+/* Contenedor para cada par (Línea Acordes + Línea Letra) */
+.bloque-linea {
+    margin-bottom: 1.2rem; /* Espacio entre cada par de líneas */
+    display: flex;
+    flex-direction: column;
+}
+
+/* La línea que solo tiene los acordes */
+.linea-acordes {
+    display: block;
+    min-height: 1.2em; /* Mantiene el espacio aunque no haya acorde */
+    color: #E67E22; /* Tono Naranja profesional similar al logo/imagen */
+    font-weight: bold;
+    /* Evitar que se peguen los acordes si no hay letra abajo */
+    white-space: pre; 
+}
+
+/* La línea que solo tiene la letra limpia */
+.linea-letras {
+    display: block;
+    color: var(--negro);
+    white-space: pre;
+}
+
+/* Estilo para las secciones como [Intro] o [Coro] */
+.marcador-seccion {
+    color: #555;
+    font-weight: bold;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    display: block;
+    font-size: 1.1rem;
+}
 /* =========================================
    ADAPTACIÓN PARA CELULARES (RESPONSIVE)
 ========================================= */
