@@ -59,3 +59,21 @@ buscador.addEventListener('input', (evento) => {
     // Volvemos a dibujar la lista solo con los resultados que coinciden
     mostrarLista(cancionesFiltradas);
 });
+
+// 4. Función para mostrar la canción seleccionada
+function mostrarCancion(id) {
+    // Buscamos la canción en nuestro arreglo en memoria
+    const cancion = inventarioCanciones.find(c => c.id === id);
+    
+    if (cancion) {
+        // Cambiamos el título en pantalla
+        document.getElementById('titulo-cancion').textContent = cancion.titulo;
+        
+        // Mostramos el menú de botones de tono (que estaba oculto)
+        document.getElementById('controles-tono').style.display = 'block';
+        document.getElementById('tono-actual').textContent = 'Tono original: ' + cancion.tono_original;
+        
+        // Inyectamos la letra en el recuadro
+        document.getElementById('letra-cancion').textContent = cancion.letra;
+    }
+}
