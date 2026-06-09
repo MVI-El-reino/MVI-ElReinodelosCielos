@@ -364,3 +364,19 @@ main {
     }
 }
 
+/* =========================================
+   MODO VISTA EXPANDIDA (MAXIMIZAR CANCIÓN)
+========================================= */
+body.modo-expandido header,
+body.modo-expandido #lista-canciones {
+    display: none !important;
+}
+
+body.modo-expandido #visor-cancion {
+    width: 100% !important;
+    height: 100vh !important;
+    border: none;
+    border-radius: 0;
+    /* Damos un margen lateral elegante para pantallas muy anchas */
+    padding: 30px 10%; 
+}
