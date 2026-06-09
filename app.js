@@ -182,14 +182,24 @@ function renderizarVisorDerecho() {
     const cancion = obtenerCancionActual();
     if (!cancion) return;
 
-    // Transponemos el título del tono y la letra en base a los pasos actuales
     let tonoMostrado = transponerAcordeStr(cancion.tono_original, pasosActuales);
     let letraTranspuesta = transponerLetraCruda(cancion.letra, pasosActuales);
 
     document.getElementById('titulo-cancion').textContent = cancion.titulo;
     document.getElementById('controles-tono').style.display = 'flex';
     document.getElementById('tono-actual').innerHTML = `Tono: <span style="color:#E67E22;">${tonoMostrado}</span>`;
-    document.getElementById('letra-cancion').innerHTML = procesarLetraYAcordes(letraTranspuesta);
+    
+    const contenedorLetra = document.getElementById('letra-cancion');
+    
+    // INTELIGENCIA DE COLUMNAS: Contamos las líneas
+    const numeroDeLineas = letraTranspuesta.split('\n').length;
+    if (numeroDeLineas > 25) {
+        contenedorLetra.classList.add('letra-doble-columna'); // Se activa la doble columna
+    } else {
+        contenedorLetra.classList.remove('letra-doble-columna'); // Se queda normal
+    }
+    
+    contenedorLetra.innerHTML = procesarLetraYAcordes(letraTranspuesta);
 }
 
 function mostrarCancion(id) {
