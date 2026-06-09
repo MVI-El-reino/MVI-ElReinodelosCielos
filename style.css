@@ -1,0 +1,206 @@
+/* =========================================
+   PALETA DE COLORES (Basada en el Logo)
+========================================= */
+:root {
+    --azul-marino: #0A192F; /* Azul oscuro y elegante */
+    --dorado: #D4AF37;      /* Tono dorado del escudo */
+    --negro: #111111;       /* Fondo del escudo */
+    --blanco: #FFFFFF;      /* Letras de contraste y paloma */
+    --gris-fondo: #F5F7FA;  
+}
+
+/* =========================================
+   CONFIGURACIÓN GENERAL
+========================================= */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--azul-marino);
+    color: var(--blanco);
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Ocupa el 100% de la altura de la pantalla */
+}
+
+/* =========================================
+   BARRA SUPERIOR (HEADER)
+========================================= */
+header {
+    background-color: var(--negro);
+    border-bottom: 4px solid var(--dorado);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Permite que los elementos bajen si no caben */
+    gap: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+}
+
+header h1 {
+    color: var(--dorado);
+    font-size: 1.6rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+input[type="text"] {
+    padding: 10px;
+    border: 1px solid var(--dorado);
+    border-radius: 5px;
+    outline: none;
+    width: 280px;
+    background-color: var(--blanco);
+    font-size: 1rem;
+}
+
+button {
+    background-color: var(--dorado);
+    color: var(--negro);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.95rem;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+button:hover {
+    background-color: #bfa035;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+/* =========================================
+   CONTENEDOR PRINCIPAL
+========================================= */
+main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    padding: 20px;
+    gap: 20px;
+}
+
+/* =========================================
+   PANEL IZQUIERDO: LISTA DE CANCIONES
+========================================= */
+#lista-canciones {
+    width: 30%;
+    background-color: var(--negro);
+    border: 2px solid var(--dorado);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+#lista-canciones h2 {
+    background-color: var(--dorado);
+    color: var(--negro);
+    padding: 12px;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+#contenedor-lista {
+    list-style: none;
+    overflow-y: auto;
+}
+
+#contenedor-lista li {
+    padding: 15px;
+    border-bottom: 1px solid #2a2a2a;
+    color: var(--blanco);
+    font-weight: 500;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+#contenedor-lista li:hover {
+    background-color: var(--azul-marino);
+    color: var(--dorado);
+    border-left: 4px solid var(--dorado);
+}
+
+/* =========================================
+   PANEL DERECHO: VISOR DE LA CANCIÓN (Fondo Blanco)
+========================================= */
+#visor-cancion {
+    width: 70%;
+    background-color: var(--blanco);
+    color: var(--negro);
+    border: 2px solid var(--dorado);
+    border-radius: 8px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+#titulo-cancion {
+    color: var(--azul-marino);
+    border-bottom: 2px solid var(--dorado);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    font-size: 2rem;
+}
+
+#controles-tono {
+    background-color: var(--gris-fondo);
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    border: 1px solid #ddd;
+}
+
+#controles-tono span {
+    font-weight: bold;
+    color: var(--azul-marino);
+    font-size: 1.1rem;
+}
+
+#letra-cancion {
+    /* La fuente Monospace es vital para que los acordes se alineen perfecto sobre la letra */
+    font-family: 'Courier New', Courier, monospace; 
+    font-size: 1.15rem;
+    line-height: 1.8;
+    white-space: pre-wrap; 
+}
+
+/* =========================================
+   ADAPTACIÓN PARA CELULARES (RESPONSIVE)
+========================================= */
+@media (max-width: 768px) {
+    main {
+        flex-direction: column;
+        padding: 10px;
+        overflow: auto; /* Permite scroll en toda la página en móviles */
+    }
+    
+    #lista-canciones, #visor-cancion {
+        width: 100%;
+        height: auto;
+    }
+
+    #lista-canciones {
+        max-height: 300px; /* Evita que una lista enorme oculte el visor */
+    }
+
+    header {
+        justify-content: center;
+        text-align: center;
+    }
+}
