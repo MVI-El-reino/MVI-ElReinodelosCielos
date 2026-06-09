@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repertorio - Ministerio Levitas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>Plataforma Levitas</h1>
+        <input type="text" id="buscador" placeholder="Buscar alabanza...">
+        <button id="btn-ver-lista">Ver mi lista dominical (0)</button>
+    </header>
+
+    <main>
+        <section id="lista-canciones">
+            <h2>Repertorio Disponible</h2>
+            <ul id="contenedor-lista">
+                <li>Cargando canciones...</li>
+            </ul>
+        </section>
+
+        <section id="visor-cancion">
+            <h2 id="titulo-cancion">Selecciona una alabanza</h2>
+            
+            <div id="controles-tono" style="display: none;">
+                <button id="bajar-tono">-1 Tono</button>
+                <span id="tono-actual">Tono: -</span>
+                <button id="subir-tono">+1 Tono</button>
+                
+                <button id="btn-agregar-lista">Añadir a lista dominical</button>
+            </div>
+
+            <pre id="letra-cancion">
+                </pre>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
