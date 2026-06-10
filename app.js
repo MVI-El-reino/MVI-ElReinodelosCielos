@@ -414,16 +414,34 @@ if (btnExportarPDF) {
                 const divCancion = document.createElement('div');
                 divCancion.className = 'cancion-pdf';
                 
+                // INTELIGENCIA DE TAMAÑOS Y COLUMNAS
                 const numeroDeLineas = cancion.letra.split('\n').length;
-                const claseColumna = numeroDeLineas > 25 ? 'letra-doble-columna' : '';
+                let claseColumna = '';
+                let estiloDinamico = '';
+
+                if (numeroDeLineas > 25) {
+                    // Canciones muy largas: Doble columna, tamaño estándar
+                    claseColumna = 'letra-doble-columna';
+                    estiloDinamico = "font-size: 11pt;";
+                } else if (numeroDeLineas <= 12) {
+                    // Canciones cortas: Letra gigante y un poco de margen superior
+                    estiloDinamico = "font-size: 18pt; margin-top: 30px;";
+                } else if (numeroDeLineas <= 18) {
+                    // Canciones medianas: Letra grande
+                    estiloDinamico = "font-size: 15pt; margin-top: 15px;";
+                } else {
+                    // Canciones normales (19 a 25 líneas)
+                    estiloDinamico = "font-size: 13pt;";
+                }
 
                 divCancion.innerHTML = `
                     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #D4AF37; margin-bottom: 15px; padding-bottom: 5px;">
                         <h2 style="margin: 0; border: none; padding: 0; font-size: 24pt;">${cancion.titulo}</h2>
                         <span style="font-family: 'Segoe UI', sans-serif; font-weight: bold; background-color: #0A192F; color: #D4AF37; padding: 6px 14px; border-radius: 4px; font-size: 11pt; text-transform: uppercase; letter-spacing: 1px;">REUNIÓN: ${cancion.dia}</span>
                     </div>
-                    <div class="tono-pdf">Tono para la alabanza: ${cancion.tono_original}</div>
-                    <div class="${claseColumna}" style="font-family: 'Courier New', Courier, monospace; font-size: 11pt;">
+                    <div class="tono-pdf" style="font-size: 14pt;">Tono para la alabanza: ${cancion.tono_original}</div>
+                    
+                    <div class="${claseColumna}" style="font-family: 'Courier New', Courier, monospace; ${estiloDinamico}">
                         ${procesarLetraYAcordes(cancion.letra)}
                     </div>
                 `;
