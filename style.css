@@ -380,3 +380,22 @@ body.modo-expandido #visor-cancion {
     /* Damos un margen lateral elegante para pantallas muy anchas */
     padding: 30px 10%; 
 }
+
+/* =========================================
+   MINI SELECTOR DE DÍA EN LA LISTA LATERAL
+========================================= */
+.select-dia-lista {
+    background-color: var(--negro);
+    color: var(--dorado);
+    border: 1px solid var(--dorado);
+    border-radius: 4px;
+    padding: 2px 4px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    outline: none;
+    font-weight: bold;
+}
+
+.select-dia-lista:hover {
+    background-color: var(--azul-marino);
+}
