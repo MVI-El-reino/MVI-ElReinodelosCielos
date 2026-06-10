@@ -4,8 +4,9 @@
 let inventarioCanciones = [];
 let listaDominical = [];
 let cancionActualId = null; 
+let cancionActualDia = null; 
 let viendoListaDominical = false;
-let pasosActuales = 0; // Controla cuántos semitonos hemos subido o bajado
+let pasosActuales = 0; 
 
 // ==========================================
 // 2. INICIALIZACIÓN Y LECTURA DE DATOS
@@ -18,8 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
             mostrarLista(inventarioCanciones);
         })
         .catch(error => {
-            console.error("Error al cargar el repertorio:", error);
-            document.getElementById('contenedor-lista').innerHTML = "<li>Error al cargar las canciones. Verifica tu archivo JSON.</li>";
+            console.error("Error al cargar:", error);
+            document.getElementById('contenedor-lista').innerHTML = "<li>Error al cargar las canciones.</li>";
         });
 });
 
@@ -29,31 +30,22 @@ document.addEventListener('DOMContentLoaded', () => {
 function transponerNota(nota, pasos) {
     const escala = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
     const equivalencias = {'Db':'C#', 'Eb':'D#', 'Gb':'F#', 'Ab':'G#', 'Bb':'A#'};
-    
-    // Convertimos bemoles a sostenidos para simplificar la matemática
     let notaNormalizada = equivalencias[nota] || nota;
     let indice = escala.indexOf(notaNormalizada);
-    
-    // Si no reconoce la nota (ej. un error de tipeo en el JSON), la devuelve igual
     if (indice === -1) return nota; 
-    
     let nuevoIndice = (indice + pasos) % 12;
-    if (nuevoIndice < 0) nuevoIndice += 12; // Manejo circular para negativos
-    
+    if (nuevoIndice < 0) nuevoIndice += 12;
     return escala[nuevoIndice];
 }
 
 function transponerAcordeStr(acordeCrudo, pasos) {
     if (pasos === 0) return acordeCrudo;
-    // Expresión regular inteligente: Extrae solo la letra de la nota (A-G) y su alteración (# o b)
-    // Ignorando los sufijos como "m", "sus4", "7", etc.
     const regexNota = /([A-G][#b]?)/g;
     return acordeCrudo.replace(regexNota, (match) => transponerNota(match, pasos));
 }
 
 function transponerLetraCruda(letraCruda, pasos) {
     if (pasos === 0) return letraCruda;
-    // Busca todo lo que esté entre corchetes y le aplica la transposición
     const regexCorchetes = /\[([^\]]+)\]/g;
     return letraCruda.replace(regexCorchetes, (match, acorde) => {
         return `[${transponerAcordeStr(acorde, pasos)}]`;
@@ -127,7 +119,7 @@ function procesarLetraYAcordes(letraCruda) {
 // ==========================================
 function obtenerCancionActual() {
     return viendoListaDominical 
-        ? listaDominical.find(c => c.id === cancionActualId) 
+        ? listaDominical.find(c => c.id === cancionActualId && c.dia === cancionActualDia) 
         : inventarioCanciones.find(c => c.id === cancionActualId);
 }
 
@@ -140,42 +132,108 @@ function mostrarLista(canciones, esListaDominical = false) {
         return;
     }
 
-    canciones.forEach(cancion => {
-        const li = document.createElement('li');
-        li.textContent = cancion.titulo;
-        li.style.cursor = 'pointer';
-        li.dataset.id = cancion.id; 
-
-        if (esListaDominical) {
-            const btnEliminar = document.createElement('button');
-            btnEliminar.textContent = "✖";
-            btnEliminar.className = "btn-eliminar";
+    if (esListaDominical) {
+        // AGRUPACIÓN INTELIGENTE POR DÍAS
+        const diasOrden = ["Miércoles", "Viernes", "Domingo"];
+        
+        diasOrden.forEach(dia => {
+            const cancionesDelDia = canciones.filter(c => c.dia === dia);
             
-            btnEliminar.addEventListener('click', (e) => {
-                e.stopPropagation(); 
-                listaDominical = listaDominical.filter(c => c.id !== cancion.id);
-                mostrarLista(listaDominical, true); 
-                document.getElementById('btn-ver-lista').textContent = `Volver al Repertorio (${listaDominical.length})`;
-                
-                if (listaDominical.length === 0) {
-                    document.getElementById('btn-exportar-pdf').style.display = 'none';
-                    // Limpiamos visor si borramos la canción que estábamos viendo
-                    if(cancionActualId === cancion.id) {
-                        document.getElementById('titulo-cancion').textContent = 'Selecciona una alabanza';
-                        document.getElementById('controles-tono').style.display = 'none';
-                        document.getElementById('letra-cancion').innerHTML = '';
-                    }
-                }
-            });
-            li.appendChild(btnEliminar);
-        }
+            if (cancionesDelDia.length > 0) {
+                const headerDia = document.createElement('div');
+                headerDia.className = 'header-dia-lista';
+                headerDia.textContent = `Culto de ${dia}`;
+                contenedor.appendChild(headerDia);
 
-        li.addEventListener('click', () => {
-            mostrarCancion(cancion.id);
+                cancionesDelDia.forEach(cancion => {
+                    const li = document.createElement('li');
+                    li.dataset.id = cancion.id; 
+                    
+                    // Diseño flexible para que quepan el título, el selector y el botón X
+                    li.style.display = 'flex';
+                    li.style.alignItems = 'center';
+                    li.style.justifyContent = 'space-between';
+                    li.style.gap = '10px';
+
+                    // 1. El Título (Clickable para ver la canción)
+                    const spanTitulo = document.createElement('span');
+                    spanTitulo.textContent = cancion.titulo;
+                    spanTitulo.style.flex = '1';
+                    spanTitulo.style.cursor = 'pointer';
+                    spanTitulo.style.overflow = 'hidden';
+                    spanTitulo.style.textOverflow = 'ellipsis';
+                    spanTitulo.style.whiteSpace = 'nowrap';
+                    
+                    spanTitulo.addEventListener('click', () => {
+                        mostrarCancion(cancion.id, cancion.dia);
+                    });
+
+                    // 2. El Mini-Selector de Días
+                    const selectDia = document.createElement('select');
+                    selectDia.className = 'select-dia-lista';
+                    
+                    const opciones = [
+                        { valor: "Miércoles", texto: "Mié" },
+                        { valor: "Viernes", texto: "Vie" },
+                        { valor: "Domingo", texto: "Dom" }
+                    ];
+                    
+                    opciones.forEach(opt => {
+                        const optionElement = document.createElement('option');
+                        optionElement.value = opt.valor;
+                        optionElement.textContent = opt.texto;
+                        if (opt.valor === cancion.dia) optionElement.selected = true;
+                        selectDia.appendChild(optionElement);
+                    });
+
+                    // Si cambian el día, actualizamos el arreglo y redibujamos la lista para agruparla
+                    selectDia.addEventListener('change', (e) => {
+                        cancion.dia = e.target.value;
+                        mostrarLista(listaDominical, true);
+                    });
+
+                    // 3. El botón de eliminar
+                    const btnEliminar = document.createElement('button');
+                    btnEliminar.textContent = "✖";
+                    btnEliminar.className = "btn-eliminar";
+                    
+                    btnEliminar.addEventListener('click', (e) => {
+                        listaDominical = listaDominical.filter(c => !(c.id === cancion.id && c.dia === cancion.dia));
+                        mostrarLista(listaDominical, true); 
+                        document.getElementById('btn-ver-lista').textContent = `Volver al Repertorio (${listaDominical.length})`;
+                        
+                        if (listaDominical.length === 0) {
+                            document.getElementById('btn-exportar-pdf').style.display = 'none';
+                        }
+                        if(cancionActualId === cancion.id && cancionActualDia === cancion.dia) {
+                            limpaVisorDerecho();
+                        }
+                    });
+
+                    // Armamos el renglón
+                    li.appendChild(spanTitulo);
+                    li.appendChild(selectDia);
+                    li.appendChild(btnEliminar);
+
+                    contenedor.appendChild(li);
+                });
+            }
         });
+    } else {
+        // Vista normal del repertorio completo (Súper Limpia)
+        canciones.forEach(cancion => {
+            const li = document.createElement('li');
+            li.textContent = cancion.titulo;
+            li.style.cursor = 'pointer';
+            li.dataset.id = cancion.id; 
 
-        contenedor.appendChild(li);
-    });
+            li.addEventListener('click', () => {
+                mostrarCancion(cancion.id, null);
+            });
+
+            contenedor.appendChild(li);
+        });
+    }
 }
 
 function renderizarVisorDerecho() {
@@ -190,22 +248,30 @@ function renderizarVisorDerecho() {
     document.getElementById('tono-actual').innerHTML = `Tono: <span style="color:#E67E22;">${tonoMostrado}</span>`;
     
     const contenedorLetra = document.getElementById('letra-cancion');
-    
-    // INTELIGENCIA DE COLUMNAS: Contamos las líneas
     const numeroDeLineas = letraTranspuesta.split('\n').length;
+    
     if (numeroDeLineas > 25) {
-        contenedorLetra.classList.add('letra-doble-columna'); // Se activa la doble columna
+        contenedorLetra.classList.add('letra-doble-columna');
     } else {
-        contenedorLetra.classList.remove('letra-doble-columna'); // Se queda normal
+        contenedorLetra.classList.remove('letra-doble-columna');
     }
     
     contenedorLetra.innerHTML = procesarLetraYAcordes(letraTranspuesta);
 }
 
-function mostrarCancion(id) {
+function mostrarCancion(id, dia = null) {
     cancionActualId = id; 
-    pasosActuales = 0; // Reseteamos la transposición al cambiar de canción
+    cancionActualDia = dia;
+    pasosActuales = 0; 
     renderizarVisorDerecho();
+}
+
+function limpaVisorDerecho() {
+    cancionActualId = null;
+    cancionActualDia = null;
+    document.getElementById('titulo-cancion').textContent = 'Selecciona una alabanza';
+    document.getElementById('controles-tono').style.display = 'none';
+    document.getElementById('letra-cancion').innerHTML = '';
 }
 
 // ==========================================
@@ -219,14 +285,15 @@ document.getElementById('buscador').addEventListener('input', (evento) => {
     mostrarLista(filtradas, false);
 });
 
-// Botones de Transposición (+1 Tono / -1 Tono)
+// Botones de Transposición
 document.getElementById('subir-tono').addEventListener('click', () => {
     if (!cancionActualId) return;
     if (viendoListaDominical) {
-        // Si estamos en la lista del domingo, guardamos el cambio permanentemente en el arreglo
-        let cancionGuardada = listaDominical.find(c => c.id === cancionActualId);
-        cancionGuardada.tono_original = transponerAcordeStr(cancionGuardada.tono_original, 1);
-        cancionGuardada.letra = transponerLetraCruda(cancionGuardada.letra, 1);
+        let cancionGuardada = listaDominical.find(c => c.id === cancionActualId && c.dia === cancionActualDia);
+        if (cancionGuardada) {
+            cancionGuardada.tono_original = transponerAcordeStr(cancionGuardada.tono_original, 1);
+            cancionGuardada.letra = transponerLetraCruda(cancionGuardada.letra, 1);
+        }
     } else {
         pasosActuales += 1;
     }
@@ -236,47 +303,51 @@ document.getElementById('subir-tono').addEventListener('click', () => {
 document.getElementById('bajar-tono').addEventListener('click', () => {
     if (!cancionActualId) return;
     if (viendoListaDominical) {
-        let cancionGuardada = listaDominical.find(c => c.id === cancionActualId);
-        cancionGuardada.tono_original = transponerAcordeStr(cancionGuardada.tono_original, -1);
-        cancionGuardada.letra = transponerLetraCruda(cancionGuardada.letra, -1);
+        let cancionGuardada = listaDominical.find(c => c.id === cancionActualId && c.dia === cancionActualDia);
+        if (cancionGuardada) {
+            cancionGuardada.tono_original = transponerAcordeStr(cancionGuardada.tono_original, -1);
+            cancionGuardada.letra = transponerLetraCruda(cancionGuardada.letra, -1);
+        }
     } else {
         pasosActuales -= 1;
     }
     renderizarVisorDerecho();
 });
 
-// Añadir a lista dominical
+// Añadir a la lista clasificada por día (Por defecto: Domingo)
 const btnAgregar = document.getElementById('btn-agregar-lista');
 btnAgregar.addEventListener('click', () => {
     if (cancionActualId === null || viendoListaDominical) return;
     
-    const yaExiste = listaDominical.find(c => c.id === cancionActualId);
+    const diaPorDefecto = "Domingo";
+    
+    const yaExiste = listaDominical.find(c => c.id === cancionActualId && c.dia === diaPorDefecto);
     if (!yaExiste) {
         const cancionBase = inventarioCanciones.find(c => c.id === cancionActualId);
         
-        // Creamos una copia que guarda el tono exacto que el músico eligió en pantalla
         const cancionClonada = {
             id: cancionBase.id,
             titulo: cancionBase.titulo,
             tono_original: transponerAcordeStr(cancionBase.tono_original, pasosActuales),
-            letra: transponerLetraCruda(cancionBase.letra, pasosActuales)
+            letra: transponerLetraCruda(cancionBase.letra, pasosActuales),
+            dia: diaPorDefecto 
         };
         
         listaDominical.push(cancionClonada);
         
-        document.getElementById('btn-ver-lista').textContent = `Ver mi lista dominical (${listaDominical.length})`;
+        document.getElementById('btn-ver-lista').textContent = `Ver mis listas (${listaDominical.length})`;
         btnAgregar.textContent = "¡Añadida!";
         btnAgregar.style.backgroundColor = "#2ecc71"; 
         setTimeout(() => {
-            btnAgregar.textContent = "Añadir a lista dominical";
+            btnAgregar.textContent = "Añadir a la lista";
             btnAgregar.style.backgroundColor = "var(--dorado)";
         }, 1500);
     } else {
-        alert("Esta alabanza ya está en tu lista del domingo.");
+        alert(`Esta alabanza ya está agregada al culto del Domingo.`);
     }
 });
 
-// Alternar entre Repertorio Global y Lista Dominical
+// Alternar vistas
 const btnVerLista = document.getElementById('btn-ver-lista');
 const btnExportarPDF = document.getElementById('btn-exportar-pdf');
 
@@ -287,32 +358,43 @@ btnVerLista.addEventListener('click', () => {
     if (viendoListaDominical) {
         btnVerLista.textContent = `Volver al Repertorio (${listaDominical.length})`;
         btnVerLista.style.backgroundColor = "var(--blanco)";
-        tituloSeccion.textContent = "Mi Lista Dominical";
-        btnAgregar.style.display = 'none'; // Ocultar botón de añadir
+        tituloSeccion.textContent = "Listas de Reunión";
         mostrarLista(listaDominical, true);
         
         if(listaDominical.length > 0 && btnExportarPDF) btnExportarPDF.style.display = 'inline-block';
-        
     } else {
-        btnVerLista.textContent = `Ver mi lista dominical (${listaDominical.length})`;
+        btnVerLista.textContent = `Ver mis listas (${listaDominical.length})`;
         btnVerLista.style.backgroundColor = "var(--dorado)";
         tituloSeccion.textContent = "Repertorio Disponible";
-        btnAgregar.style.display = 'inline-block'; // Mostrar botón de añadir
         if (btnExportarPDF) btnExportarPDF.style.display = 'none';
         
         const textoBusqueda = document.getElementById('buscador').value.toLowerCase();
         const filtradas = inventarioCanciones.filter(c => c.titulo.toLowerCase().includes(textoBusqueda));
         mostrarLista(filtradas, false);
     }
-    
-    // Limpiar el visor derecho al cambiar de modo para evitar confusiones
-    cancionActualId = null;
-    document.getElementById('titulo-cancion').textContent = 'Selecciona una alabanza';
-    document.getElementById('controles-tono').style.display = 'none';
-    document.getElementById('letra-cancion').innerHTML = '';
+    limpaVisorDerecho();
 });
 
+// Botón Vista Expandida
+const btnPantallaCompleta = document.getElementById('btn-pantalla-completa');
+if(btnPantallaCompleta) {
+    btnPantallaCompleta.textContent = "⛶ Expandir vista";
+    btnPantallaCompleta.addEventListener('click', () => {
+        const body = document.body;
+        body.classList.toggle('modo-expandido');
+        if (body.classList.contains('modo-expandido')) {
+            btnPantallaCompleta.textContent = "✖ Contraer vista";
+            btnPantallaCompleta.style.backgroundColor = "#ff4c4c"; 
+        } else {
+            btnPantallaCompleta.textContent = "⛶ Expandir vista";
+            btnPantallaCompleta.style.backgroundColor = "var(--azul-marino)"; 
+        }
+    });
+}
+
+// ==========================================
 // 7. PROGRAMACIÓN DEL BOTÓN DE EXPORTACIÓN A PDF
+// ==========================================
 if (btnExportarPDF) {
     btnExportarPDF.addEventListener('click', () => {
         if (listaDominical.length === 0) return;
@@ -323,23 +405,30 @@ if (btnExportarPDF) {
         const areaImpresion = document.createElement('div');
         areaImpresion.id = 'area-impresion-pdf';
 
-        listaDominical.forEach(cancion => {
-            const divCancion = document.createElement('div');
-            divCancion.className = 'cancion-pdf';
+        const diasOrden = ["Miércoles", "Viernes", "Domingo"];
+        
+        diasOrden.forEach(dia => {
+            const cancionesDelDia = listaDominical.filter(c => c.dia === dia);
             
-            // INTELIGENCIA DE COLUMNAS PARA EL PDF
-            const numeroDeLineas = cancion.letra.split('\n').length;
-            const claseColumna = numeroDeLineas > 25 ? 'letra-doble-columna' : '';
+            cancionesDelDia.forEach(cancion => {
+                const divCancion = document.createElement('div');
+                divCancion.className = 'cancion-pdf';
+                
+                const numeroDeLineas = cancion.letra.split('\n').length;
+                const claseColumna = numeroDeLineas > 25 ? 'letra-doble-columna' : '';
 
-            // NOTA: Cambiamos la etiqueta <pre> por <div> para que las columnas funcionen perfecto
-            divCancion.innerHTML = `
-                <h2>${cancion.titulo}</h2>
-                <div class="tono-pdf">Tono para la alabanza: ${cancion.tono_original}</div>
-                <div class="${claseColumna}" style="font-family: 'Courier New', Courier, monospace; font-size: 11pt;">
-                    ${procesarLetraYAcordes(cancion.letra)}
-                </div>
-            `;
-            areaImpresion.appendChild(divCancion);
+                divCancion.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #D4AF37; margin-bottom: 15px; padding-bottom: 5px;">
+                        <h2 style="margin: 0; border: none; padding: 0; font-size: 24pt;">${cancion.titulo}</h2>
+                        <span style="font-family: 'Segoe UI', sans-serif; font-weight: bold; background-color: #0A192F; color: #D4AF37; padding: 6px 14px; border-radius: 4px; font-size: 11pt; text-transform: uppercase; letter-spacing: 1px;">REUNIÓN: ${cancion.dia}</span>
+                    </div>
+                    <div class="tono-pdf">Tono para la alabanza: ${cancion.tono_original}</div>
+                    <div class="${claseColumna}" style="font-family: 'Courier New', Courier, monospace; font-size: 11pt;">
+                        ${procesarLetraYAcordes(cancion.letra)}
+                    </div>
+                `;
+                areaImpresion.appendChild(divCancion);
+            });
         });
 
         document.body.appendChild(areaImpresion);
@@ -347,30 +436,5 @@ if (btnExportarPDF) {
         setTimeout(() => {
             window.print();
         }, 100);
-    });
-}
-
-// ==========================================
-// 8. MODO VISTA EXPANDIDA (MAXIMIZAR)
-// ==========================================
-const btnPantallaCompleta = document.getElementById('btn-pantalla-completa');
-
-if(btnPantallaCompleta) {
-    // Le ponemos un texto inicial más adecuado
-    btnPantallaCompleta.textContent = "⛶ Expandir vista";
-
-    btnPantallaCompleta.addEventListener('click', () => {
-        const body = document.body;
-        // Alternamos la clase que expande el diseño
-        body.classList.toggle('modo-expandido');
-        
-        // Cambiamos el aspecto del botón dependiendo de si está expandido o no
-        if (body.classList.contains('modo-expandido')) {
-            btnPantallaCompleta.textContent = "✖ Contraer vista";
-            btnPantallaCompleta.style.backgroundColor = "#ff4c4c"; // Se pone rojo para salir
-        } else {
-            btnPantallaCompleta.textContent = "⛶ Expandir vista";
-            btnPantallaCompleta.style.backgroundColor = "var(--azul-marino)"; // Vuelve a azul
-        }
     });
 }
