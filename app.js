@@ -115,12 +115,40 @@ function procesarLetraYAcordes(letraCruda) {
 }
 
 // ==========================================
-// 5. RENDERIZADO DE LA INTERFAZ
+// 5. RENDERIZADO DE LA INTERFAZ Y ORDENAMIENTO
 // ==========================================
 function obtenerCancionActual() {
     return viendoListaDominical 
         ? listaDominical.find(c => c.id === cancionActualId && c.dia === cancionActualDia) 
         : inventarioCanciones.find(c => c.id === cancionActualId);
+}
+
+// NUEVA FUNCIÓN: Permite mover las canciones arriba o abajo en su respectivo día
+function moverCancionLista(id, dia, direccion) {
+    const indicesDia = [];
+    listaDominical.forEach((c, index) => {
+        if (c.dia === dia) indicesDia.push(index);
+    });
+
+    const posicionEnGrupo = indicesDia.findIndex(indexLista => listaDominical[indexLista].id === id);
+
+    if (direccion === -1 && posicionEnGrupo > 0) { 
+        // Mover hacia arriba
+        const indexActual = indicesDia[posicionEnGrupo];
+        const indexAnterior = indicesDia[posicionEnGrupo - 1];
+        const temp = listaDominical[indexActual];
+        listaDominical[indexActual] = listaDominical[indexAnterior];
+        listaDominical[indexAnterior] = temp;
+        mostrarLista(listaDominical, true);
+    } else if (direccion === 1 && posicionEnGrupo < indicesDia.length - 1) { 
+        // Mover hacia abajo
+        const indexActual = indicesDia[posicionEnGrupo];
+        const indexSiguiente = indicesDia[posicionEnGrupo + 1];
+        const temp = listaDominical[indexActual];
+        listaDominical[indexActual] = listaDominical[indexSiguiente];
+        listaDominical[indexSiguiente] = temp;
+        mostrarLista(listaDominical, true);
+    }
 }
 
 function mostrarLista(canciones, esListaDominical = false) {
@@ -133,7 +161,6 @@ function mostrarLista(canciones, esListaDominical = false) {
     }
 
     if (esListaDominical) {
-        // AGRUPACIÓN INTELIGENTE POR DÍAS
         const diasOrden = ["Miércoles", "Viernes", "Domingo"];
         
         diasOrden.forEach(dia => {
@@ -145,17 +172,16 @@ function mostrarLista(canciones, esListaDominical = false) {
                 headerDia.textContent = `Culto de ${dia}`;
                 contenedor.appendChild(headerDia);
 
-                cancionesDelDia.forEach(cancion => {
+                cancionesDelDia.forEach((cancion, index) => {
                     const li = document.createElement('li');
                     li.dataset.id = cancion.id; 
                     
-                    // Diseño flexible para que quepan el título, el selector y el botón X
                     li.style.display = 'flex';
                     li.style.alignItems = 'center';
                     li.style.justifyContent = 'space-between';
                     li.style.gap = '10px';
 
-                    // 1. El Título (Clickable para ver la canción)
+                    // Título de la canción
                     const spanTitulo = document.createElement('span');
                     spanTitulo.textContent = cancion.titulo;
                     spanTitulo.style.flex = '1';
@@ -168,7 +194,31 @@ function mostrarLista(canciones, esListaDominical = false) {
                         mostrarCancion(cancion.id, cancion.dia);
                     });
 
-                    // 2. El Mini-Selector de Días
+                    // Agrupador de todos los controles derechos
+                    const divControles = document.createElement('div');
+                    divControles.className = 'controles-item-lista';
+
+                    // Botón Subir (▲)
+                    const btnSubir = document.createElement('button');
+                    btnSubir.innerHTML = '▲';
+                    btnSubir.className = 'btn-ordenar';
+                    if (index === 0) btnSubir.style.visibility = 'hidden'; // Ocultar si es el primero
+                    btnSubir.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        moverCancionLista(cancion.id, cancion.dia, -1);
+                    });
+
+                    // Botón Bajar (▼)
+                    const btnBajar = document.createElement('button');
+                    btnBajar.innerHTML = '▼';
+                    btnBajar.className = 'btn-ordenar';
+                    if (index === cancionesDelDia.length - 1) btnBajar.style.visibility = 'hidden'; // Ocultar si es el último
+                    btnBajar.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        moverCancionLista(cancion.id, cancion.dia, 1);
+                    });
+
+                    // Mini-Selector de Días
                     const selectDia = document.createElement('select');
                     selectDia.className = 'select-dia-lista';
                     
@@ -186,18 +236,18 @@ function mostrarLista(canciones, esListaDominical = false) {
                         selectDia.appendChild(optionElement);
                     });
 
-                    // Si cambian el día, actualizamos el arreglo y redibujamos la lista para agruparla
                     selectDia.addEventListener('change', (e) => {
                         cancion.dia = e.target.value;
                         mostrarLista(listaDominical, true);
                     });
 
-                    // 3. El botón de eliminar
+                    // Botón de eliminar (✖)
                     const btnEliminar = document.createElement('button');
                     btnEliminar.textContent = "✖";
                     btnEliminar.className = "btn-eliminar";
                     
                     btnEliminar.addEventListener('click', (e) => {
+                        e.stopPropagation();
                         listaDominical = listaDominical.filter(c => !(c.id === cancion.id && c.dia === cancion.dia));
                         mostrarLista(listaDominical, true); 
                         document.getElementById('btn-ver-lista').textContent = `Volver al Repertorio (${listaDominical.length})`;
@@ -210,17 +260,20 @@ function mostrarLista(canciones, esListaDominical = false) {
                         }
                     });
 
-                    // Armamos el renglón
+                    // Ensamblaje
+                    divControles.appendChild(btnSubir);
+                    divControles.appendChild(btnBajar);
+                    divControles.appendChild(selectDia);
+                    divControles.appendChild(btnEliminar);
+
                     li.appendChild(spanTitulo);
-                    li.appendChild(selectDia);
-                    li.appendChild(btnEliminar);
+                    li.appendChild(divControles);
 
                     contenedor.appendChild(li);
                 });
             }
         });
     } else {
-        // Vista normal del repertorio completo (Súper Limpia)
         canciones.forEach(cancion => {
             const li = document.createElement('li');
             li.textContent = cancion.titulo;
