@@ -65,8 +65,13 @@ function procesarLetraYAcordes(letraCruda) {
             return;
         }
 
-        if (lineaRaw.trim().startsWith('[') && lineaRaw.trim().endsWith(']')) {
-            htmlFinal += `<span class="marcador-seccion">${lineaRaw.trim()}</span>`;
+        const lineaLimpia = lineaRaw.trim();
+        
+        // ¡LA CORRECCIÓN ESTÁ AQUÍ! 
+        // Ahora nos aseguramos de que el primer ']' sea el ÚLTIMO carácter de la línea.
+        // Si hay texto u otros acordes después del primer ']', la procesa normal.
+        if (lineaLimpia.startsWith('[') && lineaLimpia.endsWith(']') && lineaLimpia.indexOf(']') === lineaLimpia.length - 1) {
+            htmlFinal += `<span class="marcador-seccion">${lineaLimpia}</span>`;
             return;
         }
 
