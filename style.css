@@ -399,3 +399,28 @@ body.modo-expandido #visor-cancion {
 .select-dia-lista:hover {
     background-color: var(--azul-marino);
 }
+/* =========================================
+   BOTONES DE ORDENAMIENTO (ARRIBA/ABAJO)
+========================================= */
+.controles-item-lista {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.btn-ordenar {
+    background-color: transparent;
+    color: var(--dorado);
+    border: 1px solid var(--dorado);
+    border-radius: 4px;
+    padding: 2px 6px;
+    cursor: pointer;
+    font-size: 0.7rem;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.btn-ordenar:hover {
+    background-color: var(--dorado);
+    color: var(--negro);
+}
