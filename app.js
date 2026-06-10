@@ -60,21 +60,25 @@ function procesarLetraYAcordes(letraCruda) {
     let htmlFinal = '';
 
     lineasCrudas.forEach(lineaRaw => {
-        if (lineaRaw.trim() === "") {
+        const lineaLimpia = lineaRaw.trim();
+
+        // 1. Si es una línea vacía
+        if (lineaLimpia === "") {
             htmlFinal += '<br>';
             return;
         }
 
-        const lineaLimpia = lineaRaw.trim();
-        
-        // ¡LA CORRECCIÓN ESTÁ AQUÍ! 
-        // Ahora nos aseguramos de que el primer ']' sea el ÚLTIMO carácter de la línea.
-        // Si hay texto u otros acordes después del primer ']', la procesa normal.
-        if (lineaLimpia.startsWith('[') && lineaLimpia.endsWith(']') && lineaLimpia.indexOf(']') === lineaLimpia.length - 1) {
+        // 2. LA REGLA INTELIGENTE (REGEX) PARA MARCADORES
+        // Esta expresión asegura que empiece con [, termine con ], 
+        // y adentro NO tenga más corchetes. Así no confunde las canciones.
+        const esMarcador = /^\[[^\[\]]+\]$/.test(lineaLimpia);
+
+        if (esMarcador) {
             htmlFinal += `<span class="marcador-seccion">${lineaLimpia}</span>`;
             return;
         }
 
+        // 3. Si es una línea con acordes (la canción real)
         if (lineaRaw.includes('[')) {
             let lineaAcordesHTML = '';
             let lineaLetrasHTML = '';
@@ -112,13 +116,13 @@ function procesarLetraYAcordes(letraCruda) {
                     <pre class="linea-letras">${lineaLetrasHTML}</pre>
                 </div>`;
         } else {
+            // 4. Si es una línea de solo texto
             htmlFinal += `<div class="bloque-linea"><pre class="linea-letras">${lineaRaw}</pre></div>`;
         }
     });
 
     return htmlFinal;
 }
-
 // ==========================================
 // 5. RENDERIZADO DE LA INTERFAZ Y ORDENAMIENTO
 // ==========================================
