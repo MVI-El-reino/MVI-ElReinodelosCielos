@@ -424,3 +424,22 @@ body.modo-expandido #visor-cancion {
     background-color: var(--dorado);
     color: var(--negro);
 }
+/* =========================================
+   ESTILOS DE CENTRADO Y COLUMNAS PARA PDF
+========================================= */
+/* Esta clase agrupa la canción y la centra en la hoja sin desalinear los acordes */
+.letra-centrada {
+    width: fit-content;
+    margin: 0 auto;
+    text-align: left; 
+}
+
+/* Modificamos el comportamiento de impresión para forzar el salto de columna */
+@media print {
+    .letra-doble-columna {
+        column-count: 2;
+        column-fill: auto; /* Evita que el navegador intente igualar las columnas a la mitad */
+        max-height: 850px; /* Límite de altura de la hoja A4 para que brinque a la col 2 */
+        width: 100%;
+    }
+}
