@@ -270,7 +270,7 @@ main {
    CONFIGURACIÓN EXCLUSIVA PARA EL PDF (IMPRESIÓN)
 ========================================= */
 @media print {
-    /* 1. RESET VITAL: Liberamos el tamaño del body para que genere las hojas necesarias */
+    /* 1. RESET VITAL: Liberamos el tamaño del body */
     body {
         display: block !important;
         height: auto !important;
@@ -300,24 +300,24 @@ main {
 
     .cancion-pdf h2 {
         color: #0A192F !important;
-        font-size: 24pt;
+        font-size: 26pt;
         border-bottom: 2px solid #D4AF37;
         padding-bottom: 5px;
         margin-bottom: 15px;
     }
 
     .cancion-pdf .tono-pdf {
-        font-size: 12pt;
+        font-size: 15pt;
         font-weight: bold;
         color: #E67E22;
         margin-bottom: 15px;
     }
 
-    /* 5. Ajuste de tamaño de fuente y márgenes */
+    /* 5. LA MAGIA DEL TAMAÑO: Obligamos a heredar el tamaño gigante del JS */
     .cancion-pdf pre {
         font-family: 'Courier New', Courier, monospace !important;
-        font-size: 11pt; 
-        line-height: 1.3;
+        font-size: inherit !important; 
+        line-height: inherit !important;
         white-space: pre;
         margin: 0;
     }
@@ -332,11 +332,14 @@ main {
         color: #000000 !important;
         margin: 0;
     }
-}
 
-/* Ocultar el contenedor en la vista normal de la web */
-#area-impresion-pdf {
-    display: none;
+    /* 6. LA MAGIA DE LA COLUMNA: Le ponemos una pared obligatoria de 23 centímetros */
+    .letra-doble-columna {
+        column-count: 2;
+        column-fill: auto;
+        height: 23cm !important; 
+        width: 100%;
+    }
 }
 
 /* =========================================
