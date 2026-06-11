@@ -314,12 +314,22 @@ main {
     }
 
     /* 5. LA MAGIA DEL TAMAÑO: Obligamos a heredar el tamaño gigante del JS */
+    /* LA MAGIA DEL TAMAÑO: Obligamos a heredar el tamaño gigante del JS */
     .cancion-pdf pre {
-        font-family: 'Courier New', Courier, monospace !important;
+        font-family: 'Courier New', Courier, Menlo, monospace !important;
         font-size: inherit !important; 
         line-height: inherit !important;
         white-space: pre;
         margin: 0;
+        overflow: visible !important;
+    }
+
+    /* LA MAGIA DE LA COLUMNA: Le ponemos un tope de altura máximo */
+    .letra-doble-columna {
+        column-count: 2;
+        column-fill: auto;
+        max-height: 23cm !important; /* Limite exacto para que el texto brinque a la 2da columna */
+        width: 100%;
     }
 
     .cancion-pdf .linea-acordes {
@@ -334,12 +344,6 @@ main {
     }
 
     /* 6. LA MAGIA DE LA COLUMNA: Le ponemos una pared obligatoria de 23 centímetros */
-    .letra-doble-columna {
-        column-count: 2;
-        column-fill: auto;
-        height: 23cm !important; 
-        width: 100%;
-    }
 }
 
 /* =========================================
