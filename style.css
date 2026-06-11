@@ -445,3 +445,52 @@ body.modo-expandido #visor-cancion {
         width: 100%;
     }
 }
+/* =========================================
+   OPTIMIZACIÓN PARA CELULARES (DISEÑO RESPONSIVO)
+========================================= */
+
+/* 1. Permitimos que los botones "caigan" a la siguiente línea si no caben */
+#controles-tono {
+    flex-wrap: wrap !important;
+    gap: 8px;
+    justify-content: center;
+}
+
+#controles-tono button {
+    margin: 0 !important; /* Limpiamos márgenes fijos que estorban en móvil */
+}
+
+/* REGLAS EXCLUSIVAS PARA PANTALLAS PEQUEÑAS (CELULARES) */
+@media (max-width: 768px) {
+    
+    /* 2. Hacemos el botón de Expandir gigante, intuitivo y lo ponemos PRIMERO */
+    #btn-pantalla-completa {
+        width: 100% !important;
+        padding: 15px !important;
+        font-size: 1.2rem !important;
+        font-weight: bold;
+        border-radius: 8px;
+        order: -1 !important; /* Este truco lo manda hasta arriba del grupo */
+        margin-bottom: 10px !important;
+    }
+
+    /* 3. Ajustamos el tamaño de los controles de tono para que se vean bien */
+    #bajar-tono, #subir-tono, #btn-agregar-lista {
+        flex-grow: 1; /* Hacemos que se estiren para llenar los huecos */
+        padding: 10px !important;
+    }
+
+    /* 4. Encogemos un poco la letra y protegemos la pantalla */
+    #letra-cancion {
+        font-size: 0.85rem !important; /* Letra ideal para pantallas angostas */
+        width: 100% !important;
+        overflow-x: auto !important; /* Si una línea es MUY larga, solo se desliza la letra, no toda la página */
+        padding-bottom: 30px;
+    }
+
+    /* 5. Aseguramos que las canciones SIEMPRE sean de 1 columna en celular */
+    .letra-doble-columna {
+        column-count: 1 !important;
+        height: auto !important;
+    }
+}
