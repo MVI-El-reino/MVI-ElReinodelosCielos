@@ -476,32 +476,32 @@ if (btnExportarPDF) {
                 const divCancion = document.createElement('div');
                 divCancion.className = 'cancion-pdf';
                 
-                // INTELIGENCIA DE TAMAÑOS Y COLUMNAS
+                // INTELIGENCIA DE TAMAÑOS AUMENTADA (Letras gigantes)
                 const numeroDeLineas = cancion.letra.split('\n').length;
                 let claseColumna = '';
                 let estiloDinamico = '';
 
                 if (numeroDeLineas > 25) {
-                    // Canciones muy largas: Doble columna, tamaño estándar
+                    // Doble columna: Sube de 11pt a 14pt
                     claseColumna = 'letra-doble-columna';
-                    estiloDinamico = "font-size: 11pt;";
+                    estiloDinamico = "font-size: 14pt; line-height: 1.4;";
                 } else if (numeroDeLineas <= 12) {
-                    // Canciones cortas: Letra gigante y un poco de margen superior
-                    estiloDinamico = "font-size: 18pt; margin-top: 30px;";
+                    // Canciones muy cortas: Letra extra gigante
+                    estiloDinamico = "font-size: 24pt; line-height: 1.5; margin-top: 40px;";
                 } else if (numeroDeLineas <= 18) {
-                    // Canciones medianas: Letra grande
-                    estiloDinamico = "font-size: 15pt; margin-top: 15px;";
+                    // Canciones medianas: Letra muy grande
+                    estiloDinamico = "font-size: 20pt; line-height: 1.4; margin-top: 20px;";
                 } else {
-                    // Canciones normales (19 a 25 líneas)
-                    estiloDinamico = "font-size: 13pt;";
+                    // Canciones normales (19 a 25 líneas): Letra grande
+                    estiloDinamico = "font-size: 17pt; line-height: 1.4;";
                 }
 
                 divCancion.innerHTML = `
                     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #D4AF37; margin-bottom: 15px; padding-bottom: 5px;">
-                        <h2 style="margin: 0; border: none; padding: 0; font-size: 24pt;">${cancion.titulo}</h2>
-                        <span style="font-family: 'Segoe UI', sans-serif; font-weight: bold; background-color: #0A192F; color: #D4AF37; padding: 6px 14px; border-radius: 4px; font-size: 11pt; text-transform: uppercase; letter-spacing: 1px;">REUNIÓN: ${cancion.dia}</span>
+                        <h2 style="margin: 0; border: none; padding: 0; font-size: 28pt;">${cancion.titulo}</h2>
+                        <span style="font-family: 'Segoe UI', sans-serif; font-weight: bold; background-color: #0A192F; color: #D4AF37; padding: 8px 16px; border-radius: 4px; font-size: 14pt; text-transform: uppercase; letter-spacing: 1px;">REUNIÓN: ${cancion.dia}</span>
                     </div>
-                    <div class="tono-pdf" style="font-size: 14pt;">Tono para la alabanza: ${cancion.tono_original}</div>
+                    <div class="tono-pdf" style="font-size: 16pt; margin-bottom: 20px;">Tono para la alabanza: ${cancion.tono_original}</div>
                     
                     <div class="${claseColumna}" style="font-family: 'Courier New', Courier, monospace; ${estiloDinamico}">
                         ${procesarLetraYAcordes(cancion.letra)}
