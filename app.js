@@ -310,9 +310,19 @@ function renderizarVisorDerecho() {
     document.getElementById('tono-actual').innerHTML = `Tono: <span style="color:#E67E22;">${tonoMostrado}</span>`;
     
     const contenedorLetra = document.getElementById('letra-cancion');
-    const numeroDeLineas = letraTranspuesta.split('\n').length;
     
-    if (numeroDeLineas > 25) {
+    // NUEVA INTELIGENCIA: Contamos la altura visual exacta en pantalla
+    let lineasVisuales = 0;
+    letraTranspuesta.split('\n').forEach(l => {
+        const linea = l.trim();
+        if (linea === "") lineasVisuales += 1; 
+        else if (/^\[[^\[\]]+\]$/.test(linea)) lineasVisuales += 1.5; 
+        else if (linea.includes('[')) lineasVisuales += 2; // Vale por 2 (Letra + Acorde)
+        else lineasVisuales += 1; 
+    });
+    
+    // Si pasa de 20 líneas visuales, se va a doble columna
+    if (lineasVisuales > 20) {
         contenedorLetra.classList.add('letra-doble-columna');
     } else {
         contenedorLetra.classList.remove('letra-doble-columna');
