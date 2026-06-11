@@ -486,45 +486,37 @@ if (btnExportarPDF) {
                 const divCancion = document.createElement('div');
                 divCancion.className = 'cancion-pdf';
                 
-                // MAGIA MATEMÁTICA 2.0: Contamos la altura REAL (Líneas visuales)
+                // Contamos la altura REAL (Líneas visuales)
                 let lineasVisuales = 0;
                 cancion.letra.split('\n').forEach(l => {
                     const linea = l.trim();
                     if (linea === "") { 
-                        lineasVisuales += 1; // Espacio en blanco
+                        lineasVisuales += 1; 
                     } else if (/^\[[^\[\]]+\]$/.test(linea)) { 
-                        lineasVisuales += 1.5; // Es un marcador como [Coro], ocupa poco espacio
+                        lineasVisuales += 1.5; 
                     } else if (linea.includes('[')) { 
-                        lineasVisuales += 2; // Tiene acordes (Ocupa doble renglón visual)
+                        lineasVisuales += 2; 
                     } else { 
-                        lineasVisuales += 1; // Es solo texto
+                        lineasVisuales += 1; 
                     }
                 });
 
                 let claseColumna = '';
                 let estiloDinamico = '';
 
-                // Asignación de tamaños basada en la capacidad milimétrica de una hoja
-                if (lineasVisuales > 36) {
-                    // Canciones muy largas: Activa doble columna obligatoria (Ej. Por Siempre)
+                // NUEVO LÍMITE: Si pasa de 20 renglones, se divide en 2 columnas
+                if (lineasVisuales > 20) {
                     claseColumna = 'letra-doble-columna';
-                    estiloDinamico = "font-size: 12pt; line-height: 1.3;";
-                } else if (lineasVisuales <= 18) {
-                    // Canciones muy cortas (Ej. Tu Fidelidad)
+                    // Al tener dos columnas, usamos una letra muy cómoda
+                    estiloDinamico = "font-size: 14pt; line-height: 1.4;";
+                } else if (lineasVisuales <= 12) {
+                    // Canciones muy cortas 
                     claseColumna = 'letra-centrada';
                     estiloDinamico = "font-size: 22pt; line-height: 1.5; margin-top: 30px;";
-                } else if (lineasVisuales <= 25) {
-                    // Canciones medianas cortas
+                } else {
+                    // Canciones medianas (13 a 20 líneas)
                     claseColumna = 'letra-centrada';
                     estiloDinamico = "font-size: 18pt; line-height: 1.4; margin-top: 20px;";
-                } else if (lineasVisuales <= 31) {
-                    // Canciones normales (Ej. Cristo no está muerto encajará aquí)
-                    claseColumna = 'letra-centrada';
-                    estiloDinamico = "font-size: 15pt; line-height: 1.4; margin-top: 10px;";
-                } else {
-                    // Canciones al límite de 1 sola hoja sin llegar a doble columna (32 a 36 líneas)
-                    claseColumna = 'letra-centrada';
-                    estiloDinamico = "font-size: 13.5pt; line-height: 1.3;";
                 }
 
                 divCancion.innerHTML = `
