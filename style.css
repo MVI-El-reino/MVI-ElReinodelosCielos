@@ -312,24 +312,13 @@ main {
         color: #E67E22;
         margin-bottom: 15px;
     }
-
-    /* 5. LA MAGIA DEL TAMAÑO: Obligamos a heredar el tamaño gigante del JS */
-    /* LA MAGIA DEL TAMAÑO: Obligamos a heredar el tamaño gigante del JS */
-    .cancion-pdf pre {
-        font-family: 'Courier New', Courier, Menlo, monospace !important;
-        font-size: inherit !important; 
-        line-height: inherit !important;
-        white-space: pre;
-        margin: 0;
-        overflow: visible !important;
-    }
-
-    /* LA MAGIA DE LA COLUMNA: Le ponemos un tope de altura máximo */
-    .letra-doble-columna {
-        column-count: 2;
-        column-fill: auto;
-        max-height: 23cm !important; /* Limite exacto para que el texto brinque a la 2da columna */
-        width: 100%;
+    .cancion-pdf {
+        break-after: page;
+        page-break-after: always; 
+        page-break-inside: avoid !important; /* CANDADO: Prohíbe que el título y la letra se separen */
+        break-inside: avoid !important;
+        padding: 10px 20px; /* Reducimos un poco el margen para dar más espacio */
+        background-color: #ffffff !important;
     }
 
     .cancion-pdf .linea-acordes {
@@ -343,7 +332,13 @@ main {
         margin: 0;
     }
 
-    /* 6. LA MAGIA DE LA COLUMNA: Le ponemos una pared obligatoria de 23 centímetros */
+    /* 6. LA MAGIA DE LA COLUMNA: Le ponemos un tope más seguro */
+    .letra-doble-columna {
+        column-count: 2;
+        column-fill: auto;
+        max-height: 19cm !important; /* Reducido a 19cm para asegurar que quepa junto con el título */
+        width: 100%;
+    }
 }
 
 /* =========================================
