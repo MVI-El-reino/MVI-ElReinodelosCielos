@@ -503,12 +503,16 @@ if (btnExportarPDF) {
 
                 let claseColumna = '';
                 let estiloDinamico = '';
-
-                // NUEVO LÍMITE: Si pasa de 20 renglones, se divide en 2 columnas
-                if (lineasVisuales > 20) {
+                
+                // NUEVO LÍMITE: Equilibrado y con letras más grandes
+                if (lineasVisuales > 45) {
+                    // Canciones extremadamente largas (casi no hay, pero por si acaso)
                     claseColumna = 'letra-doble-columna';
-                    // Al tener dos columnas, usamos una letra muy cómoda
-                    estiloDinamico = "font-size: 14pt; line-height: 1.4;";
+                    estiloDinamico = "font-size: 13pt; line-height: 1.3;";
+                } else if (lineasVisuales > 20) {
+                    // Canciones medianas-largas (Como "A Danzar")
+                    claseColumna = 'letra-doble-columna';
+                    estiloDinamico = "font-size: 16pt; line-height: 1.4;"; // ¡Aumentamos de 14pt a 16pt!
                 } else if (lineasVisuales <= 12) {
                     // Canciones muy cortas 
                     claseColumna = 'letra-centrada';
