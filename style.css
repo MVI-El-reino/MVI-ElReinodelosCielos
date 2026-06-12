@@ -445,6 +445,13 @@ body.modo-expandido #visor-cancion {
         width: 100%;
     }
 }
+/* 7. CANDADO PARA LAS LÍNEAS: Prohíbe que el navegador separe los acordes de su letra */
+    .bloque-linea {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+        display: inline-block !important; /* Convierte cada renglón en un ladrillo sólido */
+        width: 100%;
+    }
 /* =========================================
    OPTIMIZACIÓN PARA CELULARES (DISEÑO RESPONSIVO)
 ========================================= */
