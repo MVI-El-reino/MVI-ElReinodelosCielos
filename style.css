@@ -480,21 +480,29 @@ body.modo-expandido #visor-cancion {
         padding: 10px !important;
     }
 
-    /* 4. Encogemos un poco la letra y protegemos la pantalla */
+        /* 4. Liberamos la página entera para que puedas deslizar hacia abajo de forma natural */
+    html, body, main {
+        height: auto !important;
+        overflow-y: auto !important;
+    }
+
+    /* 5. Limitamos el tamaño de la lista negra de arriba para que no estorbe */
+    #contenedor-lista {
+        max-height: 30vh !important; /* Solo ocupa un tercio de la pantalla */
+        overflow-y: auto !important;
+    }
+
+    /* 6. Le quitamos la "caja chiquita" a la letra y dejamos que el lienzo blanco crezca */
     #letra-cancion {
-        font-size: 0.85rem !important; 
-        width: 100% !important;
-        max-height: 45vh !important; /* Le da una altura máxima de casi media pantalla */
-        overflow-y: auto !important; /* Activa el deslizamiento hacia abajo */
-        overflow-x: auto !important; /* Activa el deslizamiento hacia los lados si es necesario */
-        padding: 15px !important;
+        max-height: none !important;
+        height: auto !important;
+        overflow: visible !important;
+        background-color: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
         margin-top: 15px;
-        
-        /* Toque visual para que sepan que es una caja deslizable */
-        background-color: #f4f6f9; 
-        border: 1px solid #e1e4e8;
-        border-radius: 8px;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        margin-bottom: 30px; /* Da un buen espacio al final de la canción */
     }
 
     /* 5. Aseguramos que las canciones SIEMPRE sean de 1 columna en celular */
