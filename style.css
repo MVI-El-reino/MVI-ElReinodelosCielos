@@ -335,8 +335,8 @@ main {
     /* 6. LA MAGIA DE LA COLUMNA: Le ponemos un tope más seguro */
     .letra-doble-columna {
         column-count: 2;
-        column-fill: auto;
-        max-height: 19cm !important; /* Reducido a 19cm para asegurar que quepa junto con el título */
+        column-fill: balance !important; /* MAGIA: Obliga a que ambas columnas tengan la misma cantidad de texto */
+        max-height: 19cm !important; 
         width: 100%;
     }
 }
