@@ -1,15 +1,15 @@
 [
   {
-"id": 1,
-"titulo": "Abre los Cielos",
-"tono_original": "G",
-"letra": "[C]Padre quiero estar en tu pre[G]sencia\n[C]Mi vida llena está de estar a[Em7]quí\n[D]Señor realmente quiero ver tu glo[C]ria\n[C]Deja tu fuego hoy caer [D]en mí\n[Am7]Escucha mi clamor [(G Em7 C G)] Abre los cielos hoy\n\n[C]¿Puedes mi pasión sentir? [(Am/G)-G]\n[C]¿Y el hambre ver en mí? [Em7]\n[Am7]No más barreras [C] [D]\n[C]Quitaste las tinieblas [D]\n[Am7]Ven llena hoy mi corazón [G/B] [C]"
-},
+    "id": 1,
+    "titulo": "Abre los cielos",
+    "tono_original": "G",
+    "letra": "[Intro]\n[G] [Em] [C] [G] [D]\n\n[C]Padre quiero estar en tu pre[G]sencia\n[C]Mi vida llena está de estar a[G]quí\n[Am]Señor realmente quiero ver tu [D]gloria\n[Am]Deja tu fuego [C]hoy caer en [D]mí\n\n[Coro]\n[G]Puedes mi pasión sentir\n[Em]Y el hambre ver en mí\n[C]Sabes [D]que te an[C]helo a [D]ti\n[G]No más barreras\n[Em]Quitaste las tinieblas\n[C]Ven llena hoy mi cora[D]zón\n[Am]Escucha mi cla[C]mor, ¡[D]Abre los cielos [G]hoy!\n\n[C]Hoy por todas partes siento el lla[G]mado\n[C]Que pronto podré ver tu reino a[G]quí\n[Am]Puedes escucharnos desespe[D]rados\n[Am]Es un clamor de [C]nuestro cora[D]zón"
+  },
   {
 "id": 2,
 "titulo": "Abre mis ojos oh Cristo",
 "tono_original": "E",
-"letra": "[E]Abre mis ojos oh Cristo\n[B/D#]Abre mis ojos te pido\n[A]Yo quiero verte\n[E]Yo quiero verte\n\n[B]Y contemplar tu ma[C#m]jestad\n[A]Y el resplandor de tu gloria [Bsus4] [B]\n[B]Derrama tu amor y po[C#m]der\n[A]Cuando cantamos santo, [Bsus4]santo [B]\n\n[E]Santo, Santo, Santo\n[B]Santo, Santo, Santo\n[A]Santo, Santo, Santo\n[E]Yo quiero verte"
+"letra": "[E]Abre mis ojos oh Cristo\n[B/D#]Abre mis ojos te pido\n[A]Yo quiero verte\n[E]Yo quiero verte\n\n[B]Y contemplar tu majest[C#m]ad\n[A]Y el resplandor de tu gloria [Bsus4] [B]\n[B]Derrama tu amor y po[C#m]der\n[A]Cuando cantamos santo, [Bsus4]santo [B]\n\n[E]Santo, Santo, Santo\n[B]Santo, Santo, Santo\n[A]Santo, Santo, Santo\n[E]Yo quiero verte"
 },
   {
     "id": 3,
