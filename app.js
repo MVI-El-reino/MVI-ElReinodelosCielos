@@ -350,10 +350,35 @@ function limpaVisorDerecho() {
 // 6. EVENTOS DE BOTONES E INTERACTIVIDAD
 // ==========================================
 
-// Buscador
+// ==========================================
+// 6. EVENTOS DE BOTONES E INTERACTIVIDAD
+// ==========================================
+
+// Función auxiliar para quitar acentos y convertir a minúsculas
+function limpiarTexto(texto) {
+    if (!texto) return "";
+    return texto
+        .normalize("NFD") // Separa las letras de sus acentos
+        .replace(/[\u0300-\u036f]/g, "") // Borra los acentos invisibles
+        .toLowerCase();
+}
+
+// Buscador Inteligente (Busca en título y letra, ignorando acentos y acordes)
 document.getElementById('buscador').addEventListener('input', (evento) => {
-    const texto = evento.target.value.toLowerCase();
-    const filtradas = inventarioCanciones.filter(c => c.titulo.toLowerCase().includes(texto));
+    const textoBusqueda = limpiarTexto(evento.target.value);
+    
+    const filtradas = inventarioCanciones.filter(cancion => {
+        // 1. Limpiamos el título
+        const tituloLimpio = limpiarTexto(cancion.titulo);
+        
+        // 2. Quitamos los acordes de la letra y la limpiamos
+        const letraSinAcordes = cancion.letra.replace(/\[.*?\]/g, "");
+        const letraLimpia = limpiarTexto(letraSinAcordes);
+
+        // 3. Verificamos si lo que escribió coincide con el título o con alguna frase de la canción
+        return tituloLimpio.includes(textoBusqueda) || letraLimpia.includes(textoBusqueda);
+    });
+    
     mostrarLista(filtradas, false);
 });
 
