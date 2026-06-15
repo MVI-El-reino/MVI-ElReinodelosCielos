@@ -329,6 +329,8 @@ function renderizarVisorDerecho() {
     }
     
     contenedorLetra.innerHTML = procesarLetraYAcordes(letraTranspuesta);
+    //DIBUJO DE GRAFICOS DE NOTAS
+    mostrarAcordesDeCancion(letraTranspuesta);
 }
 
 function mostrarCancion(id, dia = null) {
@@ -345,10 +347,6 @@ function limpaVisorDerecho() {
     document.getElementById('controles-tono').style.display = 'none';
     document.getElementById('letra-cancion').innerHTML = '';
 }
-
-// ==========================================
-// 6. EVENTOS DE BOTONES E INTERACTIVIDAD
-// ==========================================
 
 // ==========================================
 // 6. EVENTOS DE BOTONES E INTERACTIVIDAD
@@ -569,4 +567,26 @@ if (btnExportarPDF) {
             window.print();
         }, 100);
     });
+}
+function mostrarAcordesDeCancion(letra) {
+    // 1. Extraemos todos los acordes únicos de la letra (usando regex para buscar lo que hay entre [])
+    const acordesEnCancion = [...new Set(letra.match(/\[([^\]]+)\]/g))].map(a => a.replace(/[\[\]]/g, ''));
+    
+    const contenedorDiagramas = document.getElementById('contenedor-diagramas');
+    contenedorDiagramas.innerHTML = ''; // Limpiar lo anterior
+
+    // 2. Dibujamos cada acorde encontrado
+    acordesEnCancion.forEach(acorde => {
+        const div = document.createElement('div');
+        div.innerHTML = `<span>${acorde}</span><div id="c-${acorde}"></div>`;
+        contenedorDiagramas.appendChild(div);
+        
+        // Aquí usamos la librería ChordBox para dibujar
+        new ChordBox(`#c-${acorde}`, {
+            chord: acorde,
+            instrument: 'guitar' // O 'keyboard'
+        });
+    });
+
+    document.getElementById('diccionario-acordes').style.display = 'block';
 }
