@@ -569,23 +569,38 @@ if (btnExportarPDF) {
     });
 }
 function mostrarAcordesDeCancion(letra) {
-    // 1. Extraemos todos los acordes únicos de la letra (usando regex para buscar lo que hay entre [])
+    // 1. Extraemos acordes y quitamos duplicados
     const acordesEnCancion = [...new Set(letra.match(/\[([^\]]+)\]/g))].map(a => a.replace(/[\[\]]/g, ''));
     
     const contenedorDiagramas = document.getElementById('contenedor-diagramas');
-    contenedorDiagramas.innerHTML = ''; // Limpiar lo anterior
+    contenedorDiagramas.innerHTML = ''; 
 
-    // 2. Dibujamos cada acorde encontrado
+    // 2. Si no hay acordes, ocultamos el diccionario
+    if (acordesEnCancion.length === 0) {
+        document.getElementById('diccionario-acordes').style.display = 'none';
+        return;
+    }
+
+    // 3. Dibujamos
     acordesEnCancion.forEach(acorde => {
         const div = document.createElement('div');
-        div.innerHTML = `<span>${acorde}</span><div id="c-${acorde}"></div>`;
+        // Asignamos una clase para poder darle estilo luego
+        div.className = 'diagrama-acorde';
+        div.innerHTML = `<span style="display:block; text-align:center; font-weight:bold;">${acorde}</span><div id="c-${acorde.replace(/[\/\#]/g, '')}"></div>`;
         contenedorDiagramas.appendChild(div);
         
-        // Aquí usamos la librería ChordBox para dibujar
-        new ChordBox(`#c-${acorde}`, {
-            chord: acorde,
-            instrument: 'guitar' // O 'keyboard'
-        });
+        // El "try-catch" es vital: si un acorde no es reconocido por la librería, 
+        // no detendrá el resto de la aplicación.
+        try {
+            if (typeof ChordBox !== 'undefined') {
+                new ChordBox(`#c-${acorde.replace(/[\/\#]/g, '')}`, {
+                    chord: acorde,
+                    instrument: 'guitar'
+                });
+            }
+        } catch (e) {
+            console.warn(`No se pudo dibujar el acorde: ${acorde}`);
+        }
     });
 
     document.getElementById('diccionario-acordes').style.display = 'block';
