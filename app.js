@@ -569,39 +569,37 @@ if (btnExportarPDF) {
     });
 }
 function mostrarAcordesDeCancion(letra) {
-    // 1. Extraemos acordes y quitamos duplicados
     const acordesEnCancion = [...new Set(letra.match(/\[([^\]]+)\]/g))].map(a => a.replace(/[\[\]]/g, ''));
     
     const contenedorDiagramas = document.getElementById('contenedor-diagramas');
     contenedorDiagramas.innerHTML = ''; 
 
-    // 2. Si no hay acordes, ocultamos el diccionario
     if (acordesEnCancion.length === 0) {
         document.getElementById('diccionario-acordes').style.display = 'none';
         return;
     }
 
-    // 3. Dibujamos
-    acordesEnCancion.forEach(acorde => {
-        const div = document.createElement('div');
-        // Asignamos una clase para poder darle estilo luego
-        div.className = 'diagrama-acorde';
-        div.innerHTML = `<span style="display:block; text-align:center; font-weight:bold;">${acorde}</span><div id="c-${acorde.replace(/[\/\#]/g, '')}"></div>`;
-        contenedorDiagramas.appendChild(div);
-        
-        // El "try-catch" es vital: si un acorde no es reconocido por la librería, 
-        // no detendrá el resto de la aplicación.
-        try {
-            if (typeof ChordBox !== 'undefined') {
-                new ChordBox(`#c-${acorde.replace(/[\/\#]/g, '')}`, {
-                    chord: acorde,
-                    instrument: 'guitar'
-                });
+    // Usamos un pequeño retraso para asegurar que la librería ya fue procesada por el navegador
+    setTimeout(() => {
+        acordesEnCancion.forEach(acorde => {
+            const div = document.createElement('div');
+            div.className = 'diagrama-acorde';
+            // Limpiamos caracteres especiales para el ID
+            const idLimpio = acorde.replace(/[\/\#]/g, '');
+            div.innerHTML = `<span style="display:block; text-align:center; font-weight:bold;">${acorde}</span><div id="c-${idLimpio}"></div>`;
+            contenedorDiagramas.appendChild(div);
+            
+            try {
+                if (typeof ChordBox !== 'undefined') {
+                    new ChordBox(`#c-${idLimpio}`, {
+                        chord: acorde,
+                        instrument: 'guitar'
+                    });
+                }
+            } catch (e) {
+                console.warn(`No se pudo dibujar el acorde: ${acorde}`);
             }
-        } catch (e) {
-            console.warn(`No se pudo dibujar el acorde: ${acorde}`);
-        }
-    });
-
-    document.getElementById('diccionario-acordes').style.display = 'block';
+        });
+        document.getElementById('diccionario-acordes').style.display = 'block';
+    }, 100); // 100ms de espera para estabilidad
 }
