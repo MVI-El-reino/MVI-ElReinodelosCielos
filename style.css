@@ -2,10 +2,10 @@
    PALETA DE COLORES (Basada en el Logo)
 ========================================= */
 :root {
-    --azul-marino: #0A192F; /* Azul oscuro y elegante */
-    --dorado: #D4AF37;      /* Tono dorado del escudo */
-    --negro: #111111;       /* Fondo del escudo */
-    --blanco: #FFFFFF;      /* Letras de contraste y paloma */
+    --azul-marino: #0A192F;
+    --dorado: #D4AF37;     
+    --negro: #111111;       
+    --blanco: #FFFFFF;      
     --gris-fondo: #F5F7FA;  
 }
 
@@ -24,7 +24,7 @@ body {
     color: var(--blanco);
     display: flex;
     flex-direction: column;
-    height: 100vh; /* Ocupa el 100% de la altura de la pantalla */
+    height: 100vh;
 }
 
 /* =========================================
@@ -37,7 +37,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap; /* Permite que los elementos bajen si no caben */
+    flex-wrap: wrap; 
     gap: 15px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.5);
 }
@@ -131,280 +131,6 @@ main {
     border-left: 4px solid var(--dorado);
 }
 
-/* =========================================
-   PANEL DERECHO: VISOR DE LA CANCIÓN (Fondo Blanco)
-========================================= */
-#visor-cancion {
-    width: 70%;
-    background-color: var(--blanco);
-    color: var(--negro);
-    border: 2px solid var(--dorado);
-    border-radius: 8px;
-    padding: 30px; /* Un poco más de espacio */
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-}
-
-#titulo-cancion {
-    color: var(--azul-marino);
-    border-bottom: 2px solid var(--dorado);
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-    font-size: 2.2rem;
-    font-weight: 800;
-}
-
-#controles-tono {
-    /* Mantenemos el estilo de antes, está bien */
-    background-color: var(--gris-fondo);
-    padding: 12px;
-    border-radius: 6px;
-    margin-bottom: 25px;
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    border: 1px solid #ddd;
-}
-
-#controles-tono span {
-    font-weight: bold;
-    color: var(--azul-marino);
-    font-size: 1.1rem;
-}
-
-/* -----------------------------------------
-   ESTILO PARA LA LETRA PROFESIONAL
------------------------------------------ */
-#letra-cancion {
-    font-family: 'Courier New', Courier, Menlo, monospace;
-    font-size: 1.2rem;
-    line-height: 1.2;
-    width: 100%;
-    /* ¡OJO! Aquí eliminamos el 'white-space: pre' que bloqueaba las columnas */
-}
-
-/* SISTEMA DE DOBLE COLUMNA */
-.letra-doble-columna {
-    column-count: 2;
-    column-gap: 40px; /* Espacio entre las dos columnas */
-    column-rule: 1px dashed #cccccc; /* Línea divisoria al centro */
-}
-
-/* El secreto para que el texto fluya perfecto en columnas */
-.bloque-linea {
-    display: inline-block; /* Cambiamos flex por inline-block para evitar bugs de Chrome */
-    width: 100%;
-    margin-bottom: 1.2rem;
-    break-inside: avoid; /* Evita que el acorde quede en una columna y la letra en otra */
-    page-break-inside: avoid;
-}
-/* La línea que solo tiene los acordes */
-.linea-acordes {
-    display: block;
-    min-height: 1.2em;
-    color: #E67E22;
-    font-weight: bold;
-    white-space: pre; 
-    margin: 0; /* ¡ESTO QUITA EL ESPACIO GIGANTE! */
-}
-
-/* La línea que solo tiene la letra limpia */
-.linea-letras {
-    display: block;
-    color: var(--negro);
-    white-space: pre;
-    margin: 0; /* ¡ESTO TAMBIÉN! */
-}
-/* Estilo para las secciones como [Intro] o [Coro] */
-.marcador-seccion {
-    color: #555;
-    font-weight: bold;
-    margin-top: 1.5rem;
-    margin-bottom: 0.5rem;
-    display: block;
-    font-size: 1.1rem;
-}
-/* =========================================
-   ADAPTACIÓN PARA CELULARES (RESPONSIVE)
-========================================= */
-@media (max-width: 768px) {
-    main {
-        flex-direction: column;
-        padding: 10px;
-        overflow: auto; /* Permite scroll en toda la página en móviles */
-    }
-    
-    #lista-canciones, #visor-cancion {
-        width: 100%;
-        height: auto;
-    }
-
-    #lista-canciones {
-        max-height: 300px; /* Evita que una lista enorme oculte el visor */
-    }
-
-    header {
-        justify-content: center;
-        text-align: center;
-    }
-}
-
-/* Botón para quitar canciones de la lista dominical */
-.btn-eliminar {
-    float: right;
-    background-color: transparent;
-    color: #ff4c4c;
-    border: 1px solid #ff4c4c;
-    padding: 2px 8px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-}
-.btn-eliminar:hover {
-    background-color: #ff4c4c;
-    color: var(--blanco);
-}
-/* =========================================
-   CONFIGURACIÓN EXCLUSIVA PARA EL PDF (IMPRESIÓN)
-========================================= */
-@media print {
-    /* 1. RESET VITAL: Liberamos el tamaño del body */
-    body {
-        display: block !important;
-        height: auto !important;
-        background-color: #ffffff !important;
-    }
-
-    /* 2. Ocultamos toda la interfaz web */
-    header, main {
-        display: none !important;
-    }
-
-    /* 3. Mostramos el contenedor generado para el PDF */
-    #area-impresion-pdf {
-        display: block !important;
-        width: 100%;
-        margin: 0;
-        padding: 0;
-    }
-
-    /* 4. Estilo de cada canción dentro del PDF */
-    .cancion-pdf {
-        break-after: page;
-        page-break-after: always; 
-        padding: 20px;
-        background-color: #ffffff !important;
-    }
-
-    .cancion-pdf h2 {
-        color: #0A192F !important;
-        font-size: 26pt;
-        border-bottom: 2px solid #D4AF37;
-        padding-bottom: 5px;
-        margin-bottom: 15px;
-    }
-
-    .cancion-pdf .tono-pdf {
-        font-size: 15pt;
-        font-weight: bold;
-        color: #E67E22;
-        margin-bottom: 15px;
-    }
-    .cancion-pdf {
-        break-after: page;
-        page-break-after: always; 
-        page-break-inside: avoid !important; /* CANDADO: Prohíbe que el título y la letra se separen */
-        break-inside: avoid !important;
-        padding: 10px 20px; /* Reducimos un poco el margen para dar más espacio */
-        background-color: #ffffff !important;
-    }
-
-    .cancion-pdf .linea-acordes {
-        color: #E67E22 !important;
-        font-weight: bold;
-        margin: 0;
-    }
-
-    .cancion-pdf .linea-letras {
-        color: #000000 !important;
-        margin: 0;
-    }
-
-    /* 6. LA MAGIA DE LA COLUMNA: Le ponemos un tope más seguro */
-    .letra-doble-columna {
-        column-count: 2;
-        column-fill: balance !important; /* MAGIA: Obliga a que ambas columnas tengan la misma cantidad de texto */
-        max-height: 19cm !important; 
-        width: 100%;
-       column-gap: 40px !important; /* Crea un pasillo vacío de 40 pixeles entre las columnas */
-    }
-}
-
-/* =========================================
-   SISTEMA DE DOBLE COLUMNA PARA CANCIONES LARGAS
-========================================= */
-.letra-doble-columna {
-    column-count: 2;
-    column-gap: 50px; /* Espacio entre las dos columnas */
-    column-rule: 1px dashed #cccccc; /* Una línea sutil separando las columnas */
-}
-
-/* REGLA VITAL: Evita que el acorde y la letra se separen al cambiar de columna */
-.bloque-linea {
-    break-inside: avoid;
-    page-break-inside: avoid;
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 1.2rem;
-}
-
-/* En las pantallas pequeñas de celulares, forzamos a que vuelva a ser 1 sola columna para que se pueda leer */
-@media (max-width: 768px) {
-    .letra-doble-columna {
-        column-count: 1;
-    }
-}
-
-/* =========================================
-   MODO VISTA EXPANDIDA (MAXIMIZAR CANCIÓN)
-========================================= */
-body.modo-expandido header,
-body.modo-expandido #lista-canciones {
-    display: none !important;
-}
-
-body.modo-expandido #visor-cancion {
-    width: 100% !important;
-    height: 100vh !important;
-    border: none;
-    border-radius: 0;
-    /* Damos un margen lateral elegante para pantallas muy anchas */
-    padding: 30px 10%; 
-}
-
-/* =========================================
-   MINI SELECTOR DE DÍA EN LA LISTA LATERAL
-========================================= */
-.select-dia-lista {
-    background-color: var(--negro);
-    color: var(--dorado);
-    border: 1px solid var(--dorado);
-    border-radius: 4px;
-    padding: 2px 4px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    outline: none;
-    font-weight: bold;
-}
-
-.select-dia-lista:hover {
-    background-color: var(--azul-marino);
-}
-/* =========================================
-   BOTONES DE ORDENAMIENTO (ARRIBA/ABAJO)
-========================================= */
 .controles-item-lista {
     display: flex;
     gap: 5px;
@@ -427,80 +153,214 @@ body.modo-expandido #visor-cancion {
     background-color: var(--dorado);
     color: var(--negro);
 }
+
+.select-dia-lista {
+    background-color: var(--negro);
+    color: var(--dorado);
+    border: 1px solid var(--dorado);
+    border-radius: 4px;
+    padding: 2px 4px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    outline: none;
+    font-weight: bold;
+}
+
+.select-dia-lista:hover {
+    background-color: var(--azul-marino);
+}
+
+.btn-eliminar {
+    float: right;
+    background-color: transparent;
+    color: #ff4c4c;
+    border: 1px solid #ff4c4c;
+    padding: 2px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-eliminar:hover {
+    background-color: #ff4c4c;
+    color: var(--blanco);
+}
+
 /* =========================================
-   ESTILOS DE CENTRADO Y COLUMNAS PARA PDF
+   PANEL DERECHO: VISOR DE LA CANCIÓN
 ========================================= */
-/* Esta clase agrupa la canción y la centra en la hoja sin desalinear los acordes */
+#visor-cancion {
+    width: 70%;
+    background-color: var(--blanco);
+    color: var(--negro);
+    border: 2px solid var(--dorado);
+    border-radius: 8px;
+    padding: 30px; 
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+#titulo-cancion {
+    color: var(--azul-marino);
+    border-bottom: 2px solid var(--dorado);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    font-size: 2.2rem;
+    font-weight: 800;
+}
+
+#controles-tono {
+    background-color: var(--gris-fondo);
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 25px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    border: 1px solid #ddd;
+}
+
+#controles-tono span {
+    font-weight: bold;
+    color: var(--azul-marino);
+    font-size: 1.1rem;
+}
+
+/* =========================================
+   ESTILO PARA LA LETRA PROFESIONAL (WEB)
+========================================= */
+#letra-cancion, #letra-cancion * {
+    font-family: 'Courier New', Courier, monospace !important;
+}
+
+#letra-cancion {
+    font-size: 1.2rem;
+    line-height: 1.2;
+    width: 100%;
+}
+
+.letra-doble-columna {
+    column-count: 2;
+    column-gap: 50px; 
+    column-rule: 1px dashed #cccccc; 
+}
+
+.bloque-linea {
+    display: inline-block; 
+    width: 100%;
+    margin-bottom: 1.2rem;
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+.linea-acordes {
+    display: block;
+    min-height: 1.2em;
+    color: #E67E22;
+    font-weight: bold;
+    white-space: pre; 
+    margin: 0; 
+}
+
+.linea-letras {
+    display: block;
+    color: var(--negro);
+    white-space: pre;
+    margin: 0; 
+}
+
+.marcador-seccion {
+    color: #555;
+    font-weight: bold;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    display: block;
+    font-size: 1.1rem;
+}
+
 .letra-centrada {
     width: fit-content;
     margin: 0 auto;
     text-align: left; 
 }
 
-/* Modificamos el comportamiento de impresión para forzar el salto de columna */
-@media print {
-    .letra-doble-columna {
-        column-count: 2;
-        column-fill: auto; /* Evita que el navegador intente igualar las columnas a la mitad */
-        max-height: 850px; /* Límite de altura de la hoja A4 para que brinque a la col 2 */
-        width: 100%;
-    }
-}
-/* 7. CANDADO PARA LAS LÍNEAS: Prohíbe que el navegador separe los acordes de su letra */
-    .bloque-linea {
-        break-inside: avoid !important;
-        page-break-inside: avoid !important;
-        display: inline-block !important; /* Convierte cada renglón en un ladrillo sólido */
-        width: 100%;
-    }
 /* =========================================
-   OPTIMIZACIÓN PARA CELULARES (DISEÑO RESPONSIVO)
+   MODO VISTA EXPANDIDA (MAXIMIZAR CANCIÓN)
 ========================================= */
-
-/* 1. Permitimos que los botones "caigan" a la siguiente línea si no caben */
-#controles-tono {
-    flex-wrap: wrap !important;
-    gap: 8px;
-    justify-content: center;
+body.modo-expandido header,
+body.modo-expandido #lista-canciones {
+    display: none !important;
 }
 
-#controles-tono button {
-    margin: 0 !important; /* Limpiamos márgenes fijos que estorban en móvil */
+body.modo-expandido #visor-cancion {
+    width: 100% !important;
+    height: 100vh !important;
+    border: none;
+    border-radius: 0;
+    padding: 30px 10%; 
 }
 
-/* REGLAS EXCLUSIVAS PARA PANTALLAS PEQUEÑAS (CELULARES) */
+/* =========================================
+   ADAPTACIÓN PARA CELULARES (RESPONSIVE)
+========================================= */
 @media (max-width: 768px) {
+    main {
+        flex-direction: column;
+        padding: 10px;
+        overflow: auto; 
+    }
     
-    /* 2. Hacemos el botón de Expandir gigante, intuitivo y lo ponemos PRIMERO */
+    #lista-canciones, #visor-cancion {
+        width: 100%;
+        height: auto;
+    }
+
+    #lista-canciones {
+        max-height: 300px; 
+    }
+
+    header {
+        justify-content: center;
+        text-align: center;
+    }
+
+    #controles-tono {
+        flex-wrap: wrap !important;
+        gap: 8px;
+        justify-content: center;
+    }
+
+    #controles-tono button {
+        margin: 0 !important;
+    }
+
     #btn-pantalla-completa {
         width: 100% !important;
         padding: 15px !important;
         font-size: 1.2rem !important;
         font-weight: bold;
         border-radius: 8px;
-        order: -1 !important; /* Este truco lo manda hasta arriba del grupo */
+        order: -1 !important; 
         margin-bottom: 10px !important;
     }
 
-    /* 3. Ajustamos el tamaño de los controles de tono para que se vean bien */
     #bajar-tono, #subir-tono, #btn-agregar-lista {
-        flex-grow: 1; /* Hacemos que se estiren para llenar los huecos */
+        flex-grow: 1; 
         padding: 10px !important;
     }
 
-        /* 4. Liberamos la página entera para que puedas deslizar hacia abajo de forma natural */
-    html, body, main {
+    html, body {
         height: auto !important;
         overflow-y: auto !important;
     }
 
-    /* 5. Limitamos el tamaño de la lista negra de arriba para que no estorbe */
     #contenedor-lista {
-        max-height: 30vh !important; /* Solo ocupa un tercio de la pantalla */
+        max-height: 30vh !important; 
         overflow-y: auto !important;
     }
 
-    /* 6. Le quitamos la "caja chiquita" a la letra y dejamos que el lienzo blanco crezca */
     #letra-cancion {
         max-height: none !important;
         height: auto !important;
@@ -510,10 +370,9 @@ body.modo-expandido #visor-cancion {
         box-shadow: none !important;
         padding: 0 !important;
         margin-top: 15px;
-        margin-bottom: 30px; /* Da un buen espacio al final de la canción */
+        margin-bottom: 30px; 
     }
 
-    /* 5. Aseguramos que las canciones SIEMPRE sean de 1 columna en celular */
     .letra-doble-columna {
         column-count: 1 !important;
         height: auto !important;
@@ -521,11 +380,92 @@ body.modo-expandido #visor-cancion {
 }
 
 /* =========================================
-   CANDADO DE ESPACIOS (ALINEACIÓN DE ACORDES)
+   CONFIGURACIÓN MAESTRA DE IMPRESIÓN (PDF)
 ========================================= */
-/* =========================================
-   ALINEACIÓN PERFECTA (FUENTE MATEMÁTICA)
-========================================= */
-#letra-cancion, #letra-cancion * {
-    font-family: 'Courier New', Courier, monospace !important;
+@media print {
+    /* 1. Forzar tamaño de hoja y márgenes exactos de 1cm */
+    @page {
+        size: letter portrait;
+        margin: 1cm;
+    }
+
+    /* 2. RESET VITAL: Liberamos el tamaño del body y limpiamos márgenes */
+    html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        display: block !important;
+        height: auto !important;
+        background-color: #ffffff !important;
+        width: 100% !important;
+    }
+
+    /* 3. Ocultamos toda la interfaz web */
+    header, main {
+        display: none !important;
+    }
+
+    /* 4. Mostramos el contenedor generado para el PDF */
+    #area-impresion-pdf {
+        display: block !important;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* 5. Estilo de cada canción dentro del PDF */
+    .cancion-pdf {
+        break-after: page;
+        page-break-after: always; 
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        padding: 10px 0; /* Sin padding lateral, el @page ya da el margen */
+        background-color: #ffffff !important;
+        width: 100% !important;
+    }
+
+    .cancion-pdf h2 {
+        color: #0A192F !important;
+        font-size: 26pt;
+        border-bottom: 2px solid #D4AF37;
+        padding-bottom: 5px;
+        margin-bottom: 15px;
+    }
+
+    .cancion-pdf .tono-pdf {
+        font-size: 15pt;
+        font-weight: bold;
+        color: #E67E22;
+        margin-bottom: 15px;
+    }
+
+    .cancion-pdf .linea-acordes {
+        color: #E67E22 !important;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .cancion-pdf .linea-letras {
+        color: #000000 !important;
+        margin: 0;
+    }
+
+    /* 6. LA MAGIA DE LA COLUMNA: Límite estricto para tamaño Carta */
+    .letra-doble-columna {
+        column-count: 2 !important;
+        /* Al forzar auto, llena la columna 1 hasta el tope y luego brinca a la 2 */
+        column-fill: auto !important; 
+        /* 22cm es la altura exacta que sobra en una hoja carta después de restar márgenes y títulos */
+        max-height: 22cm !important; 
+        width: 100%;
+        column-gap: 40px !important; 
+    }
+
+    /* 7. CANDADO PARA LAS LÍNEAS (Ladrillos sólidos impenetrables) */
+    .bloque-linea {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+        display: inline-block !important; /* Obliga a saltar a la columna 2 si choca abajo */
+        width: 100% !important;
+        margin-bottom: 1.2rem;
+    }
 }
