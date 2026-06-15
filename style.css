@@ -469,3 +469,18 @@ body.modo-expandido #visor-cancion {
         margin-bottom: 1.2rem;
     }
 }
+.diccionario-acordes {
+    background-color: var(--gris-fondo);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+}
+
+.diagrama-acorde {
+    background: white;
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #eee;
+}
+
