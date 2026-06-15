@@ -522,12 +522,9 @@ body.modo-expandido #visor-cancion {
 /* =========================================
    CANDADO DE ESPACIOS (ALINEACIÓN DE ACORDES)
 ========================================= */
-.linea-acordes, .linea-letras {
-    white-space: pre-wrap !important; /* Prohíbe al navegador devorar los espacios en blanco */
-    font-family: 'Courier New', Courier, monospace !important; /* Obliga a usar fuente matemática para alinear exacto */
-}
-
-/* En caso de que el contenedor principal necesite el refuerzo */
-#letra-cancion {
-    white-space: pre-wrap !important;
+/* =========================================
+   ALINEACIÓN PERFECTA (FUENTE MATEMÁTICA)
+========================================= */
+#letra-cancion, #letra-cancion * {
+    font-family: 'Courier New', Courier, monospace !important;
 }
