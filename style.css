@@ -338,6 +338,7 @@ main {
         column-fill: balance !important; /* MAGIA: Obliga a que ambas columnas tengan la misma cantidad de texto */
         max-height: 19cm !important; 
         width: 100%;
+       column-gap: 40px !important; /* Crea un pasillo vacío de 40 pixeles entre las columnas */
     }
 }
 
