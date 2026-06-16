@@ -533,13 +533,20 @@ if (btnExportarPDF) {
 
                     if (maxLongitudLinea > 50) {
                         claseColumna = 'letra-centrada';
-                        estiloDinamico = "font-size: 14pt; line-height: 1.4; margin-top: 15px;";
-                    } else if (lineasVisuales > 32) { // 🚨 AQUÍ ESTÁ EL CAMBIO A 32
+                        estiloDinamico = "font-size: 13.5pt; line-height: 1.4; margin-top: 15px;";
+                    } else if (lineasVisuales > 32) {
+                        // Canciones largas: Doble columna
                         claseColumna = 'letra-doble-columna-equilibrada';
                         estiloDinamico = "font-size: 13pt; line-height: 1.4;";
-                    } else {
+                    } else if (lineasVisuales > 22) {
+                        // 🚨 NUEVO ESCALÓN: Canciones "medianas" (como Abre mis ojos)
+                        // Usa 1 columna, pero baja un poquito la letra para que quepa en 1 hoja
                         claseColumna = 'letra-centrada';
-                        estiloDinamico = "font-size: 17pt; line-height: 1.5; margin-top: 30px;"; // Ajustamos la letra a 17pt para que luzca perfecta
+                        estiloDinamico = "font-size: 14.5pt; line-height: 1.3; margin-top: 15px;";
+                    } else {
+                        // Canciones súper cortitas (menos de 22 líneas)
+                        claseColumna = 'letra-centrada';
+                        estiloDinamico = "font-size: 17pt; line-height: 1.4; margin-top: 30px;";
                     }
 
                     htmlCancion += `
