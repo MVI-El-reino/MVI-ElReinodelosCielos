@@ -411,6 +411,16 @@ body.modo-expandido #visor-cancion {
         margin: 0;
         padding: 0;
     }
+   /* =========================================
+   CONTENEDOR INDESTRUCTIBLE DE ESTROFAS
+========================================= */
+.estrofa-musical {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    display: inline-block !important; /* Mantiene la estrofa sólida dentro de las columnas */
+    width: 100%;
+    margin-bottom: 1.8rem; /* Da una separación elegante entre los versos */
+}
 
     /* 5. Estilo de cada canción dentro del PDF */
     .cancion-pdf {
