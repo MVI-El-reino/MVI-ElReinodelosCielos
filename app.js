@@ -283,6 +283,7 @@ function renderizarVisorDerecho() {
     const contenedorLetra = document.getElementById('letra-cancion');
     
     // NUEVA INTELIGENCIA: Contamos la altura visual exacta en pantalla
+    // NUEVA INTELIGENCIA: Contamos la altura visual exacta en pantalla
     let lineasVisuales = 0;
     letraTranspuesta.split('\n').forEach(l => {
         const linea = l.trim();
@@ -292,8 +293,8 @@ function renderizarVisorDerecho() {
         else lineasVisuales += 1; 
     });
     
-    // Si pasa de 20 líneas visuales, se va a doble columna
-    if (lineasVisuales > 20) {
+    // 🚨 AUMENTAMOS EL LÍMITE A 32 LÍNEAS 
+    if (lineasVisuales > 32) {
         contenedorLetra.classList.add('letra-doble-columna');
     } else {
         contenedorLetra.classList.remove('letra-doble-columna');
