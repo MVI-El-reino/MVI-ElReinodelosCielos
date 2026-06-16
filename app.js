@@ -508,25 +508,20 @@ if (btnExportarPDF) {
                 let estiloDinamico = '';
                 
                 // MOTOR INTELIGENTE DE ASIGNACIÓN
-                // MOTOR INTELIGENTE DE ASIGNACIÓN
-                if (maxLongitudLinea > 48) {
-                    // Líneas muy anchas: Forzamos 1 sola columna para que NUNCA se salgan del margen
+                if (lineasVisuales > 45) {
+                    // 🚨 PRIORIDAD 1: Canciones gigantes SIEMPRE usan 2 columnas para no desperdiciar hojas
+                    claseColumna = 'letra-doble-columna-gigante';
+                    estiloDinamico = "font-size: 11pt; line-height: 1.3;"; 
+                } else if (maxLongitudLinea > 50) {
+                    // PRIORIDAD 2: Solo forzamos 1 columna si la canción es corta pero de líneas muy anchas
                     claseColumna = 'letra-centrada';
                     estiloDinamico = "font-size: 14pt; line-height: 1.4; margin-top: 15px;";
-                } else if (lineasVisuales > 75) {
-                    // 🚨 CANCIONES SÚPER GIGANTES: Reducimos la fuente para obligarlas a caber en MÁXIMO 2 hojas
-                    claseColumna = 'letra-doble-columna-gigante';
-                    estiloDinamico = "font-size: 11pt; line-height: 1.2;"; 
-                } else if (lineasVisuales > 45) {
-                    // Canciones Gigantes: Doble columna con salto a la hoja 2
-                    claseColumna = 'letra-doble-columna-gigante';
-                    estiloDinamico = "font-size: 12.5pt; line-height: 1.3;";
                 } else if (lineasVisuales > 20) {
-                    // Canciones Medianas: Doble columna equilibrada en 1 sola hoja
+                    // Canciones Medianas: Doble columna
                     claseColumna = 'letra-doble-columna-equilibrada';
-                    estiloDinamico = "font-size: 14pt; line-height: 1.4;";
+                    estiloDinamico = "font-size: 13pt; line-height: 1.4;";
                 } else {
-                    // Canciones Cortas: 1 columna grande y vistosa
+                    // Canciones Cortas
                     claseColumna = 'letra-centrada';
                     estiloDinamico = "font-size: 18pt; line-height: 1.5; margin-top: 30px;";
                 }
