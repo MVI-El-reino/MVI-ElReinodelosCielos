@@ -481,9 +481,18 @@ if (btnExportarPDF) {
                 divCancion.className = 'cancion-pdf';
                 
                 // Contamos la altura REAL (Líneas visuales)
+                // Contamos la altura REAL y escaneamos la longitud de las líneas
                 let lineasVisuales = 0;
+                let maxLongitudLinea = 0;
+
                 cancion.letra.split('\n').forEach(l => {
                     const linea = l.trim();
+                    const soloTexto = linea.replace(/\[.*?\]/g, ""); // Medimos las letras sin contar los acordes
+                    
+                    if (soloTexto.length > maxLongitudLinea) {
+                        maxLongitudLinea = soloTexto.length;
+                    }
+
                     if (linea === "") { 
                         lineasVisuales += 1; 
                     } else if (/^\[[^\[\]]+\]$/.test(linea)) { 
@@ -498,23 +507,23 @@ if (btnExportarPDF) {
                 let claseColumna = '';
                 let estiloDinamico = '';
                 
-                // NUEVO LÍMITE: Equilibrado y con letras más grandes
-                if (lineasVisuales > 45) {
-                    // Canciones extremadamente largas (casi no hay, pero por si acaso)
-                    claseColumna = 'letra-doble-columna';
+                // MOTOR INTELIGENTE DE ASIGNACIÓN
+                if (maxLongitudLinea > 48) {
+                    // Líneas muy anchas: Forzamos 1 sola columna para que NUNCA se salgan del margen
+                    claseColumna = 'letra-centrada';
+                    estiloDinamico = "font-size: 14pt; line-height: 1.4; margin-top: 15px;";
+                } else if (lineasVisuales > 45) {
+                    // CANCIONES GIGANTES: Doble columna con salto fluido de hoja
+                    claseColumna = 'letra-doble-columna-gigante';
                     estiloDinamico = "font-size: 13pt; line-height: 1.3;";
                 } else if (lineasVisuales > 20) {
-                    // Canciones medianas-largas (Como "A Danzar")
-                    claseColumna = 'letra-doble-columna';
-                    estiloDinamico = "font-size: 16pt; line-height: 1.4;"; // ¡Aumentamos de 14pt a 16pt!
-                } else if (lineasVisuales <= 12) {
-                    // Canciones muy cortas 
-                    claseColumna = 'letra-centrada';
-                    estiloDinamico = "font-size: 22pt; line-height: 1.5; margin-top: 30px;";
+                    // Canciones Medianas: Doble columna equilibrada en 1 sola hoja
+                    claseColumna = 'letra-doble-columna-equilibrada';
+                    estiloDinamico = "font-size: 14pt; line-height: 1.4;";
                 } else {
-                    // Canciones medianas (13 a 20 líneas)
+                    // Canciones Cortas: 1 columna grande y vistosa
                     claseColumna = 'letra-centrada';
-                    estiloDinamico = "font-size: 18pt; line-height: 1.4; margin-top: 20px;";
+                    estiloDinamico = "font-size: 18pt; line-height: 1.5; margin-top: 30px;";
                 }
 
                 divCancion.innerHTML = `
