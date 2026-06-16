@@ -414,6 +414,11 @@ body.modo-expandido #visor-cancion {
    /* =========================================
    CONTENEDOR INDESTRUCTIBLE DE ESTROFAS
 ========================================= */
+   .cancion-pdf .linea-acordes,
+    .cancion-pdf .linea-letras {
+        white-space: pre-wrap !important; 
+        word-wrap: break-word !important;
+    }
 .estrofa-musical {
     break-inside: avoid !important;
     page-break-inside: avoid !important;
