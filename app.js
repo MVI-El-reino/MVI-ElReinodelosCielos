@@ -479,52 +479,8 @@ if (btnExportarPDF) {
             cancionesDelDia.forEach(cancion => {
                 const divCancion = document.createElement('div');
                 divCancion.className = 'cancion-pdf';
-                
-                // 1. Contamos la altura REAL y separamos estrofas
-                // 1. Contamos la altura REAL y separamos estrofas
-                let lineasVisuales = 0;
-                let maxLongitudLinea = 0;
-                let estrofasPagina1 = [];
-                let estrofasPagina2 = [];
-                let lineasAcumuladas = 0;
-                let limitePagina1 = 70; 
-                
-                const estrofas = cancion.letra.split(/\n\s*\n/);
 
-                estrofas.forEach(estrofa => {
-                    let lineasEstrofa = 0;
-                    estrofa.split('\n').forEach(l => {
-                        const linea = l.trim();
-                        const soloTexto = linea.replace(/\[.*?\]/g, ""); // Medimos las letras sin contar los acordes
-                        
-                        if (soloTexto.length > maxLongitudLinea) {
-                            maxLongitudLinea = soloTexto.length;
-                        }
-
-                        if (linea === "") { 
-                            lineasEstrofa += 1; 
-                        } else if (/^\[[^\[\]]+\]$/.test(linea)) { 
-                            lineasEstrofa += 1.5; 
-                        } else if (linea.includes('[')) { 
-                            lineasEstrofa += 2; 
-                        } else { 
-                            lineasEstrofa += 1; 
-                        }
-                    });
-
-                    lineasVisuales += lineasEstrofa;
-
-                    // Lógica de partición: Si cabe en la hoja 1, lo guardamos en la Parte 1
-                    if (lineasAcumuladas + lineasEstrofa <= limitePagina1) {
-                        estrofasPagina1.push(estrofa);
-                        lineasAcumuladas += lineasEstrofa;
-                    } else {
-                        // Lo que ya no cabe, lo mandamos a la Parte 2 (Hoja 2)
-                        estrofasPagina2.push(estrofa);
-                    }
-                });
-
-                // 2. Construimos el HTML base (Título y Tono)
+                // 1. Construimos el HTML base (Título y Tono)
                 let htmlCancion = `
                     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #D4AF37; margin-bottom: 15px; padding-bottom: 5px;">
                         <h2 style="margin: 0; border: none; padding: 0; font-size: 26pt;">${cancion.titulo}</h2>
@@ -533,20 +489,44 @@ if (btnExportarPDF) {
                     <div class="tono-pdf" style="font-size: 15pt; margin-bottom: 20px; text-align: center;">Tono para la alabanza: ${cancion.tono_original}</div>
                 `;
 
-                // 3. MOTOR INTELIGENTE DE RENDERIZADO
-                if (lineasVisuales > 45 && maxLongitudLinea <= 50) {
-                    // 🚨 LA NUEVA REGLA (Solo para gigantes): Cortamos la canción en dos diseños diferentes
+                // ========================================================
+                // 🚨 EXCEPCIÓN VIP: SOLO PARA "ALABA A DIOS" (ID: 12)
+                // ========================================================
+                if (cancion.id === 12 || cancion.titulo.includes("Alaba a Dios")) {
+                    const estrofas = cancion.letra.split(/\n\s*\n/);
+                    
+                    // Cortamos a machete: Las primeras 5 estrofas a la Hoja 1, el resto a la Hoja 2
+                    const parte1 = estrofas.slice(0, 5).join('\n\n');
+                    const parte2 = estrofas.slice(5).join('\n\n');
+
                     htmlCancion += `
-                        <div class="letra-doble-columna-gigante" style="font-family: 'Courier New', Courier, monospace; font-size: 13.5pt; line-height: 1.4;">
-                            ${procesarLetraYAcordes(estrofasPagina1.join('\n\n'))}
+                        <div class="letra-doble-columna-gigante" style="font-family: 'Courier New', Courier, monospace; font-size: 13pt; line-height: 1.4;">
+                            ${procesarLetraYAcordes(parte1)}
                         </div>
                         
                         <div class="letra-centrada" style="font-family: 'Courier New', Courier, monospace; font-size: 15pt; line-height: 1.5; page-break-before: always; padding-top: 15px;">
-                            ${procesarLetraYAcordes(estrofasPagina2.join('\n\n'))}
+                            ${procesarLetraYAcordes(parte2)}
                         </div>
                     `;
-                } else {
-                    // COMPORTAMIENTO NORMAL PARA LAS DEMÁS CANCIONES (Intactas)
+                } 
+                // ========================================================
+                // COMPORTAMIENTO NORMAL PARA EL RESTO DEL REPERTORIO
+                // ========================================================
+                else {
+                    let lineasVisuales = 0;
+                    let maxLongitudLinea = 0;
+
+                    cancion.letra.split('\n').forEach(l => {
+                        const linea = l.trim();
+                        const soloTexto = linea.replace(/\[.*?\]/g, ""); 
+                        if (soloTexto.length > maxLongitudLinea) maxLongitudLinea = soloTexto.length;
+
+                        if (linea === "") lineasVisuales += 1; 
+                        else if (/^\[[^\[\]]+\]$/.test(linea)) lineasVisuales += 1.5; 
+                        else if (linea.includes('[')) lineasVisuales += 2; 
+                        else lineasVisuales += 1; 
+                    });
+
                     let claseColumna = '';
                     let estiloDinamico = '';
 
