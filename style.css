@@ -413,19 +413,19 @@ body.modo-expandido #visor-cancion {
     }
    /* =========================================
    CONTENEDOR INDESTRUCTIBLE DE ESTROFAS
-========================================= */
+   ========================================= */
    .cancion-pdf .linea-acordes,
     .cancion-pdf .linea-letras {
         white-space: pre-wrap !important; 
         word-wrap: break-word !important;
     }
-.estrofa-musical {
-    break-inside: avoid !important;
-    page-break-inside: avoid !important;
-    display: inline-block !important; /* Mantiene la estrofa sólida dentro de las columnas */
-    width: 100%;
-    margin-bottom: 1.8rem; /* Da una separación elegante entre los versos */
-}
+   .estrofa-musical {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+        display: block !important; /* 'block' evita que el navegador se confunda al dividir hojas */
+        width: 100% !important;
+        margin-bottom: 12px !important; /* 🚨 Redujimos el margen gigante a un espacio elegante */
+    }
 
     /* 5. Estilo de cada canción dentro del PDF */
     .cancion-pdf {
@@ -481,9 +481,9 @@ body.modo-expandido #visor-cancion {
     .bloque-linea {
         break-inside: avoid !important;
         page-break-inside: avoid !important;
-        display: inline-block !important; /* Obliga a saltar a la columna 2 si choca abajo */
+        display: block !important; /* Más estable que inline-block para PDFs */
         width: 100% !important;
-        margin-bottom: 1.2rem;
+        margin-bottom: 2px !important; /* 🚨 Quitamos el exceso de espacio entre renglones */
     }
 }
 #diccionario-acordes {
