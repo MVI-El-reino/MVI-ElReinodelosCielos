@@ -481,13 +481,14 @@ if (btnExportarPDF) {
                 divCancion.className = 'cancion-pdf';
                 
                 // 1. Contamos la altura REAL y separamos estrofas
+                // 1. Contamos la altura REAL y separamos estrofas
                 let lineasVisuales = 0;
                 let maxLongitudLinea = 0;
                 let estrofasPagina1 = [];
                 let estrofasPagina2 = [];
                 let lineasAcumuladas = 0;
-                let limitePagina1 = 44; // El límite exacto para llenar la hoja 1 sin pasarse
-
+                let limitePagina1 = 70; 
+                
                 const estrofas = cancion.letra.split(/\n\s*\n/);
 
                 estrofas.forEach(estrofa => {
