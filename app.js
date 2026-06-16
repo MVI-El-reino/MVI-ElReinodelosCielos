@@ -528,25 +528,30 @@ if (btnExportarPDF) {
                         else lineasVisuales += 1; 
                     });
 
-                    let claseColumna = '';
+                   let claseColumna = '';
                     let estiloDinamico = '';
 
-                    if (maxLongitudLinea > 50) {
+                    if (lineasVisuales <= 14) {
+                        // 🚨 NUEVO ESCALÓN: Canciones SÚPER cortas (Ej. Dame de beber)
+                        // Le damos prioridad absoluta. Letra grande y la empujamos hacia el centro de la hoja.
                         claseColumna = 'letra-centrada';
-                        estiloDinamico = "font-size: 13.5pt; line-height: 1.4; margin-top: 15px;";
+                        estiloDinamico = "font-size: 16.5pt; line-height: 1.6; margin-top: 80px;";
+                    } else if (maxLongitudLinea > 50 && lineasVisuales <= 32) {
+                        // Canciones con frases muy largas pero que caben en 1 hoja
+                        claseColumna = 'letra-centrada';
+                        estiloDinamico = "font-size: 13.5pt; line-height: 1.4; margin-top: 20px;";
                     } else if (lineasVisuales > 32) {
-                        // Canciones largas: Doble columna
+                        // Canciones largas: Doble columna para aprovechar espacio
                         claseColumna = 'letra-doble-columna-equilibrada';
                         estiloDinamico = "font-size: 13pt; line-height: 1.4;";
                     } else if (lineasVisuales > 22) {
-                        // 🚨 NUEVO ESCALÓN: Canciones "medianas" (como Abre mis ojos)
-                        // Usa 1 columna, pero baja un poquito la letra para que quepa en 1 hoja
+                        // Canciones "medianas" (Ej. Abre mis ojos)
                         claseColumna = 'letra-centrada';
                         estiloDinamico = "font-size: 14.5pt; line-height: 1.3; margin-top: 15px;";
                     } else {
-                        // Canciones súper cortitas (menos de 22 líneas)
+                        // Canciones cortas normales (entre 15 y 22 líneas)
                         claseColumna = 'letra-centrada';
-                        estiloDinamico = "font-size: 17pt; line-height: 1.4; margin-top: 30px;";
+                        estiloDinamico = "font-size: 16pt; line-height: 1.4; margin-top: 30px;";
                     }
 
                     htmlCancion += `
