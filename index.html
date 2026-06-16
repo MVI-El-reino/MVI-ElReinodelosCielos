@@ -26,6 +26,13 @@
 
         <section id="visor-cancion">
             <h2 id="titulo-cancion">Selecciona una alabanza</h2>
+            <button id="btn-diccionario" onclick="abrirDiccionario(letraActual)">Ver Acordes de esta canción</button>
+
+<div id="diccionario-acordes">
+    <button onclick="cerrarDiccionario()" style="background:red; color:white;">Cerrar Diccionario</button>
+    <h3>Diccionario de Acordes</h3>
+    <div id="contenedor-diagramas" style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;"></div>
+</div>
             <div id="controles-tono" style="display: none;">
                 <button id="bajar-tono">-1 Tono</button>
                 <span id="tono-actual">Tono: -</span>
