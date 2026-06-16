@@ -416,11 +416,11 @@ body.modo-expandido #visor-cancion {
     .cancion-pdf {
         break-after: page;
         page-break-after: always; 
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-        padding: 10px 0; /* Sin padding lateral, el @page ya da el margen */
+        /* 🚨 ELIMINAMOS los candados de "avoid" para que la canción pueda fluir a una segunda hoja si es gigante */
+        padding: 10px 0; 
         background-color: #ffffff !important;
         width: 100% !important;
+        display: block !important;
     }
 
     .cancion-pdf h2 {
@@ -452,12 +452,10 @@ body.modo-expandido #visor-cancion {
     /* 6. LA MAGIA DE LA COLUMNA: Límite estricto para tamaño Carta */
     .letra-doble-columna {
         column-count: 2 !important;
-        /* Al forzar auto, llena la columna 1 hasta el tope y luego brinca a la 2 */
-        column-fill: auto !important; 
-        /* 22cm es la altura exacta que sobra en una hoja carta después de restar márgenes y títulos */
-        max-height: 22cm !important; 
+        column-fill: balance !important; /* 🚨 Hace que el navegador reparta el texto equitativamente en ambas columnas */
         width: 100%;
         column-gap: 40px !important; 
+        /* 🚨 ELIMINAMOS el max-height: 22cm para evitar que el texto se desborde y se encime */
     }
 
     /* 7. CANDADO PARA LAS LÍNEAS (Ladrillos sólidos impenetrables) */
