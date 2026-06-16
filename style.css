@@ -466,12 +466,22 @@ body.modo-expandido #visor-cancion {
 
     /* 6. LA MAGIA DE LA COLUMNA: Límite estricto para tamaño Carta */
     /* FLUJO NATURAL MULTI-PÁGINA PARA CANCIONES LARGAS Y GIGANTES */
-    .letra-doble-columna-equilibrada,
+    /* Para canciones medianas: Balancea el texto libremente en una hoja */
+    .letra-doble-columna-equilibrada {
+        column-count: 2 !important;
+        column-fill: balance !important; 
+        height: auto !important;
+        max-height: none !important;
+        width: 100% !important;
+        column-gap: 20px !important;
+        display: block !important;
+    }
+
+    /* Para canciones gigantes (Exclusivo Hoja 1): Llena la columna izquierda entera, luego la derecha */
     .letra-doble-columna-gigante {
         column-count: 2 !important;
-        column-fill: balance !important; /* Balancea la letra de izquierda a derecha en cada hoja */
-        height: auto !important; /* 🚨 LA CLAVE: Altura libre para que no salte de página ni recorte texto */
-        max-height: none !important; 
+        column-fill: auto !important; 
+        height: 19.5cm !important; /* Creamos una 'caja' estricta para la Hoja 1 */
         width: 100% !important;
         column-gap: 20px !important;
         display: block !important;
