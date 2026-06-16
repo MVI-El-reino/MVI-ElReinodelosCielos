@@ -534,12 +534,12 @@ if (btnExportarPDF) {
                     if (maxLongitudLinea > 50) {
                         claseColumna = 'letra-centrada';
                         estiloDinamico = "font-size: 14pt; line-height: 1.4; margin-top: 15px;";
-                    } else if (lineasVisuales > 20) {
+                    } else if (lineasVisuales > 32) { // 🚨 AQUÍ ESTÁ EL CAMBIO A 32
                         claseColumna = 'letra-doble-columna-equilibrada';
                         estiloDinamico = "font-size: 13pt; line-height: 1.4;";
                     } else {
                         claseColumna = 'letra-centrada';
-                        estiloDinamico = "font-size: 18pt; line-height: 1.5; margin-top: 30px;";
+                        estiloDinamico = "font-size: 17pt; line-height: 1.5; margin-top: 30px;"; // Ajustamos la letra a 17pt para que luzca perfecta
                     }
 
                     htmlCancion += `
