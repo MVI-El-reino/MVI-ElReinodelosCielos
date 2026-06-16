@@ -480,63 +480,94 @@ if (btnExportarPDF) {
                 const divCancion = document.createElement('div');
                 divCancion.className = 'cancion-pdf';
                 
-                // Contamos la altura REAL (Líneas visuales)
-                // Contamos la altura REAL y escaneamos la longitud de las líneas
+                // 1. Contamos la altura REAL y separamos estrofas
                 let lineasVisuales = 0;
                 let maxLongitudLinea = 0;
+                let estrofasPagina1 = [];
+                let estrofasPagina2 = [];
+                let lineasAcumuladas = 0;
+                let limitePagina1 = 44; // El límite exacto para llenar la hoja 1 sin pasarse
 
-                cancion.letra.split('\n').forEach(l => {
-                    const linea = l.trim();
-                    const soloTexto = linea.replace(/\[.*?\]/g, ""); // Medimos las letras sin contar los acordes
-                    
-                    if (soloTexto.length > maxLongitudLinea) {
-                        maxLongitudLinea = soloTexto.length;
-                    }
+                const estrofas = cancion.letra.split(/\n\s*\n/);
 
-                    if (linea === "") { 
-                        lineasVisuales += 1; 
-                    } else if (/^\[[^\[\]]+\]$/.test(linea)) { 
-                        lineasVisuales += 1.5; 
-                    } else if (linea.includes('[')) { 
-                        lineasVisuales += 2; 
-                    } else { 
-                        lineasVisuales += 1; 
+                estrofas.forEach(estrofa => {
+                    let lineasEstrofa = 0;
+                    estrofa.split('\n').forEach(l => {
+                        const linea = l.trim();
+                        const soloTexto = linea.replace(/\[.*?\]/g, ""); // Medimos las letras sin contar los acordes
+                        
+                        if (soloTexto.length > maxLongitudLinea) {
+                            maxLongitudLinea = soloTexto.length;
+                        }
+
+                        if (linea === "") { 
+                            lineasEstrofa += 1; 
+                        } else if (/^\[[^\[\]]+\]$/.test(linea)) { 
+                            lineasEstrofa += 1.5; 
+                        } else if (linea.includes('[')) { 
+                            lineasEstrofa += 2; 
+                        } else { 
+                            lineasEstrofa += 1; 
+                        }
+                    });
+
+                    lineasVisuales += lineasEstrofa;
+
+                    // Lógica de partición: Si cabe en la hoja 1, lo guardamos en la Parte 1
+                    if (lineasAcumuladas + lineasEstrofa <= limitePagina1) {
+                        estrofasPagina1.push(estrofa);
+                        lineasAcumuladas += lineasEstrofa;
+                    } else {
+                        // Lo que ya no cabe, lo mandamos a la Parte 2 (Hoja 2)
+                        estrofasPagina2.push(estrofa);
                     }
                 });
 
-                let claseColumna = '';
-                let estiloDinamico = '';
-                
-                // MOTOR INTELIGENTE DE ASIGNACIÓN
-                if (lineasVisuales > 45) {
-                    // 🚨 PRIORIDAD 1: Canciones gigantes SIEMPRE usan 2 columnas para no desperdiciar hojas
-                    claseColumna = 'letra-doble-columna-gigante';
-                    estiloDinamico = "font-size: 11pt; line-height: 1.3;"; 
-                } else if (maxLongitudLinea > 50) {
-                    // PRIORIDAD 2: Solo forzamos 1 columna si la canción es corta pero de líneas muy anchas
-                    claseColumna = 'letra-centrada';
-                    estiloDinamico = "font-size: 14pt; line-height: 1.4; margin-top: 15px;";
-                } else if (lineasVisuales > 20) {
-                    // Canciones Medianas: Doble columna
-                    claseColumna = 'letra-doble-columna-equilibrada';
-                    estiloDinamico = "font-size: 13pt; line-height: 1.4;";
-                } else {
-                    // Canciones Cortas
-                    claseColumna = 'letra-centrada';
-                    estiloDinamico = "font-size: 18pt; line-height: 1.5; margin-top: 30px;";
-                }
-
-                divCancion.innerHTML = `
+                // 2. Construimos el HTML base (Título y Tono)
+                let htmlCancion = `
                     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #D4AF37; margin-bottom: 15px; padding-bottom: 5px;">
                         <h2 style="margin: 0; border: none; padding: 0; font-size: 26pt;">${cancion.titulo}</h2>
                         <span style="font-family: 'Segoe UI', sans-serif; font-weight: bold; background-color: #0A192F; color: #D4AF37; padding: 8px 16px; border-radius: 4px; font-size: 12pt; text-transform: uppercase; letter-spacing: 1px;">REUNIÓN: ${cancion.dia}</span>
                     </div>
                     <div class="tono-pdf" style="font-size: 15pt; margin-bottom: 20px; text-align: center;">Tono para la alabanza: ${cancion.tono_original}</div>
-                    
-                    <div class="${claseColumna}" style="font-family: 'Courier New', Courier, monospace; ${estiloDinamico}">
-                        ${procesarLetraYAcordes(cancion.letra)}
-                    </div>
                 `;
+
+                // 3. MOTOR INTELIGENTE DE RENDERIZADO
+                if (lineasVisuales > 45 && maxLongitudLinea <= 50) {
+                    // 🚨 LA NUEVA REGLA (Solo para gigantes): Cortamos la canción en dos diseños diferentes
+                    htmlCancion += `
+                        <div class="letra-doble-columna-gigante" style="font-family: 'Courier New', Courier, monospace; font-size: 13.5pt; line-height: 1.4;">
+                            ${procesarLetraYAcordes(estrofasPagina1.join('\n\n'))}
+                        </div>
+                        
+                        <div class="letra-centrada" style="font-family: 'Courier New', Courier, monospace; font-size: 15pt; line-height: 1.5; page-break-before: always; padding-top: 15px;">
+                            ${procesarLetraYAcordes(estrofasPagina2.join('\n\n'))}
+                        </div>
+                    `;
+                } else {
+                    // COMPORTAMIENTO NORMAL PARA LAS DEMÁS CANCIONES (Intactas)
+                    let claseColumna = '';
+                    let estiloDinamico = '';
+
+                    if (maxLongitudLinea > 50) {
+                        claseColumna = 'letra-centrada';
+                        estiloDinamico = "font-size: 14pt; line-height: 1.4; margin-top: 15px;";
+                    } else if (lineasVisuales > 20) {
+                        claseColumna = 'letra-doble-columna-equilibrada';
+                        estiloDinamico = "font-size: 13pt; line-height: 1.4;";
+                    } else {
+                        claseColumna = 'letra-centrada';
+                        estiloDinamico = "font-size: 18pt; line-height: 1.5; margin-top: 30px;";
+                    }
+
+                    htmlCancion += `
+                        <div class="${claseColumna}" style="font-family: 'Courier New', Courier, monospace; ${estiloDinamico}">
+                            ${procesarLetraYAcordes(cancion.letra)}
+                        </div>
+                    `;
+                }
+
+                divCancion.innerHTML = htmlCancion;
                 areaImpresion.appendChild(divCancion);
             });
         });
