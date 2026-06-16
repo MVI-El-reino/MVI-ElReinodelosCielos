@@ -489,7 +489,7 @@ if (btnExportarPDF) {
                     <div class="tono-pdf" style="font-size: 15pt; margin-bottom: 20px; text-align: center;">Tono para la alabanza: ${cancion.tono_original}</div>
                 `;
 
-                // ========================================================
+               // ========================================================
                 // 🚨 EXCEPCIÓN VIP: SOLO PARA "ALABA A DIOS" (ID: 12)
                 // ========================================================
                 if (cancion.id === 12 || cancion.titulo.includes("Alaba a Dios")) {
@@ -504,11 +504,11 @@ if (btnExportarPDF) {
                             ${procesarLetraYAcordes(parte1)}
                         </div>
                         
-                        <div class="letra-centrada" style="font-family: 'Courier New', Courier, monospace; font-size: 15pt; line-height: 1.5; page-break-before: always; padding-top: 15px;">
+                        <div class="letra-centrada" style="font-family: 'Courier New', Courier, monospace; font-size: 13.5pt; line-height: 1.3; page-break-before: always; padding-top: 15px;">
                             ${procesarLetraYAcordes(parte2)}
                         </div>
                     `;
-                } 
+                }
                 // ========================================================
                 // COMPORTAMIENTO NORMAL PARA EL RESTO DEL REPERTORIO
                 // ========================================================
