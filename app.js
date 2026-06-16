@@ -56,72 +56,43 @@ function transponerLetraCruda(letraCruda, pasos) {
 // 4. MOTOR DE FORMATO VISUAL (ACORDES SOBRE LETRA)
 // ==========================================
 function procesarLetraYAcordes(letraCruda) {
-    const lineasCrudas = letraCruda.split('\n');
-    let htmlFinal = '';
-
-    lineasCrudas.forEach(lineaRaw => {
-        const lineaLimpia = lineaRaw.trim();
-
-        // 1. Si es una línea vacía
-        if (lineaLimpia === "") {
-            htmlFinal += '<br>';
-            return;
-        }
-
-        // 2. LA REGLA INTELIGENTE (REGEX) PARA MARCADORES
-        // Esta expresión asegura que empiece con [, termine con ], 
-        // y adentro NO tenga más corchetes. Así no confunde las canciones.
-        const esMarcador = /^\[[^\[\]]+\]$/.test(lineaLimpia);
-
-        if (esMarcador) {
-            htmlFinal += `<span class="marcador-seccion">${lineaLimpia}</span>`;
-            return;
-        }
-
-        // 3. Si es una línea con acordes (la canción real)
-        if (lineaRaw.includes('[')) {
-            let lineaAcordesHTML = '';
-            let lineaLetrasHTML = '';
-            let caracteresAcordes = 0;
-            let caracteresLetras = 0;
-
-            let partes = lineaRaw.split('[');
-
-            partes.forEach((parte, index) => {
-                if (index === 0) {
-                    lineaLetrasHTML += parte;
-                    caracteresLetras += parte.length;
-                } else {
-                    let subPartes = parte.split(']');
-                    let acorde = subPartes[0];
-                    let textoDespues = subPartes[1] || "";
-
-                    let espaciosFaltantes = caracteresLetras - caracteresAcordes;
-                    if (espaciosFaltantes > 0) {
-                        lineaAcordesHTML += ' '.repeat(espaciosFaltantes);
-                        caracteresAcordes += espaciosFaltantes;
+    // 1. Dividimos la canción en bloques completos (estrofas) usando los dobles saltos de línea
+    const estrofas = letraCruda.split(/\n\s*\n/);
+    
+    return estrofas.map(estrofa => {
+        // 2. Envolvemos toda la estrofa en un contenedor indestructible
+        let htmlEstrofa = '<div class="estrofa-musical">';
+        
+        estrofa.split('\n').forEach(linea => {
+            const lineaLimpia = linea.trim();
+            if (lineaLimpia === "") return; // Ya no usamos <br>, el div dará el espacio
+            
+            if (/^\[[^\[\]]+\]$/.test(lineaLimpia)) {
+                htmlEstrofa += `<span class="marcador-seccion">${lineaLimpia}</span>`;
+                return;
+            }
+            
+            if (linea.includes('[')) {
+                let acHTML = '', letHTML = '', cA = 0, cL = 0;
+                linea.split('[').forEach((p, i) => {
+                    if (i === 0) { letHTML += p; cL += p.length; }
+                    else {
+                        let [ac, des] = p.split(']');
+                        acHTML += ' '.repeat(Math.max(0, cL - cA)) + `<span class="acorde-formateado">${ac}</span>`;
+                        cA += (Math.max(0, cL - cA)) + ac.length;
+                        letHTML += (des || "");
+                        cL += (des || "").length;
                     }
-
-                    lineaAcordesHTML += `<span class="acorde-formateado">${acorde}</span>`;
-                    caracteresAcordes += acorde.length;
-
-                    lineaLetrasHTML += textoDespues;
-                    caracteresLetras += textoDespues.length;
-                }
-            });
-
-            htmlFinal += `
-                <div class="bloque-linea">
-                    <pre class="linea-acordes">${lineaAcordesHTML}</pre>
-                    <pre class="linea-letras">${lineaLetrasHTML}</pre>
-                </div>`;
-        } else {
-            // 4. Si es una línea de solo texto
-            htmlFinal += `<div class="bloque-linea"><pre class="linea-letras">${lineaRaw}</pre></div>`;
-        }
-    });
-
-    return htmlFinal;
+                });
+                htmlEstrofa += `<div class="bloque-linea"><pre class="linea-acordes">${acHTML}</pre><pre class="linea-letras">${letHTML}</pre></div>`;
+            } else {
+                htmlEstrofa += `<div class="bloque-linea"><pre class="linea-letras">${linea}</pre></div>`;
+            }
+        });
+        
+        htmlEstrofa += '</div>';
+        return htmlEstrofa;
+    }).join('');
 }
 // ==========================================
 // 5. RENDERIZADO DE LA INTERFAZ Y ORDENAMIENTO
