@@ -301,8 +301,6 @@ function renderizarVisorDerecho() {
     }
     
     contenedorLetra.innerHTML = procesarLetraYAcordes(letraTranspuesta);
-    //DIBUJO DE GRAFICOS DE NOTAS
-    mostrarAcordesDeCancion(letraTranspuesta);
 }
 
 function mostrarCancion(id, dia = null) {
