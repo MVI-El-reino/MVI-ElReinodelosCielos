@@ -574,7 +574,14 @@ if (btnExportarPDF) {
 }
 // Función para mostrar el diccionario como "página extra"
 function abrirDiccionario(letra) {
-    const acordes = [...new Set(letra.match(/\[([^\]]+)\]/g))].map(a => a.replace(/[\[\]]/g, ''));
+    // 🚨 Agregamos una validación por si la canción no tiene acordes para que no marque error
+    if (!letraActual) return; 
+    const coincidencias = letraActual.match(/\[([^\]]+)\]/g);
+    if (!coincidencias) return; // Si no hay acordes, no hace nada
+
+    // 🚨 Usamos la variable global 'letraActual' en lugar de 'letra'
+    const acordes = [...new Set(coincidencias)].map(a => a.replace(/[\[\]]/g, ''));
+    
     const contenedor = document.getElementById('contenedor-diagramas');
     contenedor.innerHTML = '';
 
