@@ -573,27 +573,30 @@ if (btnExportarPDF) {
         }, 100);
     });
 }
-function abrirDiccionario() {
-    const acordes = [...new Set(letraActual.match(/\[([^\]]+)\]/g))].map(a => a.replace(/[\[\]]/g, ''));
+// Función para mostrar el diccionario como "página extra"
+function abrirDiccionario(letra) {
+    const acordes = [...new Set(letra.match(/\[([^\]]+)\]/g))].map(a => a.replace(/[\[\]]/g, ''));
     const contenedor = document.getElementById('contenedor-diagramas');
     contenedor.innerHTML = '';
-    
-    if (acordes.length === 0) return;
 
     acordes.forEach(acorde => {
-        const idSeguro = acorde.replace(/[#\/]/g, (m) => m === '#' ? 'Sharp' : 'Slash');
-        contenedor.innerHTML += `
-            <div class="diagrama-acorde">
-                <span style="display:block; text-align:center; font-weight:bold;">${acorde}</span>
-                <div id="c-${idSeguro}" style="width:100px; height:120px;"></div>
-            </div>`;
-        setTimeout(() => {
-            if (typeof ChordBox !== 'undefined') new ChordBox(`#c-${idSeguro}`, { chord: acorde, instrument: 'guitar' });
-        }, 50);
-    });
+    const idSeguro = acorde.replace(/[#\/]/g, (m) => m === '#' ? 'Sharp' : 'Slash');
+    const div = document.createElement('div');
+    div.className = 'diagrama-acorde';
+    
+    // Aquí es donde defines qué se ve
+    div.innerHTML = `
+        <div style="font-size: 1.2rem; font-weight: bold; text-align: center; margin-bottom: 5px;">${acorde}</div>
+        <div id="c-${idSeguro}" style="width: 100px; height: 120px; background: white;"></div>
+    `;
+    // ... resto del código
+});
+
+    // Mostramos la "página"
     document.getElementById('diccionario-acordes').style.display = 'block';
 }
 
+// Botón para cerrar
 function cerrarDiccionario() {
     document.getElementById('diccionario-acordes').style.display = 'none';
 }
