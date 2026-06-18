@@ -377,6 +377,42 @@ body.modo-expandido #visor-cancion {
         column-count: 1 !important;
         height: auto !important;
     }
+
+   /* =========================================
+       CORRECCIÓN: MODO EXPANDIDO Y RESPONSIVIDAD MÓVIL
+    ========================================= */
+    
+    /* 1. Bloqueo absoluto del scroll horizontal en la página */
+    html, body {
+        overflow-x: hidden !important;
+        max-width: 100vw !important;
+    }
+
+    /* 2. Arreglamos el modo expandido para que use el 100% del celular */
+    body.modo-expandido #visor-cancion {
+        padding: 20px 10px !important; /* Quitamos el 10% de margen lateral */
+        height: auto !important; 
+        min-height: 100vh;
+        overflow-x: hidden !important;
+    }
+
+    /* 3. Forzamos a la letra y acordes a ajustarse al ancho */
+    #letra-cancion {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* 4. Le quitamos la "rigidez" al texto. Si no cabe, baja al siguiente renglón */
+    .linea-acordes, .linea-letras {
+        white-space: pre-wrap !important; 
+        word-break: break-word !important; 
+        font-size: 0.95rem !important; /* Letra un pelín más chica para proteger la alineación de acordes */
+    }
+    
+    .bloque-linea {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
 }
 
 /* =========================================
