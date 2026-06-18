@@ -573,33 +573,40 @@ if (btnExportarPDF) {
     });
 }
 // Función para mostrar el diccionario como "página extra"
-function abrirDiccionario(letra) {
-    // 🚨 Agregamos una validación por si la canción no tiene acordes para que no marque error
+function abrirDiccionario() { 
     if (!letraActual) return; 
     const coincidencias = letraActual.match(/\[([^\]]+)\]/g);
-    if (!coincidencias) return; // Si no hay acordes, no hace nada
-
-    // 🚨 Usamos la variable global 'letraActual' en lugar de 'letra'
-    const acordes = [...new Set(coincidencias)].map(a => a.replace(/[\[\]]/g, ''));
     
+    if (!coincidencias) {
+        alert("Esta canción no tiene acordes para mostrar.");
+        return; 
+    }
+
+    // 🚨 1. ABRIMOS LA CAJA DE INMEDIATO (Antes de hacer matemáticas)
+    document.getElementById('diccionario-acordes').style.display = 'block';
+
+    const acordes = [...new Set(coincidencias)].map(a => a.replace(/[\[\]]/g, ''));
     const contenedor = document.getElementById('contenedor-diagramas');
     contenedor.innerHTML = '';
 
     acordes.forEach(acorde => {
-    const idSeguro = acorde.replace(/[#\/]/g, (m) => m === '#' ? 'Sharp' : 'Slash');
-    const div = document.createElement('div');
-    div.className = 'diagrama-acorde';
-    
-    // Aquí es donde defines qué se ve
-    div.innerHTML = `
-        <div style="font-size: 1.2rem; font-weight: bold; text-align: center; margin-bottom: 5px;">${acorde}</div>
-        <div id="c-${idSeguro}" style="width: 100px; height: 120px; background: white;"></div>
-    `;
-    // ... resto del código
-});
+        const idSeguro = acorde.replace(/[#\/]/g, (m) => m === '#' ? 'Sharp' : 'Slash');
+        const div = document.createElement('div');
+        div.className = 'diagrama-acorde';
+        // Agregamos un título arribita del gráfico para saber qué acorde es
+        div.innerHTML = `<div style="text-align: center; font-weight: bold; color: #D4AF37; margin-bottom: 5px;">${acorde}</div>`;
+        contenedor.appendChild(div);
 
-    // Mostramos la "página"
-    document.getElementById('diccionario-acordes').style.display = 'block';
+        // 🚨 2. ESCUDO PROTECTOR: Si un acorde raro falla, que no rompa la app
+        try {
+            // Aquí adentro va la función que ya tenías para dibujar (probablemente algo como dibujarAcorde(acorde, div) o chordbox.draw)
+            // (Deja tu código original que tenías adentro del forEach)
+            
+        } catch (error) {
+            console.log(`El acorde ${acorde} es muy complejo para dibujarlo automáticamente.`);
+            div.innerHTML += `<div style="color: red; font-size: 0.8rem; text-align: center;">Sin gráfico</div>`;
+        }
+    });
 }
 
 // Botón para cerrar
