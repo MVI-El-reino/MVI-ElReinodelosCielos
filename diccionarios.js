@@ -45,7 +45,11 @@ const diccionarioGuitarra = {
 
     // Acordes Complejos / Con Bajo
     "D/F#": [ [1, 2], [2, 3], [3, 2], [4, 0], [5, 0], [6, 2] ],
-    "A2": [ [1, 0], [2, 0], [3, 2], [4, 2], [5, 0], [6, 'x'] ]
+    "A2": [ [1, 0], [2, 0], [3, 2], [4, 2], [5, 0], [6, 'x'] ],
+
+    // Acordes Suspendidos (sus)
+    "Bsus2": [ [1, 2], [2, 2], [3, 4], [4, 4], [5, 2], [6, 'x'] ],
+    "Bsus4": [ [1, 2], [2, 5], [3, 4], [4, 4], [5, 2], [6, 'x'] ]
 };
 
 // ==========================================
@@ -94,5 +98,9 @@ const diccionarioTeclado = {
 
     // Acordes Complejos / Con Bajo
     "D/F#": ["F#", "A", "D"], // Inversión para que el bajo sea F#
-    "A2": ["A", "B", "E"]
+    "A2": ["A", "B", "E"],
+
+    // Acordes Suspendidos (sus)
+    "Bsus2": ["B", "C#", "F#"],
+    "Bsus4": ["B", "E", "F#"]
 };
