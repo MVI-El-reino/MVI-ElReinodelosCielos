@@ -302,6 +302,9 @@ function renderizarVisorDerecho() {
     }
     
     contenedorLetra.innerHTML = procesarLetraYAcordes(letraTranspuesta);
+    
+    //diccionario de acordes = guarde la letra
+    letraActual = letraTranspuesta;
 }
 
 function mostrarCancion(id, dia = null) {
