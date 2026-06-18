@@ -49,7 +49,16 @@ const diccionarioGuitarra = {
 
     // Acordes Suspendidos (sus)
     "Bsus2": [ [1, 2], [2, 2], [3, 4], [4, 4], [5, 2], [6, 'x'] ],
-    "Bsus4": [ [1, 2], [2, 5], [3, 4], [4, 4], [5, 2], [6, 'x'] ]
+    "Bsus4": [ [1, 2], [2, 5], [3, 4], [4, 4], [5, 2], [6, 'x'] ],
+
+    // Acordes con números (2, 4, 9)
+    "B2": [ [1, 2], [2, 2], [3, 4], [4, 4], [5, 2], [6, 'x'] ],
+    "F#4": [ [1, 2], [2, 2], [3, 4], [4, 4], [5, 4], [6, 2] ], // Equivalente a F#sus4
+    "E9": [ [1, 2], [2, 3], [3, 1], [4, 2], [5, 2], [6, 0] ],  // Acorde con mucha riqueza
+
+    // Acordes con bajo invertido
+    "B/D#": [ [1, 'x'], [2, 4], [3, 4], [4, 4], [5, 6], [6, 'x'] ],
+    "F#/A#": [ [1, 2], [2, 2], [3, 3], [4, 4], [5, 1], [6, 'x'] ]
 };
 
 // ==========================================
@@ -102,5 +111,14 @@ const diccionarioTeclado = {
 
     // Acordes Suspendidos (sus)
     "Bsus2": ["B", "C#", "F#"],
-    "Bsus4": ["B", "E", "F#"]
+    "Bsus4": ["B", "E", "F#"],
+
+    // Acordes con números (2, 4, 9)
+    "B2": ["B", "C#", "F#"],
+    "F#4": ["F#", "B", "C#"],
+    "E9": ["E", "G#", "B", "D", "F#"], // ¡Nuestro teclado dinámico soporta estas 5 notas sin problema!
+
+    // Acordes con bajo invertido (La primera nota es el bajo que se toca con la mano izquierda)
+    "B/D#": ["D#", "F#", "B"], 
+    "F#/A#": ["A#", "C#", "F#"]
 };
