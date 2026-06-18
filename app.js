@@ -599,14 +599,19 @@ function abrirDiccionario() {
         // Agregamos un título arribita del gráfico para saber qué acorde es
         div.innerHTML = `<div style="text-align: center; font-weight: bold; color: #D4AF37; margin-bottom: 5px;">${acorde}</div>`;
         contenedor.appendChild(div);
-
-        // 🚨 2. ESCUDO PROTECTOR: Si un acorde raro falla, que no rompa la app
+        // 🚨 2. ESCUDO PROTECTOR Y DIBUJO
         try {
-            // Aquí adentro va la función que ya tenías para dibujar (probablemente algo como dibujarAcorde(acorde, div) o chordbox.draw)
-            // (Deja tu código original que tenías adentro del forEach)
+            // Buscamos si el acorde existe en la variable de diccionarios.js
+            if (diccionarioGuitarra[acorde]) {
+                // Si existe, le decimos a la librería que lo dibuje
+                vexchords.draw(div, { chord: diccionarioGuitarra[acorde] });
+            } else {
+                // Si no existe, forzamos el error para que salte al catch
+                throw new Error("Acorde no registrado en diccionarios.js");
+            }
             
         } catch (error) {
-            console.log(`El acorde ${acorde} es muy complejo para dibujarlo automáticamente.`);
+            console.log(`Fallo al dibujar ${acorde}:`, error.message);
             div.innerHTML += `<div style="color: red; font-size: 0.8rem; text-align: center;">Sin gráfico</div>`;
         }
     });
