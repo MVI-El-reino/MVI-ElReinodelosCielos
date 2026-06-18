@@ -7,6 +7,7 @@ let cancionActualId = null;
 let cancionActualDia = null; 
 let viendoListaDominical = false;
 let pasosActuales = 0; 
+let letraActual = "";
 
 // ==========================================
 // 2. INICIALIZACIÓN Y LECTURA DE DATOS
