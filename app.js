@@ -588,7 +588,21 @@ function abrirDiccionario() {
     // 🚨 1. ABRIMOS LA CAJA DE INMEDIATO (Antes de hacer matemáticas)
     document.getElementById('diccionario-acordes').style.display = 'block';
 
-    const acordes = [...new Set(coincidencias)].map(a => a.replace(/[\[\]]/g, ''));
+    // Sacamos el texto limpio sin los corchetes
+    let acordes = [...new Set(coincidencias)].map(a => a.replace(/[\[\]]/g, ''));
+    
+    // 🚨 FILTRO INTELIGENTE: Le enseñamos al sistema cómo se ve un acorde real
+    // Acepta letras A-G, sostenidos/bemoles, menores (m), suspendidos (sus), números (2, 4, 7) y bajos con diagonal (D/F#)
+    const regexAcorde = /^[A-G][#b]?(m|sus|maj|dim|aug)?\d?(\/[A-G][#b]?)?$/;
+    
+    // Descartamos todo lo que no sea un acorde (Verso, Coro, //, etc.)
+    acordes = acordes.filter(acorde => regexAcorde.test(acorde));
+
+    // Si después de limpiar resulta que solo había texto y cero acordes, avisamos y no abrimos la caja
+    if (acordes.length === 0) {
+        alert("Esta canción no tiene acordes musicales para mostrar.");
+        return;
+    }
     const contenedor = document.getElementById('contenedor-diagramas');
     contenedor.innerHTML = '';
 
