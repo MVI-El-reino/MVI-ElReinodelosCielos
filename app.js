@@ -593,34 +593,84 @@ function abrirDiccionario() {
     contenedor.innerHTML = '';
 
     acordes.forEach(acorde => {
-        const idSeguro = acorde.replace(/[#\/]/g, (m) => m === '#' ? 'Sharp' : 'Slash');
-        const div = document.createElement('div');
-        div.className = 'diagrama-acorde';
-        // Agregamos un título arribita del gráfico para saber qué acorde es
-        div.innerHTML = `<div style="text-align: center; font-weight: bold; color: #D4AF37; margin-bottom: 5px;">${acorde}</div>`;
-        contenedor.appendChild(div);
-        // 🚨 2. ESCUDO PROTECTOR Y DIBUJO
+        // Creamos la "tarjeta" principal para este acorde
+        const divPrincipal = document.createElement('div');
+        divPrincipal.className = 'diagrama-acorde';
+        divPrincipal.style.display = 'flex';
+        divPrincipal.style.flexDirection = 'column';
+        divPrincipal.style.alignItems = 'center';
+
+        // Título del acorde (Dorado)
+        divPrincipal.innerHTML = `<div style="text-align: center; font-weight: bold; color: #D4AF37; margin-bottom: 10px; font-size: 1.2rem;">${acorde}</div>`;
+
+        // Contenedor exclusivo para que la librería dibuje la guitarra
+        const divGuitarra = document.createElement('div');
+        divPrincipal.appendChild(divGuitarra);
+
+        // 1. DIBUJO DE GUITARRA
         try {
-            // Buscamos si el acorde existe en la variable de diccionarios.js
             if (diccionarioGuitarra[acorde]) {
-                // Si existe, le decimos a la librería que lo dibuje
-                vexchords.draw(div, { chord: diccionarioGuitarra[acorde] });
+                vexchords.draw(divGuitarra, { chord: diccionarioGuitarra[acorde] });
             } else {
-                // Si no existe, forzamos el error para que salte al catch
-                throw new Error("Acorde no registrado en diccionarios.js");
+                divGuitarra.innerHTML = `<div style="color: #ff4c4c; font-size: 0.7rem; text-align: center;">Sin gráfico 🎸</div>`;
             }
-            
         } catch (error) {
-            console.log(`Fallo al dibujar ${acorde}:`, error.message);
-            div.innerHTML += `<div style="color: red; font-size: 0.8rem; text-align: center;">Sin gráfico</div>`;
+            console.log(`Fallo guitarra ${acorde}:`, error);
         }
+
+        // 2. DIBUJO DE TECLADO
+        if (diccionarioTeclado[acorde]) {
+            // Llamamos a nuestra nueva función que devuelve el HTML del piano
+            divPrincipal.innerHTML += dibujarTecladoHTML(diccionarioTeclado[acorde]);
+        } else {
+            divPrincipal.innerHTML += `<div style="color: #ff4c4c; font-size: 0.7rem; text-align: center; margin-top: 15px;">Sin gráfico 🎹</div>`;
+        }
+
+        // Inyectamos la tarjeta completa en el panel
+        contenedor.appendChild(divPrincipal);
     });
 }
-
 // Botón para cerrar
 function cerrarDiccionario() {
     const modal = document.getElementById('diccionario-acordes');
     if (modal) {
         modal.style.display = 'none'; // Lo volvemos a ocultar
     }
+}
+
+// ==========================================
+// GENERADOR DE MINI-TECLADO HTML
+// ==========================================
+function dibujarTecladoHTML(notasAcorde) {
+    const teclas = [
+        { nota: 'C', tipo: 'blanca' }, { nota: 'C#', tipo: 'negra', left: '11%' },
+        { nota: 'D', tipo: 'blanca' }, { nota: 'D#', tipo: 'negra', left: '25%' },
+        { nota: 'E', tipo: 'blanca' },
+        { nota: 'F', tipo: 'blanca' }, { nota: 'F#', tipo: 'negra', left: '54%' },
+        { nota: 'G', tipo: 'blanca' }, { nota: 'G#', tipo: 'negra', left: '68%' },
+        { nota: 'A', tipo: 'blanca' }, { nota: 'A#', tipo: 'negra', left: '82%' },
+        { nota: 'B', tipo: 'blanca' }
+    ];
+
+    let html = `<div style="position: relative; width: 110px; height: 50px; margin: 15px auto 5px auto; display: flex; border: 1px solid #555; border-radius: 3px; overflow: hidden; background: white;">`;
+    
+    // 1. Dibujamos las teclas blancas
+    teclas.filter(t => t.tipo === 'blanca').forEach(t => {
+        const esActiva = notasAcorde.includes(t.nota);
+        const colorCuerpo = esActiva ? '#D4AF37' : '#ffffff';
+        html += `<div style="flex: 1; border-right: 1px solid #ccc; background: ${colorCuerpo};"></div>`;
+    });
+
+    // 2. Dibujamos las teclas negras flotando encima
+    teclas.filter(t => t.tipo === 'negra').forEach(t => {
+        const esActiva = notasAcorde.includes(t.nota);
+        const colorCuerpo = esActiva ? '#D4AF37' : '#222222';
+        html += `<div style="position: absolute; width: 9%; height: 60%; top: 0; left: ${t.left}; background: ${colorCuerpo}; border-radius: 0 0 2px 2px; box-shadow: 1px 1px 2px rgba(0,0,0,0.5);"></div>`;
+    });
+
+    html += `</div>`;
+    // Añadimos el texto con las notas exactas debajo del piano
+    html += `<div style="font-size: 0.75rem; color: #aaa; text-align: center; margin-bottom: 10px;">🎹 ${notasAcorde.join(' - ')}</div>`;
+    
+    return html;
 }
