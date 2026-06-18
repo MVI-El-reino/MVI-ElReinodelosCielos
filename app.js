@@ -604,5 +604,8 @@ function abrirDiccionario(letra) {
 
 // Botón para cerrar
 function cerrarDiccionario() {
-    document.getElementById('diccionario-acordes').style.display = 'none';
+    const modal = document.getElementById('diccionario-acordes');
+    if (modal) {
+        modal.style.display = 'none'; // Lo volvemos a ocultar
+    }
 }
