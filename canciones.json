@@ -87,7 +87,7 @@
     "id": 16,
     "titulo": "Al que está sentado - quiero conocerte (Marcos Brunet)",
     "tono_original": "B",
-    "letra": "[Intro]\n[E9/G#m/B]  [E9/G#m/B/F#]  [E9/G#m/B]  [E9/G#m/B/D#/F#/F#4]  [E9/F#E9/F#]\n\n[Verso]\n[B2]Quiero conocerte\n[G#m]Cada día más a ti\n[F#]Entrar en tu presencia y ado[E]rar [E11+] [E]\n\n[G#m]Revélanos tu gloria\n[F#]Deseamos ir mucho más en ti\n[E]Queremos tu presencia, [F#4]Je[F#]sús\n\n[Coro]\n[B2]Al que está sentado en el trono\n[G#m]Al que vive para siempre y siempre\n[C#m]Sea la gloria, sea [B/D#]la honra y el poder\n[E]Sea la gloria, sea [F#]la honra y el po[F#4]der\n\n[Instrumental]\n[E] [G#m] [B2]\n[E] [G#m] [F#/A#]\n[E] [E11+] [E]\n\n[Puente]\n[E] [G#m] [B2]\nSanto\n[E] [G#m] [B2]\nTu eres santo\n[C#m] [D#m]\nTu eres santo, santo, santo\n[E] [F#]\nSanto, santo eres tú\n\n[Final]\n(Se repite el Coro)"
+    "letra": "[Intro]\n[E9/G#m/B]  [E9/G#m/B/F#]  [E9/G#m/B] \n [E9/G#m/B/D#/F#/F#4]  [E9/F#E9/F#]\n\n[Verso]\n[B2]Quiero conocerte\n[G#m]Cada día más a ti\n[F#]Entrar en tu presencia y ado[E]rar [E11+] [E]\n\n[G#m]Revélanos tu gloria\n[F#]Deseamos ir mucho más en ti\n[E]Queremos tu presencia, [F#4]Je[F#]sús\n\n[Coro]\n[B2]Al que está sentado en el trono\n[G#m]Al que vive para siempre y siempre\n[C#m]Sea la gloria, sea [B/D#]la honra y el poder\n[E]Sea la gloria, sea [F#]la honra y el po[F#4]der\n\n[Instrumental]\n[E] [G#m] [B2]\n[E] [G#m] [F#/A#]\n[E] [E11+] [E]\n\n[Puente]\n[E] [G#m] [B2]\nSanto\n[E] [G#m] [B2]\nTu eres santo\n[C#m] [D#m]\nTu eres santo, santo, santo\n[E] [F#]\nSanto, santo eres tú\n\n[Final]\n(Se repite el Coro)"
   },
   {
     "id": 17,
@@ -220,7 +220,7 @@
   "titulo": "Con manos levantadas - Danilo Montero",
   "tono_original": "A",
   "letra": "[E]Con mis manos levantadas hacia el [A]cielo\n[C#m]Me presento ante [B]ti hoy mi se[E]ñor\n[A]Para recibir de [B]ti la fuerza y el [E]poder [C#m]\n[F#]Para vivir [A]junto a [B]ti\n\n[E]Llenas hoy mi corazón con tu pre[F#m7]sencia\n[B]Llenas de alegría y paz todo mi [C#m]ser\n[A]De cualquier necesidad tu me respon[E]derás [C#m]\n[F#m]Por que me [B]amas me amas\n\n[E]Llenas hoy mi corazón con tu pre[F#m7]sencia\n[B]Llenas de alegría y paz todo mi [C#m]ser\n[A]De cualquier necesidad tu me respon[E]derás [C#m]\n[D]Por que me [Am7]amas me [E]amas"
-},
+  },
   {
     "id": 39,
     "titulo": "Cuan grande es El - Crystal Lewis",
@@ -233,138 +233,138 @@
     "tono_original": "C",
     "letra": "[C]El esplendor de un Rey, [G/B]vestido en Majes[Am]tad\nLa Tierra alegre es[F]tá, La Tierra alegre es[G]tá\n[C]Cubierto está de luz, [G/B]venció a la oscuri[Am]dad\nY tiembla a Su [F]voz, Tiembla a Su [G]voz\n\n[Coro]\n[C]Cuán Grande es Dios\n[G/B]Cántale, Cuán grande es [Am]Dios\n[F]Y todos lo ve[G]rán, Cuán grande es [C]Dios\n\n[C]Día a Día Él está, [G/B]Y el tiempo está en Él [Am]\nPrincipio y el fin, Principio y el fin\n[C]La Trinidad en Dios, [G/B]El Padre, Hijo, Espíri[Am]tu\nCordero y el [F]León, Cordero y el [G]León\n\n[Coro 2]\n[C]Y Tu Nombre sobre todo es\n[G/B]Tu eres Digno de ala[Am]bar\nY mi ser di[F]rá, Cuán grande es [G]Dios [C]"
   },
-{
+  {
   "id": 41,
   "titulo": "Cristo no está muerto - Juan Carlos Alvarado",
   "tono_original": "C",
   "letra": "[C]Cristo no está muerto, está vivo\n[F]Cristo no está muerto, está vivo\n[C]Cristo no está muerto, está vivo\n[C]Lo siento en mis manos\n\n[C]Lo siento en mis pies\n[C]Lo siento en todo mi ser\n\n[C]La tengo, la tengo\n[F]La tengo, la [C]tengo\n[G]La unción está sobre [G7]mí [F#7] [F7]\n[C]Gloria a Dios porque la tengo"
-},
+  },
   {
   "id": 42,
   "titulo": "Cristo yo te amo - En espiritu y en Verdad",
   "tono_original": "G",
   "letra": "[Intro] [G] [C]\n\n[G]Cristo yo te a[C]mo, [D]Cristo yo te [G]amo\n[D]No hay nadie como [Em]tú, [Am]Jesús [D]\n\n[G]Cristo yo te a[C]mo, [D]Cristo yo te [G]amo\n[D]No hay nadie como [Em]tú, [Am]Jesús [D]\n\n[G]Y no sé dónde estu[D]viera\nSi yo a ti no te tu[Em]viera [D]\nSi no hubiera cono[Am]cido\nAl Dios que me [D]ama\n\n[A]Y no sé dónde estu[E]viera\nSi yo a ti no te tu[F#m]viera\nSi no hubiera cono[Bm]cido\nAl Dios que me [E]ama\n\n[A]Y no sé dónde estu[E]viera\nSi yo a ti no te tu[F#m]viera\nSi no hubiera cono[Bm]cido\nAl Dios que me [A]ama [Dm]\nAl Dios que me [A]ama [Dm]\nAl Dios que me [A]ama"
-},
+  },
   {
   "id": 43,
   "titulo": "Por Siempre - Vino Nuevo",
   "tono_original": "G",
   "letra": "[Intro] [G] [Em] [D] [C] [G] [Em] [D] [C] [G]\n\n[G]Dar gracias a Dios al Señor y Rey\nSu amor es para siem[G]pre\n[C]Porque bueno es y sobre todo está\nSu amor es para siem[G]pre\n\n[Pre-coro]\n[D]Cantad, can[C]tad\n\n[G]Su brazo fuerte extendido está\nSu amor es para siem[G]pre\n[C]Por la vida que ha vuelto a nacer\nSu amor es para siem[G]pre\n\n[Coro]\n[G]Por siempre Dios es fuerte, por siempre Dios es [Em]fiel\n[D]Por siempre con nosotros, por siempre y siem[C]pre\n[G]Por siempre\n\n[G]Desde el alba hasta el anochecer\nSu amor es para siem[G]pre\n[C]Por su gracia si podemos seguir\nSu amor es para siem[G]pre\n\n[Puente]\n[G]Su amor es para siempre x8\n\n[Cambio de tono]\n[A]Por siempre Tú es fuerte, por siempre Tú es [F#m]fiel\n[E]Por siempre con nosotros, por siempre y siem[D]pre"
-},
+  },
   {
   "id": 44,
   "titulo": "Dame de beber - Marco Barrientos",
   "tono_original": "D",
   "letra": "[D]Quiero estar en tu pre[F#m7]sencia [Em] [A4]\n[A]Y poderte contem[D]plar [A/C#] [Bm]\n[D/A]Necesito estar con[Em]tigo [A4]\n[A]Necesito ado[D]rar [C/E]\n\n[D/F#]Dame de [G]beber de tu ma[A/G]nantial\n[D/A]Dame de beber, [Em7]necesito [A4]más [A] [D] [C/E]\n[D/F#]Dame de [G]beber de tu ma[A/G]nantial\n[D/A]Dame de beber, [Em7]necesito [G/A]más [A] [D]\n\n[G]Quie[A/G]ro más, [F#m]quie[Bm7]ro [Em]más [F#7] [F#7/Bb] [Bm7] [D/A]\n[G]Más de tu es[D/F#]píritu\n[G]Más de tu pre[Bm7]sencia\n[Em]Quie[D/F#]ro [G]más de [A]ti [D]"
-},
+  },
   {
   "id": 45,
   "titulo": "Danzare - Conquistando Fronteras",
   "tono_original": "E",
   "letra": "[E]Mas glorioso de lo que mis ojos ven\n[A]Danzando sobre montes y collados\n[E]Viene nuestro [A]rey\n\n[E]Del trono de justicia descendió\n[A]Las aguas de su rio esta fluyendo\n[E]Alegran la ciudad\n\n[A]Viene nuestro rey\n[B]Clamare hasta que [A]brille tu [B]justicia\n[A]Y tu alabanza en la [B]tierra\n[A]Cosas suceden cuando [B]danzamos\n\n-CORO-\n[E]Danzare en el rio [A]danzare\n[C#m]Alegre danzare\n[B]Mi corazón derramo ante [E]ti\n\n[A]Aunque no te pueda ver\n[C#m]Tu permanecerás\n[B]La gloria de tu nombre es [E]realidad"
-},
+  },
   {
   "id": 46,
   "titulo": "David danzaba - Inspiracion",
   "tono_original": "C",
   "letra": "[Intro] [Dm] [Em] [F] [G]\n[Dm] [Em] [F] [G]\n\n[Am]David David danzaba en la presencia del se[G]ñor [Am]\n[F]Y el pueblo se regocijaba\n[Dm]Porque David andaba [Am]\n\n[F]Conforme al cora[G]zon de Jehov[Am]á [Am] [G/B] [A7/C#]\n\n[Am]David David peleo contra el oso y el le[G]on [Am]\n[F]Y el pueblo se regocijaba\n[Dm]Porque David andaba [Am]\n\n[Am]Saul mato a mil y David a sus diez[G]mil [Am]\n[F]Y el pueblo se regocijaba\n[Dm]Porque David andaba [Am]"
-},
+  },
   {
   "id": 47,
   "titulo": "De gloria en gloria - Marcos Witt",
   "tono_original": "D",
   "letra": "[D]De gloria en gloria te [A]veo\n[Bm]Cuanto más te cono[D7]zco\n[G]Quiero saber más de [A]ti [A7]\n\n[D]Mi Dios cual buen alfa[A]rero\n[Bm]Quebrántame, transfor[D7]mame\n[G]Moldeame a tu imagen se[A]ñor [D] [D7]\n\n[G]Quiero ser más [A]como tu\n[F#m]Ver la vida [Bm]como tu\n[G]Saturarme de tu es[A]piritu\n[F#m]y reflejar al [Bm]mundo tu amor [G]\n[A]y reflejar al [D]mundo tu amor [D7]\n\n[Final] [G] [A] [G] [D]"
-},
+  },
   {
   "id": 48,
   "titulo": "Delante de tu trono - Marco Barrientos",
   "tono_original": "G",
   "letra": "[G]Delante de tu trono\n[Em]Señor yo quiero estar\n[C]Para contemplar\n[D]Tu hermosura y santidad\n\n[G]Y decirte te amo, [Em]y decirte te adoro\n[G]Y decirte te amo [Em]y que [C]eres todo para [D]mi [G]\n\n[C]Y que eres todo para mi, [D]y que [Em]eres todo para [C]mi [D] [G]"
-},
+  },
   {
   "id": 49,
   "titulo": "De tal manera me amó - Abel Zavala",
   "tono_original": "C",
   "letra": "[Intro] [F] [G] [C] [F] [G] [C]\n\n[C]De tal manera me [G]amó\n[Dm7]Que su vida no esca[Am]timo [G]\n[C]Hasta el final él se entre[G]gó\n[F]Y a la muerte fue porque [G]él me a[C]mó\n\n[C]De tal manera me [G]amó\n[Dm7]Que no hay forma en que podré pa[Am7]gar [G]\n[C]El precio de su grande a[G]mor\n[F]Pero toda mi alma [G]quiero [C]dar\n\n[Estribillo]\n[Am]Por su amor, yo vivi[G]ré [C]\n[Am]De su amor, yo canta[G]ré [C]\n[Am]Con mi Jesús camina[G]ré [F]\n[G]Porque él me amó a [F]mi\n\n[Am]Por su amor, yo vivi[G]ré [C]\n[Am]De su amor, yo canta[G]ré [C]\n[Am]Con mi Jesús camina[G]ré [F]\n[G]Porque él murió por [F]mi... [G]Le segui[C]ré [G]"
-},
+  },
   {
   "id": 50,
   "titulo": "Digno es el Cordero - Danilo Montero",
   "tono_original": "G",
   "letra": "[Intro] [D] [Am] [C] [G]\n\n[D]Digno es el Cordero Santo\n[Am]Santo Santo es [C]Él\n[G]Levantamos nuestra alabanza\n[D]Al que en el trono [Am]esta. [C]\n\n[D]Santo, santo, santo Dios Todo[Am]poderoso [C]\n[G]Quien fue, quien es y quien vendrá\n[D]La creación hoy canta y damos [Am]gloria a [C]Él\n[G]Tú eres digno por siempre y siempre.\n\n[D]Santo, santo, santo Dios Todo[Am]poderoso [C]\n[G]Quien fue, quien es y quien vendrá\n[D]La creación hoy canta y damos [Am]gloria a [C]Él\n[G]Tú eres digno por siempre y siempre.\n\n[D]Levantamos nuestra ala[Am]banza [C]\n[G]Al que en el trono esta.\n[D]La creación hoy canta y damos [Am]gloria a [C]Él\n[G]Tú eres digno por siempre y siempre."
+  },
+  {
+  "id": 51,
+  "titulo": "Digno, Eternamente Digno - Marcos Brunet",
+  "tono_original": "A",
+  "letra": "[A]No tengo nada para ofrecer\n[F#m]Nada que te pueda sorprender\n[Bm]Solo el corazón que[A/C#]brantado\n[E]Una y otra vez\n\n[A]No hay nada que me enamore mas\n[F#m]Nada que me apasione mas\n[Bm]Solo tu presencia, solo tu\n[A/C#]Mirada me hacen suspi[E]rar\n\n[Bm]Me inclino ante [Dm]ti, rey que\n[A/C#]Perdona multitud de erro[E]res\n[Bm]Me inclino ante [Dm]ti\n\n[A]Digno, eternamente, [F#m]digno\n[E]Impresionante y digno\nSolo ante ti yo me inclino [D] [Dm]\n\n[Solo] [A] - [F#m] - [E] - [D] - [G] - [A]\n\n[D]No tengo nada para ofrecer\n[Bm]Nada que te pueda sorprender\n[Em]Solo el corazón que[D/F#]brantado\n[A]Una y otra vez\n\n[D]No hay nada que me enamore mas\n[Bm]Nada que me apasione mas\n[Em]Solo tu presencia, solo tu\n[D/F#]Mirada me hacen suspi[A4]rar [A]\n\n[Em]Me inclino ante [Gm]ti, rey que\n[D/F#]Perdona multitud de erro[A/C#]res\n[Em]Me inclino ante [Gm]ti\n\n[D]Digno, eternamente, [Bm]digno\n[A]Impresionante y digno\nSolo ante ti yo me inclino [G] [Gm] [D]"
+  },
+  {
+  "id": 52,
+  "titulo": "Digno y Santo - Kari Jobe",
+  "tono_original": "G",
+  "letra": "[D]Digno y santo el [Am7]cordero inmolado [C]en la [G]cruz\n[D]Nuevo canto levan[Am7]taremos al que [C]en su trono es[G]tá\n\n[D]Santo, santo, santo [Am7]Dios todo poderoso\n[C]Quien es, quien fue y quien [G]vendrá\n[D]La creacion te canta ho[Am7]sanna al gran yo soy\n[C]Tu eres mi todo y yo [G]te adoraré\n\n[D]De un arco iris estas [Am7]vestido tu voz re[C]suena como un es[G]truendo\n[D]Recibe honor y [Am7]gloria, poder y ma[C]jestad a ti al único [G]rey\n\n[D]Tan grandioso, asom[Am7]broso con solo [C]decir Je[G]sús\n[D]Cristo tu nombre es [Am7]grande fuerte inagotable\n[C]Tu misterio glo[G]rioso es"
 },
   {
-    "id": 51,
-    "titulo": "Digno, eternamente digno",
-    "tono_original": "A",
-    "letra": "[A]Digno eternamente Dig[F#m]no [E]\n[D]Impresionante y [F#m]digno [E]solo ante ti yo [A]\n[F#m]quebrantado una y otra [E]vez\n\n[A]No tengo nada para ofrecer, nada que te pueda sorprender\n[D]Solo un corazón, [F#m]quebrantado una y otra [E]vez\n[A]Y no hay nada que me enamore más, nada que me apasione más\n[D]Solo tu presencia, solo tu [E]mirada me hace suspi[A]rar\n\n// [Dm]Me inclino ante [E]ti, Rey que perdona multitud de errores // [D] [A]"
-  },
+  "id": 53,
+  "titulo": "Dios ha sido bueno - Marcos Witt",
+  "tono_original": "F",
+  "letra": "[F]Dios ha sido [Dm7]bueno [Bb] [C]\n[Bb]Dios ha [C]sido [Bb]bueno [F]\n[Am]Dios ha [Cm7]si----do [D#m]bueno [F] [Gm]\n[Bb]Bue[C]no es [F]Dios [Bb] - [C]\n\n[Bb]Su bondad me alcanzó, [F]su amor me resca[Bb]tó\n[Bb]Su gracia me salvó, [F/A]bueno es [C]Dios [F/A]\n[Bb]Por eso cantaré [F]y siempre alaba[Bb]ré\n[Bb]Y nunca olvidaré, [F]bueno es [C]Dios\n\n[Bb]Mis manos alzaré, [F/A]mi vida entrega[Bb]ré\n[Bb]Mi voz levantaré, [F/A]bueno es [Bb/C]Dios [C] [F/A]\n[Bb]Y no me cansaré, [F/A]de darle todo a [Bb]El\n[Bb]Yo quiero serle fiel, [F/A]bueno es [Bb/C]Dios [C/D]\n\n[Cambio de tono]\n[G]Dios ha sido [Em7]bueno [Am7] [D]\n[Am7]Dios ha [D]sido [C]bueno [G]\n[G/B]Dios ha [Dm7]si----do [F/G]bueno [G7] [Am]\n[Am7]Bue[C/D]no es [D]Dios [G] [C/E] [D/F#]\n[G]Dios ha sido [Em7]bueno [Am7] [D]\n\n[Final]\n[Am7]Bue[C/D]no es [D]Dios [Em7] [Em7/D]\n[Am7]Bue[C/D]no es [D]Dios [Em7] [Em7/D]\n[Am7]Bue[C/D]no es [D]Dios [G]"
+},
   {
-    "id": 52,
-    "titulo": "Digno y Santo",
-    "tono_original": "D",
-    "letra": "[D]Digno y santo el cor[Am7]dero inmolado en la [C]cruz\n[D]nuevo canto levan[Am7]taremos al que en su [C]trono esta//\n\n[D]santo, santo, santo [Am7]Dios todopoderoso [C]quien es, quien fue y quien [G]vendrá\n[D]la creación te canta [Am7]hosanna al gran yo soy [C]tu eres mi todo y yo [G]te adorare\n\n[D]de un arco iris estas ves[Am7]tido tu voz resuena como un es[C]truendo\n[D]recibe honor y gloria, po[Am7]der y majestad a [C]ti al único rey [G]\n\n[D]tan grandioso, asombroso con [Am7]solo decir Je[C]sús\n[D]Cristo tu nombre es grande [Am7]fuerte inagotable [C]tu misterio glorioso [G]es"
-  },
+  "id": 54,
+  "titulo": "Dios manda lluvia - Marcos Witt",
+  "tono_original": "G",
+  "letra": "[G]Dios manda lluvia derrama de tu Es[Em]piritu\n[C]Desciende hoy tu fuego sana mis he[Am]ridas\n[D]Restaurame Se[G]ñor\n[G]Dios manda lluvia derrama de tu Es[Em]piritu\n\n[C]Desciende hoy tu fuego sana mis he[Am]ridas\n[D]Restauramé Se[G]ñor [G7]\n\n[C]Manda la lluvia [D]el rocio de tu a[Bm]mor [Em]\n[Am]Llenando las vidas de tu pueblo Oh Se[D]ñor [G] [G7]\n[C]Manda la lluvia [D]el rocio de tu a[Bm]mor [Em]\n[Am]Visita hoy mi vida cambiame Se[D]ñor [G]"
+},
   {
-    "id": 53,
-    "titulo": "Dios ha sido bueno",
-    "tono_original": "F",
-    "letra": "[F]Dios ha sido [Dm7]bueno [Gm7] [C]\n[Bb]Dios ha sido [F]bueno [Gm7] [C]\n[F/A]Dios [Cm7]ha sido bue - [F7]no [Gsus4] [G]\n[Gm7]Bueno es [C]Dios [F]\n\n[Bb]Su bondad me alcanzó su amor me rescató. [F/A] [Bb] [F/A]\n[Bb]Su gracia me salvó, [F/A]bueno es Di---[Bb/C]os [C] [F/A]\n[Bb]Mis manos alzaré, mi vida entregaré [F/A] [Bb] [F/A]\nMi voz levantaré, bueno es Dios\nY no me cansaré, de darle todo a Él\nYo quiero serle fiel, bueno es Dios.\n\n[Bb]Por eso can[F/A]taré y [Bb]siempre alaba[F/A]ré\n[Bb]Y nunca olvida[F/A]ré, bueno es [Bb/C]Di----[C]os."
-  },
+  "id": 55,
+  "titulo": "Dios no está muerto - Newsboys",
+  "tono_original": "G#m",
+  "letra": "[Intro] [G#m] - [F#] - [B] - [C#m]\n\n[G#m]Que tu amor des[F#]cienda con po[B]der\n[C#m]Revolución que traiga aviva[G#m]miento\n[E]En todo [F#]lugar [G#m]\n\n[F#]Solo en ti yo soy [G#m]libre\n[F#]Y a este mundo ven[G#m]ceré [E]\n\n[F#]Mi Dios no está muerto Él vivo está\n[G#m]Él venció la muerte Y vive para siem[E]pre\n[G#m]Vive, Él [F#]vive, Él vive para [E]siempre\n[G#m]Él vive, Él [F#]vive, Él vive para [E]siempre\n\n[G#m]Que las tinieblas [F#]huyan ante [B]ti\n[C#m]Avívame y dame forta[G#m]leza para se[E]guir [F#]\n\n[Puente]\n[B]Desciende hoy\n[F#]Con fuego Dios\n[G#m]La creación temblará al oír tu [C#m]voz"
+},
   {
-    "id": 54,
-    "titulo": "Dios manda lluvia",
-    "tono_original": "G",
-    "letra": "[G]Dios manda lluvia derrama de tu Es[Em]píritu [C] [D]\n[Bm]Manda la lluvia el rocío de tu a[Em]mor [C] [Am]\nDesciende hoy tu fuego, sana mis he[D]ridas [G]\nRestaurame, Se[G]ñor [G7]\n\n[Am]Visita hoy mi vi[D]da cámbiame, Se[G]ñor\n[Em]Llenando las [C]vidas de tu [D]pueblo Oh Se[Bm]ñor [Em]\n[C]Manda la lluvia el [Am]rocío de tu a[D]mor"
-  },
+  "id": 56,
+  "titulo": "Dios sea exaltado - Claudio Freidzon",
+  "tono_original": "Am",
+  "letra": "[Intro] [Am] - [G] - [F] - [G]\n\n[Am]Dios sea exaltado sus enemigos sean esparcidos\n[F]Venciendo en el [G]reino de las [F]tinieblas con ala[G]banza [Am] [B] [C] [B] [Am] [G] [F]\n[F]Subire a las [G]montañas, gritare a las [F]naciones [G]\n\n[F]Que el reino de las [G]tinieblas esta cayendo [Am] [G] [Am] [Am]\n[F]Esta ca[G]yendo\n[F]Esta ca[G]yendo\n[F]Esta ca[G]yendo\n[F]Esta ca[G]yendo"
+},
   {
-    "id": 55,
-    "titulo": "Dios no está muerto",
-    "tono_original": "B",
-    "letra": "[G#m]Que tu amor descienda con po[F#m]der [B]\n[C#m]Revolución, [G#m]traiga avivami[E]ento\n[F#m]En todo lugar//\n\nMi Dios no está muerto, El vivo está\nEl venció la muerte Y vive para siempre\n[F#m]Solo en Ti yo [G#m]soy libre\n[F#m]Y a este mundo [G#m]vence[E]ré\n\n[F#m]Vive, Él vive, Él vive para siempr[G#m]e\nÉl Vive, Él vive, Él vive para siempre\n//// [B]Desciende hoy [F#m]Con Fuego Dios [G#m]La creación temblara [C#m]Al oír Tu voz ////"
-  },
+  "id": 57,
+  "titulo": "Donde esta el espíritu de Dios",
+  "tono_original": "C",
+  "letra": "[C]Donde esta el espiritu de [F]dios\n[G]Hay libertad, hay liber[C]tad\n[C7]Donde esta el espiritu de [F]dios\n[G]Ahi siempre hay liber[C]tad\n\n[G]Libertad, liber[C]tad\n[G]Libertad, liber[C]tad\n[C7]Donde esta el espiritu de [F]dios\n[G]Ahi siempre hay liber[C]tad"
+},
   {
-    "id": 56,
-    "titulo": "Dios sea exaltado",
-    "tono_original": "Am",
-    "letra": "//// [Am]Dios sea exal[G]tado sus ene[F]migos sean espar[E]cidos ////\n[G] [F] [G] [Am] [B] [C] [B] [Am] [G] [F]\n// Penetrando en el reino de las tinieblas con alabanza //\n\n[F] // [G]Subiré a las [F]montañas, gri[G]tare a las [F]naciones\n[Am]el reino [G]de las ti[Am]nieblas es[Am]tá ca[G]yendo //\n[F]Está ca[G]yendo...\n[F]Ya se ca[G]yó..."
-  },
+  "id": 58,
+  "titulo": "El borde de su manto - Carlos Alvarado",
+  "tono_original": "Am",
+  "letra": "[Am]Si tan solo tocare el [G]borde de su [F]manto\n[Am]Si tan solo pudiera [G]ver su [F]rostro\n[Am]Si tan solo pudiera [G]tocar sus [F]manos\n[C]Libre seria, [Dm]yo [G]se\n[Am]Si tan solo tocare el [G]borde de su [F]manto\n[Am]Si tan solo pudiera [G]oir su [F]voz\n\n[Am]Si tan solo pudiera [G]acercarme a [F]el\n[C]Libre seria, [Dm]yo [G]se\n\n[G]Porque delante de [C]ti\n[E]Solo soy alguien que [Am]necesita\n[G]Un toque del [F]maestro [C]para ser liberado\n[G]Porque delante de [C]ti\n[G]Solo soy alguien que [E]necesita [Am]una mirada de mi salvador\n[G]...Su nombre es jesús\n\n[C]Jesus, [E]jesus, [Am]jesus, [G]nombre [F]sin [C]igual [G]"
+},
   {
-    "id": 57,
-    "titulo": "Donde está el Espíritu de Dios",
-    "tono_original": "C",
-    "letra": "[C] [F] [G] [C] Donde está el espíritu de dios\n[G] [C] Hay libertad, hay libertad\n[C7] [F] [G] [C] Donde está el espíritu de dios\n[G] [G7] [C] Ahí siempre hay libertad\n[G] [C] Libertad, libertad\n\n[C] [F] [G] [C] Libre tú me hiciste libre, tú me hiciste libre, libre señor\nRotas fueron las cadenas que aprisionaban a mi corazón"
-  },
+  "id": 59,
+  "titulo": "El Espíritu de Dios está en este lugar",
+  "tono_original": "D",
+  "letra": "[Intro] [D] - [G] - [D]\n\n[D]El Espiritu de Dios esta en este lu[G]gar\n[D]El Espiritu de Dios se mueve en este lu[G]gar [A]\n[D]Esta aqui para consolar\n[D]Esta aqui para liber[G]ar\n\n[D]Esta aqui para guiar\n[A]El Espiritu de Dios esta aqui\n\n[G]Muévete en [A]mi, muévete en [Bm]mi\n[G]Toma mi mente y mi cora[A]zón\n[F#m]Llena mi vida de tu a[Bm]mor\n[G]Muévete en mi, Dios Espiritu, muévete en [D]mi"
+},
   {
-    "id": 58,
-    "titulo": "El borde de su manto",
-    "tono_original": "C",
-    "letra": "[Am]Si tan solo to[Em]care el borde de su [F]manto [G] [C]\n[Am]sí tan solo pu[Em]diera ver su [F]rostro [C] [G]\n[Am]sí tan solo pu[Em]diera tocar sus [F]manos [C] [G]\n[Dm]libre seria, [G]yo [C]sé.\n[Am]sí tan solo pu[Em]diera acer[F]carme a [G]El\n[Dm]libre seria, [C]yo [G]sé.\n\n[C]Porque [C/B]delante de [Am]ti [F]solo soy alguien que necesita [G]\nun toque del maestro para ser liberado\n[C]Porque [C/B]delante de [Am]ti [F]solo soy alguien que necesita [G]\nuna mirada de mi salvador... [Am] [F] [Em] [C] ...su nombre es Jesús.\n[C] [C/B] [Am] [F] [C] [G] Jesús, Jesús, Jesús, nombre sin igual. //////"
-  },
+  "id": 60,
+  "titulo": "El me levantará",
+  "tono_original": "D",
+  "letra": "[D]El me levantará, [Em]El me levantará [A] [D]\n[Bm]El me levantará, [Em]asi es el [A]Señor [D]\n\n[D]El me levantará, [G]El me levantará [A] [F#]\n[Bm]En su mano me sosten[G]drá, [A]El me levantará [D]\n\n[D7]El me levantará, [G]El me levantará [A] [F#]\n[Bm]En su mano me sostendrá, [G]asi es el [A]Señor [D]\n\n[D]El me levantará, [Em]El me levantará [A] [D]\n[Bm]El me levantará, [Em]asi es el [A]Señor, [D]Me fortalece[A]rá\n\n[D7]El me levantará, [G]El me levantará [A] [F#]\n[Bm]En su mano me sosten[G]drá, [A]El me levantará [D]\n[D7]El me levantará, [G]El me levantará [A] [F#]\n[Bm]En su mano me sosten[G]drá, [A]asi es el [D]Señor"
+},
   {
-    "id": 59,
-    "titulo": "El Espíritu de Dios",
-    "tono_original": "D",
-    "letra": "// [D]EL ESPIRITU DE [G]DIOS ESTA EN ESTE LU[D]GAR\n[G]EL ESPIRITU DE [D]DIOS SE MUEVE EN ESTE LUGAR\nESTA A[D]QUI PARA CONSO[A]LAR [G]\nESTA A[D]QUI PARA LIBE[G]RAR\nESTA A[D]QUI PARA GUIAR EL ESPIRITU DE DIOS ESTA A[D]QUI //\n\n// [G]MUEVETE EN [A]MI, MUEVETE EN [D]MI\n[G]TOCA MI [A]MENTE MI CORAZON\n[F#m]LLENA MI [Bm]VIDA DE TU AMOR\n[G]MUEVETE EN [A]MI DIOS ESPIRITU MUEVETE EN [D]MI //"
-  },
+  "id": 61,
+  "titulo": "El Señor es mi pastor - Danilo Montero",
+  "tono_original": "C",
+  "letra": "[D]El Señor es mi pastor\n[Em]Naaadáaa me faltará [G] [A] [D]\n[D]El señor es mi pastor\n\n[G]En pastos delicados\n[Em]Él me hará descan[G]sar [A]\n[Bm]Junto a aguas de reposo\n[G]Me pastoreará\n[A]Confortará mi al[D]ma\n[Bm]Me guiará por sendas de justicia\n[Em]Por amor de su [G]nombre [D] [A]"
+},
   {
-    "id": 60,
-    "titulo": "El me levantará",
-    "tono_original": "D",
-    "letra": "[D]El me levanta[Em]ra, El me levanta[A]ra [D]\nEl me levanta[A]ra, Así es el Se[Bm]ñor (3x) [D]\n[D7]En sus [G]manos me sos[A]tendrá el me levanta[D]rá, [Em] [A]\n[Bm]En sus [D]manos me sostendrá, Así es el Señor. [D]\n\n[D]Me fortalece[Em]rá, Me fortalece[A]rá [D]\nMe fortalece[Em]rá, Así es [A]el Se[Bm]ñor (2x) [D7] [G] [A] [Bm] [D]\nEn sus manos me sostendrá, me fortalecerá [Em] [A]"
-  },
-  {
-    "id": 61,
-    "titulo": "El Señor es mi pastor",
-    "tono_original": "A",
-    "letra": "// EL [A]SEÑOR ES MI PAS[Bm]TOR\n[D]NADA [E]ME FALTA[A]RÁ // [E]\n\n[A]EL SEÑOR ES MI PAS[Bm]TOR\n[D]EN PASTOS DELI[D/C#]CADOS ÉL [D/B]ME HARÁ [C#m]DESCANZAR\n[F#m]JUNTO A AGUAS DE REPOSO ME PASTOREARÁ\n[Bm]CONFOR[A]TARÁ MI [C#m]ALMA [E]\n[F#m]ME GUIARÁ POR [Bm]SENDAS DE JUSTICIA\n[B]POR AMOR DE SU [E]NOMBRE\n\n[A]EL SEÑOR ES MI PAS[Bm]TOR\n[D]NADA [A]ME FALTARÁ\n[D]NADA [A]ME FALTARÁ [E]\n// [A]NADA ME FALTARÁ //"
-  },
-  {
-    "id": 62,
-    "titulo": "El Señor es mi pastor (Versión 2)",
-    "tono_original": "C",
-    "letra": "El se[C]ñor es mi pas[F]tor\n[G]nada [F]me [G]falta[C]rá\n\nEl se[C]ñor es mi pas[F]tor\n[Dm]En pastos deli[F]cados él [G]me hará descansar\n[Am]junto a aguas de re[F]poso me pastoreará\n\n[G]Confortará [F]mi [C]alma\n[Am]me guiará por [F]sendas de justicia\n[Dm]Por a[F]mor [G]de [F]su nombre. [C]"
-  },
+  "id": 62,
+  "titulo": "El señor esta en este lugar - Marco Barrientos",
+  "tono_original": "G",
+  "letra": "[Bm]El señor esta en este lu[G]gar [A]\n[G]Para sanar, para librar para romper toda obra de mal[Bm]dad\n[G]Para sanar, para librar mi al[Bm]ma\n\n[G]Para sanar, para librar para romper toda obra de mal[Bm]dad\n[G]Para sanar, para librar mi al[Bm]ma\n[C] [D] [C] [D] [C] [D] [Em]El señor,el señor el señor está aquí"
+},
   {
     "id": 63,
     "titulo": "El Señor esta en este lugar",
@@ -372,11 +372,11 @@
     "letra": "//// El Se[C]ñor Es[D]ta En Este Lu[Em]gar ////\n//// [C]Para Sa[D]nar, Para Librar Mi [Em]Alma ////\n\n//// [C]Para Sa[D]nar, Para Li[Em]brar \nPara Romper Toda Obra De Maldad ////\n[Em] [D] [C] [Em] [D] [C] [Em] [C] [D] [Em]\n\nFINAL... El Señor El Señor El Señooooor"
   },
   {
-    "id": 64,
-    "titulo": "Enciende una luz",
-    "tono_original": "G",
-    "letra": "En[G]ciende una luz, [Am]y déjala brillar \nla [D]luz de Je[C]sús, que brille en todo lugar\n[G]No la puedes escon[Am]der, no te puedes callar \n[C]ante tal necesi[D]dad enciende una luz [G]en la obscuridad.\n\n[Em]¿Cómo pues invoca[A]ran, a a[Am]quel en el [C]cual [D]no han creído?\n[Em]¿Y cómo cree[A]rán en a[Am]quel de quien [C] [D]no han oído?\n[F]¿Y cómo oi[C]rán si [Gm]nadie les pre[Bb]dica?\n[F]Hermosos son los pies de los que anuncian la [D]paz. \nLas [G]buenas nuevas de [C]Je[D]su[E]us."
-  },
+  "id": 64,
+  "titulo": "Enciende una luz",
+  "tono_original": "G",
+  "letra": "[G]Enciende una luz, y dejala brillar\n[C]La la luz de Jesus, que [D]brille en todo lugar\n[G]No la puedes esconder, no te [Am]puedes callar\n[C]Ante tal necesidad enciende una [D]luz\n[G]En la oscuridad\n\n[Em]¿Como pues invoca[A]ran, a aquel en el [Am]cual [C]no han cre[D]ido?\n[Em]¿Y como cree[A]ran en aquel de [Am]quien [C]no han oi[D]do?\n[F]¿ Y como oiran [C]si nadie les [Gm]predica? [Bb]\n[F]Hermosos son lo pies de los que anun[C]cian\n[D]La paz.Las buenas [G]nuevas de [C]Jesu,[D]us [E]\n\n[E]Enciende una luz, y dejala brillar\n[A]La la luz de Jesus, que [D]brille en todo lugar\n[E]No la puedes esconder, no te [A]puedes callar\n[Bm]Ante tal necesidad enciende una [D]luz [E]\n[A]En la oscuridad"
+},
   {
     "id": 65,
     "titulo": "En el nombre de Jesús",
