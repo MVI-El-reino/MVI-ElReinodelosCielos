@@ -337,22 +337,39 @@ function limpiarTexto(texto) {
 
 // Buscador Inteligente (Busca en título y letra, ignorando acentos y acordes)
 document.getElementById('buscador').addEventListener('input', (evento) => {
+    
+    // 1. AUTO-RETORNO: Si busca algo mientras ve la Lista Dominical, 
+    // lo regresamos automáticamente al repertorio general para que no se "trabe".
+    if (viendoListaDominical) {
+        viendoListaDominical = false;
+        const btnVerLista = document.getElementById('btn-ver-lista');
+        btnVerLista.textContent = `Ver mis listas (${listaDominical.length})`;
+        btnVerLista.style.backgroundColor = "var(--dorado)";
+        document.querySelector('#lista-canciones h2').textContent = "Repertorio Disponible";
+        
+        const btnExportarPDF = document.getElementById('btn-exportar-pdf');
+        if (btnExportarPDF) btnExportarPDF.style.display = 'none';
+    }
+
     const textoBusqueda = limpiarTexto(evento.target.value);
     
     const filtradas = inventarioCanciones.filter(cancion => {
-        // 1. Limpiamos el título
-        const tituloLimpio = limpiarTexto(cancion.titulo);
+        // 2. ESCUDO PROTECTOR: Añadimos ( || "" ) por si en el JSON olvidaste 
+        // poner la letra o el título de alguna alabanza. Así la app no colapsa.
+        const tituloLimpio = limpiarTexto(cancion.titulo || "");
+        const letraOriginal = cancion.letra || ""; 
         
-        // 2. Quitamos los acordes de la letra y la limpiamos
-        const letraSinAcordes = cancion.letra.replace(/\[.*?\]/g, "");
+        // Quitamos los acordes y limpiamos el texto
+        const letraSinAcordes = letraOriginal.replace(/\[.*?\]/g, "");
         const letraLimpia = limpiarTexto(letraSinAcordes);
 
-        // 3. Verificamos si lo que escribió coincide con el título o con alguna frase de la canción
+        // Verificamos coincidencias
         return tituloLimpio.includes(textoBusqueda) || letraLimpia.includes(textoBusqueda);
     });
     
     mostrarLista(filtradas, false);
 });
+
 
 // Botones de Transposición
 document.getElementById('subir-tono').addEventListener('click', () => {
