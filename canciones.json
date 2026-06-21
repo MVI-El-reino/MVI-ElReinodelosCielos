@@ -60,8 +60,11 @@
     "letra": "[E]Encuentro sanidad, encuentro libertad [C#m]\n[B]En tu presencia [B]\n[E]Encuentro Hoy perdón, encuentro salvación\n[B]En tu presencia [A]\n\n[B]Correremos hacia a [C#m]ti [A]\n[B]El Cielo hoy está a[C#m]quí [A]\n\n//[E]Amamos tu presencia oh, [C#m]Dios [B]\n[A]Amamos tu presencia oh, [C#m]Dios//"
   },
 {
-    "id": 11
-   },
+  "id": 11,
+  "titulo": "Padre Nuestro",
+  "tono_original": "G",
+  "letra": "[G]Padre nuestro [C]del [G]cielo\n[C]Tu nombre [Am]santo [D]es [D4] [D]\n[G]Que tu [C]reino venga [G]pronto\n[C]Y tu [Am]voluntad [D]también [D4] [D]\n\n[C]Aquí\n[Am]Como en\n[Em]El cielo\n[D]Que el cielo venga\n\n[C]Tuyo es el reino\n[Am]Tuyo el poder\n[Em]Tuya es la gloria\n[Bm]Por siempre amén"
+},
   {
     "id": 12,
     "titulo": "Alaba a Dios (Danny Berrios)",
