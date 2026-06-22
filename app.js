@@ -57,16 +57,14 @@ function transponerLetraCruda(letraCruda, pasos) {
 // 4. MOTOR DE FORMATO VISUAL (ACORDES SOBRE LETRA)
 // ==========================================
 function procesarLetraYAcordes(letraCruda) {
-    // 1. Dividimos la canción en bloques completos (estrofas) usando los dobles saltos de línea
     const estrofas = letraCruda.split(/\n\s*\n/);
     
     return estrofas.map(estrofa => {
-        // 2. Envolvemos toda la estrofa en un contenedor indestructible
         let htmlEstrofa = '<div class="estrofa-musical">';
         
         estrofa.split('\n').forEach(linea => {
             const lineaLimpia = linea.trim();
-            if (lineaLimpia === "") return; // Ya no usamos <br>, el div dará el espacio
+            if (lineaLimpia === "") return; 
             
             if (/^\[[^\[\]]+\]$/.test(lineaLimpia)) {
                 htmlEstrofa += `<span class="marcador-seccion">${lineaLimpia}</span>`;
@@ -79,10 +77,34 @@ function procesarLetraYAcordes(letraCruda) {
                     if (i === 0) { letHTML += p; cL += p.length; }
                     else {
                         let [ac, des] = p.split(']');
+                        
+                        // 1. Imprimimos el acorde
                         acHTML += ' '.repeat(Math.max(0, cL - cA)) + `<span class="acorde-formateado">${ac}</span>`;
-                        cA += (Math.max(0, cL - cA)) + ac.length;
-                        letHTML += (des || "");
-                        cL += (des || "").length;
+                        cA += Math.max(0, cL - cA) + ac.length;
+                        
+                        // 2. RESCATE DE GUIONES Y ESPACIOS
+                        // Detectamos si lo que sigue es un guión o espacio puro
+                        let matchSeparador = (des || "").match(/^([-\s]+)(.*)/);
+                        
+                        if (matchSeparador) {
+                            let sep = matchSeparador[1];  // El guión o espacio
+                            let resto = matchSeparador[2]; // El resto de la letra
+                            
+                            // ¡Magia! Subimos el guión a la línea de los acordes
+                            acHTML += sep; 
+                            cA += sep.length;
+                            
+                            // Rellenamos la línea de abajo con espacios para no descuadrar la letra
+                            if (cA > cL) { letHTML += ' '.repeat(cA - cL); cL = cA; }
+                            
+                            letHTML += resto;
+                            cL += resto.length;
+                        } else {
+                            // Si no hay guiones, emparejamos y ponemos el texto normal
+                            if (cA > cL) { letHTML += ' '.repeat(cA - cL); cL = cA; }
+                            letHTML += (des || "");
+                            cL += (des || "").length;
+                        }
                     }
                 });
                 htmlEstrofa += `<div class="bloque-linea"><pre class="linea-acordes">${acHTML}</pre><pre class="linea-letras">${letHTML}</pre></div>`;
