@@ -329,7 +329,7 @@ function renderizarVisorDerecho() {
     document.getElementById('controles-tono').style.display = 'flex';
     document.getElementById('tono-actual').innerHTML = `Tono: <span style="color:#E67E22;">${tonoMostrado}</span>`;
     
-    const contenedorLetra = document.getElementById('letra-cancion');
+    const contenedorLetra = document.getElementById('letra-cancion').classList.add('letra-escalable');
     
     // NUEVA INTELIGENCIA: Contamos la altura visual exacta en pantalla
     // NUEVA INTELIGENCIA: Contamos la altura visual exacta en pantalla
