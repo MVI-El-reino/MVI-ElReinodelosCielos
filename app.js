@@ -329,31 +329,37 @@ function renderizarVisorDerecho() {
     document.getElementById('controles-tono').style.display = 'flex';
     document.getElementById('tono-actual').innerHTML = `Tono: <span style="color:#E67E22;">${tonoMostrado}</span>`;
     
-    const contenedorLetra = document.getElementById('letra-cancion').classList.add('letra-escalable');
+    // 🚨 SEGURIDAD: Buscamos el elemento primero
+    const contenedorLetra = document.getElementById('letra-cancion');
     
-    // NUEVA INTELIGENCIA: Contamos la altura visual exacta en pantalla
-    // NUEVA INTELIGENCIA: Contamos la altura visual exacta en pantalla
-    let lineasVisuales = 0;
-    letraTranspuesta.split('\n').forEach(l => {
-        const linea = l.trim();
-        if (linea === "") lineasVisuales += 1; 
-        else if (/^\[[^\[\]]+\]$/.test(linea)) lineasVisuales += 1.5; 
-        else if (linea.includes('[')) lineasVisuales += 2; // Vale por 2 (Letra + Acorde)
-        else lineasVisuales += 1; 
-    });
-    
-    // 🚨 AUMENTAMOS EL LÍMITE A 32 LÍNEAS 
-    if (lineasVisuales > 32) {
-        contenedorLetra.classList.add('letra-doble-columna');
+    if (contenedorLetra) {
+        // Solo si el elemento existe, intentamos manipularlo
+        let lineasVisuales = 0;
+        letraTranspuesta.split('\n').forEach(l => {
+            const linea = l.trim();
+            if (linea === "") lineasVisuales += 1; 
+            else if (/^\[[^\[\]]+\]$/.test(linea)) lineasVisuales += 1.5; 
+            else if (linea.includes('[')) lineasVisuales += 2; 
+            else lineasVisuales += 1; 
+        });
+        
+        if (lineasVisuales > 32) {
+            contenedorLetra.classList.add('letra-doble-columna');
+        } else {
+            contenedorLetra.classList.remove('letra-doble-columna');
+        }
+        
+        // 🚨 AGREGAMOS LA CLASE PARA EL ESCALADO QUE QUERÍAS
+        contenedorLetra.classList.add('letra-escalable');
+        
+        contenedorLetra.innerHTML = procesarLetraYAcordes(letraTranspuesta);
+        letraActual = letraTranspuesta;
+        
+        // Ejecutamos el ajuste de escala
+        setTimeout(ajustarEscalaLetra, 10);
     } else {
-        contenedorLetra.classList.remove('letra-doble-columna');
+        console.error("No se encontró el elemento con id 'letra-cancion'");
     }
-    
-    contenedorLetra.innerHTML = procesarLetraYAcordes(letraTranspuesta);
-    
-    //diccionario de acordes = guarde la letra
-    letraActual = letraTranspuesta;
-    setTimeout(ajustarEscalaLetra, 10); 
 }
 
 // También lo activamos si el usuario rota el celular (cambia el ancho de pantalla)
