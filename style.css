@@ -573,7 +573,7 @@ body.modo-expandido #visor-cancion {
     font-size: 0.95em;
     line-height: 1;
     margin-bottom: 2px; /* Separación sutil entre el acorde y la letra */
-    white-space: nowrap; /* Impide que un acorde largo se rompa en dos */
+    white-space: pre; /* Impide que un acorde largo se rompa en dos */
 }
 
 .letra-base, .texto-base {
