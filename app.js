@@ -54,7 +54,7 @@ function transponerLetraCruda(letraCruda, pasos) {
 }
 
 // ==========================================
-// 4. MOTOR DE FORMATO VISUAL (ACORDES SOBRE LETRA)
+// 4. MOTOR DE FORMATO VISUAL (FLEXBOX + RESCATE DE GUIONES)
 // ==========================================
 function procesarLetraYAcordes(letraCruda) {
     const estrofas = letraCruda.split(/\n\s*\n/);
@@ -72,44 +72,50 @@ function procesarLetraYAcordes(letraCruda) {
             }
             
             if (linea.includes('[')) {
-                let acHTML = '', letHTML = '', cA = 0, cL = 0;
+                let htmlLinea = '<div class="linea-cancion">';
                 linea.split('[').forEach((p, i) => {
-                    if (i === 0) { letHTML += p; cL += p.length; }
-                    else {
+                    if (i === 0) { 
+                        if(p) htmlLinea += `<span class="texto-base">${p}</span>`; 
+                    } else {
                         let [ac, des] = p.split(']');
+                        let texto = des || "";
                         
-                        // 1. Imprimimos el acorde
-                        acHTML += ' '.repeat(Math.max(0, cL - cA)) + `<span class="acorde-formateado">${ac}</span>`;
-                        cA += Math.max(0, cL - cA) + ac.length;
-                        
-                        // 2. RESCATE DE GUIONES Y ESPACIOS
-                        // Detectamos si lo que sigue es un guión o espacio puro
-                        let matchSeparador = (des || "").match(/^([-\s]+)(.*)/);
+                        // 🌟 MAGIA RECUPERADA: EL RESCATE DEL GUION
+                        // Buscamos guiones o espacios inmediatamente después del acorde
+                        let matchSeparador = texto.match(/^([-\s]+)(.*)/);
                         
                         if (matchSeparador) {
-                            let sep = matchSeparador[1];  // El guión o espacio
-                            let resto = matchSeparador[2]; // El resto de la letra
+                            let sep = matchSeparador[1];  // El guion y/o espacios (ej. " - ")
+                            let resto = matchSeparador[2]; // La letra que sigue
                             
-                            // ¡Magia! Subimos el guión a la línea de los acordes
-                            acHTML += sep; 
-                            cA += sep.length;
-                            
-                            // Rellenamos la línea de abajo con espacios para no descuadrar la letra
-                            if (cA > cL) { letHTML += ' '.repeat(cA - cL); cL = cA; }
-                            
-                            letHTML += resto;
-                            cL += resto.length;
+                            if (resto === "") {
+                                // Es un Intro puro sin letra (ej. [Cm] - [Ab])
+                                // Subimos el guion al nivel del acorde
+                                htmlLinea += `<span class="bloque-acorde"><span class="acorde-flotante">${ac}${sep}</span><span class="letra-base"></span></span>`;
+                            } else {
+                                // Hay guion/espacios y luego empieza la letra
+                                let matchPalabra = resto.match(/^([^\s]+)(.*)/);
+                                if (matchPalabra) {
+                                    htmlLinea += `<span class="bloque-acorde"><span class="acorde-flotante">${ac}${sep}</span><span class="letra-base">${matchPalabra[1]}</span></span><span class="texto-base">${matchPalabra[2]}</span>`;
+                                } else {
+                                    htmlLinea += `<span class="bloque-acorde"><span class="acorde-flotante">${ac}${sep}</span><span class="letra-base">&nbsp;</span></span><span class="texto-base">${resto}</span>`;
+                                }
+                            }
                         } else {
-                            // Si no hay guiones, emparejamos y ponemos el texto normal
-                            if (cA > cL) { letHTML += ' '.repeat(cA - cL); cL = cA; }
-                            letHTML += (des || "");
-                            cL += (des || "").length;
+                            // Lógica normal para estrofas (la palabra va pegada al acorde)
+                            let matchPalabra = texto.match(/^([^\s]+)(.*)/);
+                            if (matchPalabra) {
+                                htmlLinea += `<span class="bloque-acorde"><span class="acorde-flotante">${ac}</span><span class="letra-base">${matchPalabra[1]}</span></span><span class="texto-base">${matchPalabra[2]}</span>`;
+                            } else {
+                                htmlLinea += `<span class="bloque-acorde"><span class="acorde-flotante">${ac}</span><span class="letra-base"></span></span>`;
+                            }
                         }
                     }
                 });
-                htmlEstrofa += `<div class="bloque-linea"><pre class="linea-acordes">${acHTML}</pre><pre class="linea-letras">${letHTML}</pre></div>`;
+                htmlLinea += '</div>';
+                htmlEstrofa += htmlLinea;
             } else {
-                htmlEstrofa += `<div class="bloque-linea"><pre class="linea-letras">${linea}</pre></div>`;
+                htmlEstrofa += `<div class="linea-cancion"><span class="texto-base">${linea}</span></div>`;
             }
         });
         
