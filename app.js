@@ -119,6 +119,29 @@ function procesarLetraYAcordes(letraCruda) {
         return htmlEstrofa;
     }).join('');
 }
+
+//AJUSTAR LETRA//
+function ajustarEscalaLetra() {
+    const contenedor = document.getElementById('letra-cancion');
+    const visor = document.getElementById('visor-cancion');
+    
+    // Reseteamos escala para medir el ancho real sin restricciones
+    contenedor.style.transform = 'scale(1)';
+    
+    const anchoContenedor = visor.clientWidth - 60; // 60px de margen (padding)
+    const anchoLetra = contenedor.scrollWidth;
+    
+    if (anchoLetra > anchoContenedor) {
+        // Calculamos la proporción necesaria para que quepa
+        const escala = anchoContenedor / anchoLetra;
+        contenedor.style.transform = `scale(${escala})`;
+        contenedor.style.width = `${100 / escala}%`; // Compensamos el ancho para que no deje espacio vacío
+    } else {
+        contenedor.style.transform = 'scale(1)';
+        contenedor.style.width = '100%';
+    }
+}
+
 // ==========================================
 // 5. RENDERIZADO DE LA INTERFAZ Y ORDENAMIENTO
 // ==========================================
@@ -294,6 +317,7 @@ function mostrarLista(canciones, esListaDominical = false) {
     }
 }
 
+    
 function renderizarVisorDerecho() {
     const cancion = obtenerCancionActual();
     if (!cancion) return;
@@ -329,7 +353,11 @@ function renderizarVisorDerecho() {
     
     //diccionario de acordes = guarde la letra
     letraActual = letraTranspuesta;
+    setTimeout(ajustarEscalaLetra, 10); 
 }
+
+// También lo activamos si el usuario rota el celular (cambia el ancho de pantalla)
+window.addEventListener('resize', ajustarEscalaLetra);
 
 function mostrarCancion(id, dia = null) {
     cancionActualId = id; 
