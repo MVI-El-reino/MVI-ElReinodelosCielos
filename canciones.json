@@ -84,8 +84,11 @@
     "letra": "[Verso]\n[C]Pueblos todos, vestíos de gloria\n[F]Subid al monte, oíd su voz\n[C]Sobre Sión se levantó\n[F]En una cruz el Salvador\n[C] // Sol de justicia // [F]\n\n[Coro]\n[C]A la montaña más alta yo subiré\n[F]Yo subiré cantando\n[C] // Yo cantaré // [F]\n\n[C]A la montaña más alta yo subiré\n[F]Yo subiré gritando\n[C] // Yo gritaré // [F]\n\n[Puente]\n// [C]Yo subiré a la montaña más [F]alta subiré\nY no descan[Am]saré, yo subiré, yo subi[F]ré //\n\n[Final]\n[C]Proseguiremos en cono[G]certe\n[Am]Te proclamaremos como el al[F]ba al amanecer"
   },
   {
-    "id": 15
-  },
+  "id": 15,
+  "titulo": "Fiesta",
+  "tono_original": "Cm",
+  "letra": "Intro:\n\n[Cm]-[Fm]-[Bb]-[G] ([Ab]-[G] [Ab]-[G] [Ab])x2\n\nVerso:\n\nLo que se [Cm]canta en el cielo, cantamos en la [Fm]tierra\nAl que se [Bb]adora en el cielo, Adoramos en la [G]tierra\nLo que se [Cm]canta en el cielo, cantamos en la [Fm]tierra\nAl que se [Bb]([C]-[D]-[Eb] [G]-[Ab]-[F]-[G]-[Ab]-[F]-[G])adora en el cielo, adoramos en la [G]tierra\n\nPrecoro:\n\nAl [Ab]Santo (Santo), [Gm]Digno (Digno), [Fm]al Cordero (Cordero), [Eb]que vive [G]para siempre\nHacemos\n\n[Cm]Fiesta, hoy hacemos una [Fm]fiesta\n[Bb]Unidos hoy danzamos con gozo celebramos, [G]oh uh oh uh oh ([Ab]-[G] [Ab]-[G] [Ab]-[G])\n[Cm]Fiesta, Hoy hacemos una [Fm]fiesta\n[Bb]En la tierra cantamos juntos gritamos, [G]oh uh oh uh oh ([Ab]-[G] [Ab]-[G] [Ab]-[Bb])\n\nIntro x1\n\nVerso x1\n\nPrecoro x1\n\nCoro x1\n\nPuente\n\n[C]-[C]-[C] [Eb]-[F]-[C]-[Eb]-[Eb]-[C]\n\n[Bb]-[C]-[Bb]-[G]-[Bb]-[A]-[Eb]\n\n[Eb]-[F]-[C]-[Eb]-[Eb]-[C]\n\nAcordes: [Cm]-[Eb]-[F]-[Bb]-[Cm]\n\nPuente 2\n\n[Cm]Hacemos [Ab]Fiesta, [Cm]Hacemos [Ab]Fiesta\n[Cm]Fiesta, Fiesta, Hacemos Fiesta, fiesta,\nHacemos Fiesta, Fiesta, Fiesta, fiesta//\n\nCoro Final.\n\n[Cm]Fiesta, hoy hacemos una [Fm]fiesta\n[Bb]Unidos hoy danzamos con gozo celebramos, [G]oh uh oh uh oh ([Ab]-[G] [Ab]-[G] [Ab]-[G])\n[Cm]Fiesta, Hoy hacemos una [Fm]fiesta\n[Bb]En la tierra cantamos juntos gritamos, [G]oh uh oh uh oh ([Ab]-[G] [Ab]-[G] [Ab]-[Bb])"
+},
   {
     "id": 16,
     "titulo": "Al que está sentado - quiero conocerte (Marcos Brunet)",
@@ -408,38 +411,38 @@
   "id": 69,
   "titulo": "Mi Sanador - Miel San Marcos",
   "tono_original": "C",
-  "letra": "Intro: [C] [Am] [G] [Dm]\n\n[C]Por tus llagas yo soy sano,\n[Am]por tu Sangre yo soy limpio, [F]Dios.\n[Dm]Eres mi Sanador. [Am] ([G])\n\n[C]De las cenizas me levantaste\n[Am]De tinieblas me rescataste, [F]Dios.\n[Dm]Eres mi Sanador. [Am] ([G])\n\n[F]Por tu muerte tengo [G]vida.\n[F]Moraré contigo para [G]siempre.\n\n[C]Eres mi Sanador, mi Liberta[Am]dor.\nVenciste en esa [G]Cruz. [Dm] Mi victoria está en [Am]ti. [G]\n\n[C]Eres mi Sanador, mi Liberta[Am]dor.\nVenciste en esa [G]Cruz. Mi victoria está en [Am]ti. [G]\n[C]Eres mi Sanador, Eres mi Reden[Am]tor\nGanaste Tú por [G]mí, seguro estoy en [Am]Ti. [G]\n\n[C] [Am] [G] [Dm]-[G]\n\n[C]Mi confianza está sólo en Ti\n[Am]Mi confianza está sólo en Ti\n[G]Mi confianza está sólo en [Dm]Ti\nSólo en [G]Ti, mi Sana[C]dor."
-}
+  "letra": "Intro: [C]-[Am]-[G]-[Dm]\n\n[C]Por tus llagas yo soy sano,\n[Am]por tu Sangre yo soy limpio, [F]Dios.\n[Dm]Eres mi Sanador. [Am] ([G])\n\n[C]De las cenizas me levantaste\n[Am]De tinieblas me rescataste, [F]Dios.\n[Dm]Eres mi Sanador. [Am] ([G])\n\n[F]Por tu muerte tengo [G]vida.\n[F]Moraré contigo para [G]siempre.\n\n[C]Eres mi Sanador, mi Liberta[Am]dor.\nVenciste en esa [G]Cruz. [Dm] Mi victoria está en [Am]ti. [G]\n\n[C]Eres mi Sanador, mi Liberta[Am]dor.\nVenciste en esa [G]Cruz. Mi victoria está en [Am]ti. [G]\n[C]Eres mi Sanador, Eres mi Reden[Am]tor\nGanaste Tú por [G]mí, seguro estoy en [Am]Ti. [G]\n\n[C] [Am] [G] [Dm]-[G]\n\n[C]Mi confianza está sólo en Ti\n[Am]Mi confianza está sólo en Ti\n[G]Mi confianza está sólo en [Dm]Ti\nSólo en [G]Ti, mi Sana[C]dor."
+},
   {
-    "id": 70,
-    "titulo": "Eres tú la única razón",
-    "tono_original": "E",
-    "letra": "[E]ERES TU LA UNICA RAZON DE MI ADORACION ¡OH [B]JESUS! [C#m7] [A]\n[E]ERES TU LA [B]ESPERANZA QUE ANHELE TENER ¡OH [C#m7]JESUS! [A]\n[F#m]CONFIE EN [B]TI ME HAS [F#m]AYUDADO TU SALVA[A]CION ME [B]HAS REGALADO\n[E]HOY HAY GOZO EN MI CORA[B]ZON CON MI [A]CANTO TE ALA[B]BARE\n\n[F#m] [C#] [D#m] [B] \n//TE ALABARE TE GLORIFICARE\n[F#] [C#]TE ALABARE MI [B]BUEN JESUS//\n\n// EN TODO TIEMPO TE ALABARE EN TODO TIEMPO TE ADORARE //"
-  },
+  "id": 70,
+  "titulo": "Eres tu la única razón",
+  "tono_original": "E",
+  "letra": "[E]ERES TU LA UNICA [B]RAZON DE MI ADORACION [C#m7]¡OH JESUS! [A]\n[E]ERES TU LA ESPE[B]RANZA QUE ANHELE TENER [C#m7]¡OH JESUS! [A]\n[F#m]CONFIE EN TI [B]ME HAS AYUDADO [F#m]TU SALVACION ME HAS REGA[B]LADO\n[E]HOY HAY GOZO EN MI CO[B]RAZON CON MI [A]CANTO TE ALABA[B]RE\n\n[F#m]//TE ALABA[C#]RE [D#m]TE GLORIFICA[B]RE\n[F#]TE ALABARE [C#] MI BUEN [B]JESUS//\n\nERES TU....\n\n//[E] [A] [E] [B7]//\n\n//[E]EN TODO [A]TIEMPO [E]TE ALABA[B7]RE [E]EN TODO [A]TIEMPO [E]TE ADORA[B7]RE//\n\nPUENTE. //////[E] [C] [D] [B] //////\n\n[G]TE ALABA[D]RE [Em]TE GLORIFICA[C]RE\n[G]TE ALABARE [D] MI BUEN [C]JESUS//\n\n En el Final Se Toca el PuenTe!"
+},
   {
-    "id": 71,
-    "titulo": "Esperar en ti",
-    "tono_original": "G",
-    "letra": "[G]Esperar en ti, di[Em7]fícil sé que es\n[Csus2]mi [Am7]mente dice [F2]no, no es po[D]sible\n[G]pero mi corazón, con[Em7]fiado está en ti\n[Am7]tú siempre has sido [C]fiel, me has soste[D]nido.\n\n[Coro]\n[G]Y espera[C]ré, [D]paciente[Am7]mente\naunque la duda me ator[Csus2]mente\nyo no confío con la [Em7]mente\nlo [D]hago con el corazón.\n\n[G]Y espera[C]ré [D]en la tor[Am7]menta\naunque tardare tu res[Csus2]puesta\nyo confiaré en tu provi[Am7]dencia\n[D]tú siempre [G]tienes el control."
-  },
+  "id": 71,
+  "titulo": "Esperar en ti - Jesús Adrian Romero",
+  "tono_original": "G",
+  "letra": "Intro: [G] - [Em] - [C] - [Am] - [D]\n\n[G]//Esperar en tí, [Em]difícil se que es,\n[C]Mi mente dice no, [Am]no es posi[C]ble, [D]\n[G]Pero mi corazón, [Em]confiado esta en tí,\n[C]Tú siempre has sido fiel, [Am]me has sosteni[C]do. [D]\n\n[G]Y esperaré, [Em]paciente[D]mente,\n[C]Aunque la duda me atormente,\n[Am]Yo no confío con la mente,\n[C]Lo hago con el cora[D]zón.\n\n[G]Y esperaré en la [Em]tormen[D]ta,\n[C]Aunque tardare tu respuesta,\n[Am]Yo confiaré en tu providencia,\n[C]Tú siempre [D]tienes el con[G]trol//"
+},
   {
-    "id": 72,
-    "titulo": "Espíritu de Dios",
-    "tono_original": "Am",
-    "letra": "[Am]Espíritu de Dios\n[G]Llena mi vida\n[F]Llena mi alma\n[E7]Llena mi ser\n\n[Coro]\n[Am]Lléname, Lléname\n[G]Con tu Presencia lléname, lléname\n[F]Con tu bondad lléname, lléname\n[E7]Con tu poder"
-  },
+  "id": 72,
+  "titulo": "Espíritu de Dios",
+  "tono_original": "Am",
+  "letra": "Es[Am]píritu de Dios\nLlena mi [G]vida\nLlena mi [F]alma\nLlena mi [E7]ser\n\n(Coro)\nLléname, [Am]Lléname\nCon tu [G]Presencia lléname, lléname\nCon tu [F]bondad lléname, lléname\nCon tu [E7]poder"
+},
   {
-    "id": 73,
-    "titulo": "Está cayendo",
-    "tono_original": "G",
-    "letra": "// [G]Algo está ca[Am]yendo aquí\n[D]es tan fuerte [G]sobre mi\n[Em]mis manos levan[D]taré\n[Am]y su gloria to[G]ca[D]ré //\n\n[Coro]\n// [G]Está ca[Am]yendo, su gloria\nsobre mi sanando heridas,\n[D]Levantando al caí[C]do su\ngloria está aquí //"
-  },
+  "id": 73,
+  "titulo": "Esta cayendo su gloria sobre mi",
+  "tono_original": "G",
+  "letra": "Intro: //[G]-[Em]-[C]-[D]//\n\n[G]//Algo cayendo a[Am]quí\n[D]Es tan fuerte sobre [G]mí\n[Em]Mis manos levanta[Am]ré\n[D]Y su Gloria toca[G]ré// [C]-[G]\n\n[D]Está ca[G]yendo, su Gloria sobre [D]mi\n[Am]Sanando heridas, levantando al caí[G]-[C]do\nSu Gloria está a[D]quí//\n\nSu Gloria está a[G]-[Em]-[C]-[D]quí\n\n[G]Algo cayendo a[Am]quí\n[D]Es tan fuerte sobre [G]mí\n[Em]Mis manos levanta[Am]re\n[D]Y su Gloria toca[G]ré [C]-[G]\n\n[D]//Está ca[G]yendo, su Gloria sobre [D]mi\n[Am]Sanando heridas, levantando al caí[G]-[C]do\nSu Gloria está a[D]quí//\n\n///Su Gloria está a[Em]-[D]-[Am]-[D]quí/// [G]"
+},
   {
-    "id": 74,
-    "titulo": "Exaltado estás",
-    "tono_original": "C",
-    "letra": "[C]Del cielo ba[G]jaste [Am]por mi te entre[F]gaste\n[C]el pre[G]cio tu pa[C]gaste [G]\n[C]tomaste mi lu[G]gar [Am]mi dolor qui[F]taste\n[C]mi culpas tu bo[G]rraste [Am]mi enfermedad sa[F]naste\n\n// exaltado es[C]tas, coronado es[G]tas,\n[F]digno de toda la gloria, digno de toda la honra // Cristo [Am]Je[F]sús [C] [G] [Am] [F]\nal morir en esa cruz\n\n[C]Inmolado [G]fuiste cordero de [C]Dios,\n[G]te levan[C]taste con gloria y poder,\n[G]Rey vence[C]dor, alfa y omega,\n[G]el gran yo [C]soy, pronto volveráaaaa...s"
-  },
+  "id": 74,
+  "titulo": "Exaltado Estás - Miel San Marcos",
+  "tono_original": "C",
+  "letra": "INTRO (2x)\n[C]-[G]-[Am7]-[F]\n\nVERSO 1\n[C]Del cielo ba[G]jaste,\n[Am7]Por mi te entre[F]gaste\n[C]El precio tú pa[G]gaste,\n[F]Tomaste mi lugar\n\nVERSO 2\n[C]Mi dolor qui[G]taste,\n[Am7]Mi enfermedad sa[F]naste\n[C]Mis culpas tú bo[G]rraste,\n[F]Al morir en esa cruz.\n\nPRE-CORO\n[Am]Inmolado [Em]fuiste cordero de [Am]Dios\n[Em]Te levantaste con gloria y po[F]der\n[G]Rey vencedor, alfa y o[C/E]mega\n[G]El gran yo soy, pronto volve[F]rás. [G]\n\nCORO 1 (2x)\nExal[C]tado estás, Coronado es[G/B]tás\n[Am7]Digno de toda la gloria,\n[F]Digno de toda la honra\n\nINTERLUDIO\nCristo Je[C]sús [G/B]-[Am7]-[C/E]-[F]\n\nPRE-CORO\n[Am]Inmolado [Em]fuiste cordero de [Am]Dios\n[Em]Te levantaste con gloria y po[F]der\n[G]Rey vencedor, alfa y o[C/E]mega\n[G]El gran yo soy, pronto volve[F]rás. [G]\n[F/A]pronto volve[G/B]rás.\n\n+ CORO 1 (2x)\n\nCORO 2 (2x)\nExal[C/E]tado estás, Coronado es[G]tás\n[Am7]Digno de toda la gloria,\n[F]Digno de toda la honra\n\nINSTRUMENTAL 1\nCristo Je[C]sús [G/B]-[Am7]-[F]\n\nINSTRUMENTAL\n[C/G]-[F/A]-[Am7]-[G]\n\nPUENTE\nPronto volve[C]rás, Pronto volve[G/B]rás\n[Am7]Pronto volverás, Cristo Je[F]sus\nPronto volve[C/G]rás, Pronto volve[F/A]rás\n[Am7]Pronto volverás, Cristo Je[F]sus.\n\n+ CORO 1 (3x)\n+ CORO 2\n\nSALIDA\nCristo Je[C]sús [G/B]-[Am7]-[C/E]-[F]"
+},
   {
     "id": 75,
     "titulo": "Fiesta",
@@ -1015,6 +1018,19 @@
   "titulo": "Danzando cada temporada",
   "tono_original": "Bm",
   "letra": "INTRO: [Bm] [G] [D] [A], [Bm] [G] [D] [A]\n\nTu palabra [Bm]dice [G]\n[D]Que aunque pase por el fuego, no me [A]quemaré [Bm] [G]\n[D]Y si paso por las aguas, no me aho[A]garé [Bm] [G]\n[D]Aunque haya oscuridad, con fe, ca[A]minaré [Bm] [G]\n[D]Pues Tú siempre vas con[A]migo\n\nTu palabra [Bm]dice [G]\n[D]No hay justo que Tú hayas desampa[A]rado [Bm] [G]\n[D]Eres pan para el hambriento y necesi[A]tado [Bm] [G]\n[D]En mi mesa nunca, nunca ha fal[A]tado [Bm] [G]\n[D]Tú provees y no has fa[A]llado\n\n[G]Yo no teme[F#7]ré, [G]Tu promesa es [F#7]fiel\n\n[Bm]Tu yugo es fá[G]cil, [D]ligera es Tu car[A]ga\n[Bm]Te entrego mi vi[G]da y [D]mi ala[A]banza\n[Bm]Mi escudo, mi fuer[G]za, [D]mi segu[A]ridad\n[G]Con Cristo camino y es[F#7]toy\nDanzando en cada tempo[Bm]rada [G] [D]\n[A]Danzando en cada tempo[Bm]rada [G] [D] [A]\n\nTu palabra [Bm]dice [G]\n[D]Que Tú oyes el clamor del quebran[A]tado [Bm] [G]\n[D]Por Tu llaga en la cruz, fuimos sa[A]nados [Bm] [G]\n[D]Sobre toda enfermedad, Tú has ga[A]nado [Bm] [G]\n[D]Y mi vida está en Tu [A]mano\n\nTu palabra [Bm]dice [G]\n[D]Que Tu muerte en la cruz fue por sal[A]varnos [Bm] [G]\n[D]Que perdonas y redimes del pe[A]cado [Bm] [G]\n[D]Y en las nubes, seremos arreba[A]tados [Bm] [G]\n[D]Cara a cara, Te ve[A]remos\n\n[G]Yo no teme[F#7]ré, [G]Tu promesa es [F#7]fiel\n\n[A] /// Danzando en cada tempo[Bm]rada [G] [D] ///\n\n[A]\nEstribillo:\nSigo danzando, glorificando, En cada temporada, Tú sigues obrando\nAunque ande en el valle de sombra, Danzo, danzo, (danzo, danzo)\n\n// [Bm]No se apaga, no se apa[G]gará este ritmo\n[D]Aunque venga contra mí el ene[A]migo\n[Bm]Tus promesas siempre van con[G]migo\n[D]Danzo, danzo, danzo, danzo //\n\n[Bm]En Ti yo confío, (en [G]Ti yo confío)\n[D]En Ti yo confío, (en [A]Ti yo confío)\n[Bm]En Ti yo confío, (en [G]Ti yo confío) [D] [A]\n\n// [A]Danzando en cada tempo[Bm]rada [G] [D] //\n\n[A]Danzando en cada temporada\n\nINSTRUMENTAL //// ( [Bm] [G] [D] [A] ) ////"
+},
+  {
+  "id": 171,
+  "titulo": "Bondad de Dios",
+  "tono_original": "G",
+  "letra": "Intro: [G]\n\n[G]Te amo Diós\n[C]Tu bondad nunca me fa[G]lla\n[D]Y mis [Em]dias, en tus [C]manos es[D]tán\n[Em]Desde el [C]momento que despierto\n[G]Hasta el a[D]noche[Em]cer\n[C]Yo cantaré de la [D]bondad de [G]Diós\n\n[C]En mi vida has sido [G]bueno\n[C]En mi vida has sido [G]fiel Se[D]ñor\n[C]Con cada aliento de mi ser [G] [D] [Em]\n[C]Yo cantaré de la [D]bondad de [G]Dios\n\n[G]Amo Tu voz\n[C]Me has guiado a través del [G]fuego\n[D]En la os[Em]curidad\n[C]Tu presencia me acom[D]paña\n\n[C]En mi vida has sido [G]bueno\n[C]En mi vida has sido [G]fiel Se[D]ñor\n[C]Con cada aliento de mi ser [G] [D] [Em]\n[C]Yo cantaré de la [D]bondad de [G]Dios\n\n[G]Tu bondad corre de[C]trás\n[D]Corre detrás de [G]mí\n[G]Tu bondad corre de[C]trás\n[D]Corre detrás de [G]mí\n[G]Mi vida te doy, yo me [C]rindo a ti\n[D]Te doy todo de [Em]mí\n[G]Tu bondad corre de[C]trás\n[D]Corre detrás de [G]mí\n\n[G]Tu bondad corre de[C]trás\n[D]Corre detrás de [G]mí\n[G]Tu bondad corre de[C]trás\n[D]Corre detrás de [G]mí\n[G]Mi vida te doy, yo me [C]rindo a ti\n[D]Te doy todo de [Em]mí\n[G]Tu bondad corre de[C]trás\n[D]Corre detrás de [G]mí\n\n[C]En mi vida has sido [G]bueno\n[C]En mi vida has sido [G]fiel Se[D]ñor\n[C]Con cada aliento de mi ser [G] [D] [Em]\n[C]Yo cantaré de la [D]bondad de [G]Dios\n\n[C]En mi vida has sido [G]bueno\n[C]En mi vida has sido [G]fiel Se[D]ñor\n[C]Con cada aliento de mi ser [G] [D] [Em]\n[C]Yo cantaré de la [D]bondad de [Em]Dios\n[C]Yo cantaré de la [D]bondad de [G]Dios"
+},
+{
+  "id": 172,
+  "titulo": "Montesanto (Fiesta en el desierto)",
+  "tono_original": "C#m",
+  "letra": "VERSO I\n[C#m]En Santiago uno, verso dos\nestá escrito que tenga gozo\n[C#m]Cuando pase por diversas pruebas\nPorque de allí saldré victorioso\n\nPRE-CORO\n[A]Mi lamento cambiaste por [B]danza\n[G#]Ya no hay tristeza, solo ala[C#m]banza\n[A]Mi lamento cambiaste por [B]danza\n[G#]Ya no hay tristeza.\n\nCORO\n[A]Yo Danzo, danzo, [B]danzo, danzo, danzo, [G#7]danzo\n[C#m]En el proceso\n[A]Y Grito, grito, [B]grito, grito, grito, [G#7]grito\n[C#m]No moriré\n[A]Doy vueltas, vueltas, [B]vueltas, vueltas, vueltas, [G#7]vueltas\n[C#m]No me avergüenzo\n[A]Hay fiesta, fiesta [B]fiesta, fiesta, [G#7]fiesta\n[G#]Fiesta en el desierto\n\nMELODIA / LaLa\nP // [A] [B] [G#7] [G#] - [F#] - [E] - [B/D#] //\n[B] // [A]-[E] [B]-[F#] [G#]-[D#] [G#]-[F#]-[E]-[D#] //\nVERSO I\nPRE-CORO\nCORO (\"doy vueltas\" corito style)\nMELODIA / LaLa X4\n\nPUENTE\n[C#m]//Aunque venga la enfermedad\nMientras viva te alabaré\n[C#m]Aunque mis labios quieran callar\nMientras viva te alabaré\n[A]Aunque el desierto me quiera secar\n[B]Mientras viva te alabaré\n[G#] ([G#/C]) Aunque la higuera no florezca\n[G#7]Mientras viva te alabaré//"
 }
+  
 ]
 
