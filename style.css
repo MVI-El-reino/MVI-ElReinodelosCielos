@@ -403,16 +403,19 @@ body.modo-expandido #visor-cancion {
         max-width: 100% !important;
     }
 
-    /* 4. Le quitamos la "rigidez" al texto. Si no cabe, baja al siguiente renglón */
+    /* 4. RIGIDEZ ABSOLUTA: El texto NO salta de renglón, conservando la alineación perfecta.
+          El usuario usará el zoom (pellizco) o scroll horizontal para ver el final. */
     .linea-acordes, .linea-letras {
-        white-space: pre-wrap !important; 
-        word-break: break-word !important; 
-        font-size: 0.95rem !important; /* Letra un pelín más chica para proteger la alineación de acordes */
+        white-space: pre !important; /* 🚨 Esto evita que salte de renglón */
+        word-break: normal !important; /* Anula la ruptura de palabras */
+        font-size: 0.95rem !important; 
     }
     
     .bloque-linea {
         width: 100% !important;
         max-width: 100% !important;
+        overflow-x: auto !important; /* Permite deslizar a los lados si no quieren hacer zoom */
+        padding-bottom: 5px !important;
     }
 }
 
