@@ -548,37 +548,3 @@ body.modo-expandido #visor-cancion {
     text-align: center;
     margin-bottom: 30px;
 }
-
-/* =========================================
-   NUEVO SISTEMA DE LETRAS Y ACORDES (RESPONSIVE)
-========================================= */
-.linea-cancion {
-    display: block;
-    margin-bottom: 8px;
-    white-space: pre-wrap; /* Permite el salto de línea natural y respeta tus espacios */
-    word-wrap: break-word; /* Evita que la pantalla colapse en celulares */
-    line-height: 1.6; /* Da una lectura relajada */
-}
-
-.bloque-acorde {
-    display: inline-flex;
-    flex-direction: column; /* Apila el acorde arriba y la palabra abajo */
-    align-items: flex-start; /* Asegura que el acorde inicie donde inicia la palabra */
-    vertical-align: bottom; /* Mantiene la base del texto alineada con la oración */
-}
-
-.acorde-flotante {
-    color: #E67E22;
-    font-weight: bold;
-    font-size: 0.95em;
-    line-height: 1;
-    margin-bottom: 2px; /* Separación sutil entre el acorde y la letra */
-    white-space: pre; /* Impide que un acorde largo se rompa en dos */
-}
-
-.letra-base, .texto-base {
-    /* Opcional: Elimina la familia 'Courier New' de aquí si prefieres que 
-       la letra se vea más moderna (sans-serif) ahora que ya no dependemos 
-       del monoespaciado para alinear. */
-    line-height: 1;
-}
