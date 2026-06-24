@@ -763,3 +763,24 @@ function dibujarTecladoHTML(notasAcorde) {
     
     return html;
 }
+
+//ZOOM
+function alternarZoomMovil(permitirZoom) {
+    // Buscamos la etiqueta viewport en el HTML
+    let metaViewport = document.querySelector('meta[name="viewport"]');
+    
+    // Si por alguna razón no existe, la creamos
+    if (!metaViewport) {
+        metaViewport = document.createElement('meta');
+        metaViewport.name = "viewport";
+        document.head.appendChild(metaViewport);
+    }
+
+    if (permitirZoom) {
+        // MODO EXPANDIDO: Permite hacer zoom hasta 3 veces el tamaño original
+        metaViewport.content = "width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes";
+    } else {
+        // MODO NORMAL: Bloquea el zoom para proteger la interfaz de la lista y los botones
+        metaViewport.content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no";
+    }
+}
