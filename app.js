@@ -520,18 +520,45 @@ btnVerLista.addEventListener('click', () => {
 });
 
 // Botón Vista Expandida
+// 1. Agregamos la función que controla el viewport del celular
+function alternarZoomMovil(permitirZoom) {
+    let metaViewport = document.querySelector('meta[name="viewport"]');
+    
+    if (!metaViewport) {
+        metaViewport = document.createElement('meta');
+        metaViewport.name = "viewport";
+        document.head.appendChild(metaViewport);
+    }
+
+    if (permitirZoom) {
+        metaViewport.content = "width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes";
+    } else {
+        metaViewport.content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no";
+    }
+}
+
+// 2. BOTON VISION EXPANDIDA, LLAMANDO AL ZOOM
 const btnPantallaCompleta = document.getElementById('btn-pantalla-completa');
 if(btnPantallaCompleta) {
     btnPantallaCompleta.textContent = "⛶ Expandir vista";
+    
     btnPantallaCompleta.addEventListener('click', () => {
         const body = document.body;
         body.classList.toggle('modo-expandido');
+        
         if (body.classList.contains('modo-expandido')) {
             btnPantallaCompleta.textContent = "✖ Contraer vista";
             btnPantallaCompleta.style.backgroundColor = "#ff4c4c"; 
+            
+            // Habilitar zoom al expandir
+            alternarZoomMovil(true); 
+            
         } else {
             btnPantallaCompleta.textContent = "⛶ Expandir vista";
             btnPantallaCompleta.style.backgroundColor = "var(--azul-marino)"; 
+            
+            // Bloquear zoom al regresar a la vista normal
+            alternarZoomMovil(false); 
         }
     });
 }
@@ -762,25 +789,4 @@ function dibujarTecladoHTML(notasAcorde) {
     html += `<div style="font-size: 0.75rem; color: #aaa; text-align: center; margin-bottom: 10px;">🎹 ${notasAcorde.join(' - ')}</div>`;
     
     return html;
-}
-
-//ZOOM
-function alternarZoomMovil(permitirZoom) {
-    // Buscamos la etiqueta viewport en el HTML
-    let metaViewport = document.querySelector('meta[name="viewport"]');
-    
-    // Si por alguna razón no existe, la creamos
-    if (!metaViewport) {
-        metaViewport = document.createElement('meta');
-        metaViewport.name = "viewport";
-        document.head.appendChild(metaViewport);
-    }
-
-    if (permitirZoom) {
-        // MODO EXPANDIDO: Permite hacer zoom hasta 3 veces el tamaño original
-        metaViewport.content = "width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes";
-    } else {
-        // MODO NORMAL: Bloquea el zoom para proteger la interfaz de la lista y los botones
-        metaViewport.content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no";
-    }
 }
