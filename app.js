@@ -1,5 +1,5 @@
 // ==========================================
-// 1. VARIABLES GLOBALES DE MEMORIA
+// 1. VARIABLES GLOBALES Y EXPORTACIONES
 // ==========================================
 let inventarioCanciones = [];
 let listaDominical = [];
@@ -9,22 +9,66 @@ let viendoListaDominical = false;
 let pasosActuales = 0; 
 let letraActual = "";
 
+// Al usar módulos, necesitamos exponer estas funciones para el HTML
+window.abrirDiccionario = abrirDiccionario;
+window.cerrarDiccionario = cerrarDiccionario;
+
 // ==========================================
-// 2. INICIALIZACIÓN Y LECTURA DE DATOS
+// 2. INICIALIZACIÓN Y CONEXIÓN A FIREBASE (REALTIME DATABASE)
 // ==========================================
-document.addEventListener('DOMContentLoaded', () => {
-    fetch('canciones.json')
-        .then(respuesta => respuesta.json())
-        .then(datos => {
-            inventarioCanciones = datos;
-            mostrarLista(inventarioCanciones);
-        })
-        .catch(error => {
-            console.error("Error al cargar:", error);
-            document.getElementById('contenedor-lista').innerHTML = "<li>Error al cargar las canciones.</li>";
-        });
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBYrKSwxlndFu-1KI6MV3z4WwCnqPiLm6k",
+  authDomain: "alabanzas-mvi.firebaseapp.com",
+  databaseURL: "https://alabanzas-mvi-default-rtdb.firebaseio.com",
+  projectId: "alabanzas-mvi",
+  storageBucket: "alabanzas-mvi.firebasestorage.app",
+  messagingSenderId: "36436624706",
+  appId: "1:36436624706:web:3a56a5bbdec6d78cec34db"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+document.addEventListener('DOMContentLoaded', async () => {
+    await cargarCancionesDesdeFirebase();
 });
 
+async function cargarCancionesDesdeFirebase() {
+    try {
+        const dbRef = ref(db); // Apuntamos a la raíz de tu base de datos
+        const snapshot = await get(dbRef);
+        
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            
+            // Lógica de limpieza (Firebase a veces añade un 'null' si los IDs empiezan en 1)
+            let cancionesArray = [];
+            if (Array.isArray(data)) {
+                cancionesArray = data;
+            } else if (data.canciones && Array.isArray(data.canciones)) {
+                cancionesArray = data.canciones;
+            } else {
+                cancionesArray = Object.values(data);
+            }
+
+            // Filtramos elementos vacíos y ordenamos por ID numérico
+            inventarioCanciones = cancionesArray
+                .filter(c => c && c.id)
+                .sort((a, b) => a.id - b.id);
+            
+            mostrarLista(inventarioCanciones);
+            console.log("¡Conexión exitosa! Canciones descargadas de la nube:", inventarioCanciones.length);
+        } else {
+            document.getElementById('contenedor-lista').innerHTML = "<li>No se encontraron datos en la nube.</li>";
+        }
+    } catch (error) {
+        console.error("Error al conectar con Firebase:", error);
+        document.getElementById('contenedor-lista').innerHTML = "<li>Error de conexión. Revisa la consola.</li>";
+    }
+}
 // ==========================================
 // 3. MOTOR MATEMÁTICO DE TRANSPOSICIÓN MUSICAL
 // ==========================================
