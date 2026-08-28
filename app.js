@@ -934,17 +934,37 @@ if(btnProcesar) {
             const nuevoId = inventarioCanciones.length > 0 ? inventarioCanciones[inventarioCanciones.length - 1].id + 1 : 1;
             cancionProcesada.id = nuevoId;
 
-            // 🚨 CORRECCIÓN: Guardamos en la raíz de la base de datos (Igual que tu importación manual)
+            // Guardamos en la raíz de la base de datos
             const nuevaCancionRef = dbRef(window.dbInstance, (nuevoId - 1).toString()); 
             await set(nuevaCancionRef, cancionProcesada);
 
             mensajeEstado.style.color = "green";
             mensajeEstado.textContent = "✅ ¡Canción agregada con éxito!";
             
-            // Recargamos la lista
+            // ---------------------------------------------------------
+            // 🚨 NUEVO: AUTO-BÚSQUEDA Y APERTURA DE LA CANCIÓN
+            // ---------------------------------------------------------
             setTimeout(() => {
-                window.location.reload(); 
-            }, 1500);
+                // 1. Agregamos la canción a la memoria actual para no tener que recargar
+                inventarioCanciones.push(cancionProcesada);
+
+                // 2. Cerramos y limpiamos el panel de la IA
+                panelAdmin.style.display = 'none';
+                inputImagenes.value = "";
+                mensajeEstado.textContent = "";
+
+                // 3. Escribimos el nombre en el buscador automáticamente
+                const buscador = document.getElementById('buscador');
+                if (buscador) {
+                    buscador.value = cancionProcesada.titulo;
+                    // Forzamos al buscador a "filtrar" la lista como si el usuario hubiera tecleado
+                    buscador.dispatchEvent(new Event('input')); 
+                }
+
+                // 4. Mostramos la canción en el visor derecho instantáneamente
+                mostrarCancion(cancionProcesada.id, null);
+
+            }, 1500); // Esperamos 1.5 segundos para que el usuario alcance a leer el mensaje de éxito
 
         } catch (error) {
             console.error(error);
