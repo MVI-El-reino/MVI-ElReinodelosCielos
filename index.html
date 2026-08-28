@@ -14,8 +14,25 @@
         <input type="text" id="buscador" placeholder="Buscar alabanza...">
         <button id="btn-ver-lista">Ver mi lista (0)</button>
         <button id="btn-exportar-pdf" style="display: none; background-color: #2ecc71; color: white;">Exportar lista a PDF</button>
+        <!-- Botón para abrir el panel (Agregalo junto a tus otros botones del header) -->
+<button id="btn-abrir-admin" style="background-color: #9b59b6; color: white; margin-left: 10px;">Añadir Canción (IA)</button>
+
+<!-- Panel flotante de Inteligencia Artificial (Pégalo justo antes de cerrar el </header>) -->
+<div id="panel-admin-ia" style="display: none; position: absolute; top: 70px; right: 20px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 1000; border: 2px solid var(--dorado); color: black;">
+    <h3 style="margin-top:0; color: var(--azul-marino);">Asistente de Transcripción</h3>
+    <p style="font-size: 0.9rem; color: #555;">Sube Las capturas de la canción.</p>
+    
+    <input type="file" id="input-imagenes-ia" accept="image/*" multiple style="margin-bottom: 15px; width: 100%;">
+    
+    <div style="display: flex; gap: 10px; justify-content: flex-end;">
+        <button id="btn-cerrar-admin" style="background: #ccc; color: black;">Cancelar</button>
+        <button id="btn-procesar-ia" style="background: #2ecc71; color: white;">Procesar Imágenes</button>
+    </div>
+    <div id="mensaje-estado-ia" style="margin-top: 15px; font-weight: bold; color: #e67e22; text-align: center;"></div>
+</div>
     </header>
 
+    
     <main>
         <section id="lista-canciones">
             <h2>Repertorio Disponible</h2>
