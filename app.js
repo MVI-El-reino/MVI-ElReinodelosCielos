@@ -797,7 +797,127 @@ function cerrarDiccionario() {
         modal.style.display = 'none'; // Lo volvemos a ocultar
     }
 }
+// ==========================================
+// 8. ASISTENTE DE INTELIGENCIA ARTIFICIAL (GEMINI)
+// ==========================================
+import { ref as dbRef, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
+// PEGA TU API KEY AQUÍ ABAJO
+const GEMINI_API_KEY = "AQ.Ab8RN6IB-u_BtYZrv0a6lw05VjX7q0KnSmX_CXeoI8smNI4RRQ"; 
+
+// Controles del Panel
+const btnAbrirAdmin = document.getElementById('btn-abrir-admin');
+const panelAdmin = document.getElementById('panel-admin-ia');
+const btnCerrarAdmin = document.getElementById('btn-cerrar-admin');
+const btnProcesar = document.getElementById('btn-procesar-ia');
+const inputImagenes = document.getElementById('input-imagenes-ia');
+const mensajeEstado = document.getElementById('mensaje-estado-ia');
+
+if(btnAbrirAdmin) {
+    btnAbrirAdmin.addEventListener('click', () => panelAdmin.style.display = 'block');
+    btnCerrarAdmin.addEventListener('click', () => {
+        panelAdmin.style.display = 'none';
+        inputImagenes.value = "";
+        mensajeEstado.textContent = "";
+    });
+}
+
+// Función para convertir la imagen a Base64 (Formato que lee la IA)
+function convertirABase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            const base64String = reader.result.split(',')[1];
+            resolve({
+                inlineData: {
+                    data: base64String,
+                    mimeType: file.type
+                }
+            });
+        };
+        reader.onerror = error => reject(error);
+    });
+}
+
+// Evento principal para procesar con IA
+if(btnProcesar) {
+    btnProcesar.addEventListener('click', async () => {
+        if (inputImagenes.files.length === 0) {
+            alert("Por favor selecciona al menos una imagen.");
+            return;
+        }
+
+        mensajeEstado.textContent = "⏳ Analizando imágenes con IA... (Esto puede tomar unos segundos)";
+        btnProcesar.disabled = true;
+
+        try {
+            // 1. Convertimos todas las imágenes subidas
+            const promesasImagenes = Array.from(inputImagenes.files).map(convertirABase64);
+            const partesDeImagenes = await Promise.all(promesasImagenes);
+
+            // 2. El "Prompt" Maestro para Gemini
+            const instruccionTexto = {
+                text: `Actúa como un transcriptor musical experto. Analiza las siguientes capturas de pantalla de una canción cristiana y extrae su información. 
+                REGLAS ESTRICTAS:
+                1. El tono original escríbelo en notación americana (ej. C, D, Em).
+                2. Extrae toda la letra y coloca los acordes EXACTAMENTE antes de la sílaba correspondiente usando corchetes, así: [Acorde]Sílaba. Ejemplo: [G]Cerca de [D]Ti yo [C]quiero estar.
+                3. Une la letra si son varias imágenes manteniendo el orden lógico.
+                4. Usa etiquetas para las partes de la canción (ej. [Verso], [Coro]).
+                5. DEVUELVE ÚNICA Y EXCLUSIVAMENTE UN OBJETO JSON VÁLIDO con esta estructura, sin texto extra, sin markdown, sin comillas invertidas:
+                {
+                  "titulo": "Nombre de la cancion - Autor",
+                  "tono_original": "Tono",
+                  "letra": "Toda la letra formateada aquí con saltos de línea \\n"
+                }`
+            };
+
+            // Juntamos la instrucción con las imágenes
+            const contenidos = [instruccionTexto, ...partesDeImagenes];
+
+            // 3. Enviamos a la API de Gemini 1.5 Flash
+            const respuesta = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: contenidos }],
+                    generationConfig: { temperature: 0.2 } // Baja temperatura = respuestas más precisas
+                })
+            });
+
+            const datos = await respuesta.json();
+            
+            // 4. Limpiamos la respuesta (A veces la IA manda texto extra)
+            let textoJSON = datos.candidates[0].content.parts[0].text;
+            textoJSON = textoJSON.replace(/```json/g, '').replace(/```/g, '').trim();
+
+            const cancionProcesada = JSON.parse(textoJSON);
+
+            // 5. Calculamos el nuevo ID y Guardamos en Firebase
+            const nuevoId = inventarioCanciones.length > 0 ? inventarioCanciones[inventarioCanciones.length - 1].id + 1 : 1;
+            cancionProcesada.id = nuevoId;
+
+            // Importamos 'db' desde el bloque inicial de Firebase en tu archivo
+            const nuevaCancionRef = dbRef(window.dbInstance, 'canciones/' + (nuevoId - 1)); // Firebase usa índice 0 para arrays
+            await set(nuevaCancionRef, cancionProcesada);
+
+            mensajeEstado.style.color = "green";
+            mensajeEstado.textContent = "✅ ¡Canción agregada con éxito!";
+            
+            // Recargamos la lista
+            setTimeout(() => {
+                window.location.reload(); 
+            }, 1500);
+
+        } catch (error) {
+            console.error(error);
+            mensajeEstado.style.color = "red";
+            mensajeEstado.textContent = "❌ Error al procesar. Revisa la consola.";
+        } finally {
+            btnProcesar.disabled = false;
+        }
+    });
+}
 // ==========================================
 // GENERADOR DE MINI-TECLADO HTML
 // ==========================================
@@ -833,4 +953,5 @@ function dibujarTecladoHTML(notasAcorde) {
     html += `<div style="font-size: 0.75rem; color: #aaa; text-align: center; margin-bottom: 10px;">🎹 ${notasAcorde.join(' - ')}</div>`;
     
     return html;
+  
 }
