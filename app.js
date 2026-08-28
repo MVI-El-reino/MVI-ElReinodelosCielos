@@ -875,12 +875,37 @@ if(btnProcesar) {
 
             // Juntamos la instrucción con las imágenes
             const contenidos = [instruccionTexto, ...partesDeImagenes];
-            // Limpiamos la llave por si se copió con espacios invisibles
-            // Limpiamos la llave por si se copió con espacios invisibles
+            // Limpiamos la llave por si acaso
             const apiKeyLimpia = GEMINI_API_KEY.trim();
 
-            // 3. Enviamos a la API de Gemini (USANDO EL MODELO PRO)
-            const respuesta = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${apiKeyLimpia}`, {
+            // ---------------------------------------------------------
+            // 🚨 NUEVO: AUTO-DETECCIÓN DEL MODELO CORRECTO
+            // ---------------------------------------------------------
+            mensajeEstado.textContent = "🔍 Buscando modelo compatible...";
+            
+            // Le pedimos a Google tu lista personal de modelos
+            const listResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKeyLimpia}`);
+            if (!listResponse.ok) throw new Error("Fallo al verificar modelos con tu API Key.");
+            const listData = await listResponse.json();
+            
+            // Filtramos los modelos que sirven para generar texto
+            const modelosValidos = listData.models.filter(m => 
+                m.supportedGenerationMethods && m.supportedGenerationMethods.includes("generateContent")
+            );
+
+            // Buscamos 1.5 Flash (Más rápido), si no 1.5 Pro (Más inteligente), si no, cualquiera base
+            let modeloIdeal = modelosValidos.find(m => m.name.includes("gemini-1.5-flash")) || 
+                              modelosValidos.find(m => m.name.includes("gemini-1.5-pro")) || 
+                              modelosValidos.find(m => m.name.includes("gemini"));
+
+            if (!modeloIdeal) throw new Error("No tienes modelos Gemini habilitados en tu cuenta.");
+            
+            console.log("✅ Modelo auto-detectado con éxito:", modeloIdeal.name);
+            mensajeEstado.textContent = "⏳ Analizando imágenes con IA... (Esto puede tomar unos segundos)";
+
+            // 3. Enviamos a la API usando el modelo EXACTO que nos dio Google
+            // (modeloIdeal.name ya incluye la palabra "models/")
+            const respuesta = await fetch(`https://generativelanguage.googleapis.com/v1beta/${modeloIdeal.name}:generateContent?key=${apiKeyLimpia}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -889,23 +914,21 @@ if(btnProcesar) {
                 })
             });
 
-            // 🚨 VALIDACIÓN Y RASTREO DE ERRORES
             if (!respuesta.ok) {
-                // Si falla, le pedimos a Google la lista de modelos permitidos para tu cuenta y la imprimimos en consola
-                try {
-                    const listResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKeyLimpia}`);
-                    const listData = await listResponse.json();
-                    console.log("Modelos habilitados para tu llave:", listData);
-                } catch(e) {}
-                
                 const errorData = await respuesta.json();
                 throw new Error(`Error de API (${respuesta.status}): ${errorData.error?.message || 'Desconocido'}`);
             }
             
-            // 4. Limpiamos la respuesta
+            const datos = await respuesta.json();
+            
+            if (!datos.candidates || datos.candidates.length === 0) {
+                throw new Error("La IA no devolvió una transcripción válida.");
+            }
+            
+            // 4. Limpiamos la respuesta JSON
             let textoJSON = datos.candidates[0].content.parts[0].text;
             textoJSON = textoJSON.replace(/```json/g, '').replace(/```/g, '').trim();
-
+          
             const cancionProcesada = JSON.parse(textoJSON);
 
             // 5. Calculamos el nuevo ID y Guardamos en Firebase
