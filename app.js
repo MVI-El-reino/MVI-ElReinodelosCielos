@@ -878,8 +878,8 @@ if(btnProcesar) {
             // Limpiamos la llave por si se copió con espacios invisibles
             const apiKeyLimpia = GEMINI_API_KEY.trim();
 
-            // 3. Enviamos a la API de Gemini 1.5 Flash
-            const respuesta = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKeyLimpia}`, {
+            // 3. Enviamos a la API de Gemini (Usando el sufijo -latest)
+            const respuesta = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKeyLimpia}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -888,7 +888,7 @@ if(btnProcesar) {
                 })
             });
 
-            // 🚨 NUEVO: Validación de red para evitar colapsos
+            // Validación de red para evitar colapsos
             if (!respuesta.ok) {
                 const errorData = await respuesta.json();
                 throw new Error(`Error de API (${respuesta.status}): ${errorData.error?.message || 'Desconocido'}`);
