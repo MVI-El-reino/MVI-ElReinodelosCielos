@@ -894,8 +894,8 @@ if(btnProcesar) {
             );
 
             // Buscamos 1.5 Flash (Más rápido), si no 1.5 Pro (Más inteligente), si no, cualquiera base
-            let modeloIdeal = modelosValidos.find(m => m.name.includes("gemini-1.5-flash")) || 
-                              modelosValidos.find(m => m.name.includes("gemini-1.5-pro")) || 
+            let modeloIdeal = modelosValidos.find(m => m.name.includes("gemini-3.6-flash")) || 
+                              modelosValidos.find(m => m.name.includes("gemini-3.6-pro")) || 
                               modelosValidos.find(m => m.name.includes("gemini"));
 
             if (!modeloIdeal) throw new Error("No tienes modelos Gemini habilitados en tu cuenta.");
@@ -921,8 +921,7 @@ if(btnProcesar) {
             
             const datos = await respuesta.json();
             
-            if (!datos.candidates || datos.candidates.length === 0) {
-                throw new Error("La IA no devolvió una transcripción válida.");
+            if (!datos.candidates || datos.candidates.length === 0) {                throw new Error("La IA no devolvió una transcripción válida.");
             }
             
             // 4. Limpiamos la respuesta JSON
