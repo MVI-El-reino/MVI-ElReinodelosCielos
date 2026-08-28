@@ -31,6 +31,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+window.dbInstance = db;
 
 document.addEventListener('DOMContentLoaded', async () => {
     await cargarCancionesDesdeFirebase();
