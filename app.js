@@ -876,10 +876,11 @@ if(btnProcesar) {
             // Juntamos la instrucción con las imágenes
             const contenidos = [instruccionTexto, ...partesDeImagenes];
             // Limpiamos la llave por si se copió con espacios invisibles
+            // Limpiamos la llave por si se copió con espacios invisibles
             const apiKeyLimpia = GEMINI_API_KEY.trim();
 
-            // 3. Enviamos a la API de Gemini (Usando el sufijo -latest)
-            const respuesta = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKeyLimpia}`, {
+            // 3. Enviamos a la API de Gemini (USANDO EL MODELO PRO)
+            const respuesta = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${apiKeyLimpia}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -888,17 +889,17 @@ if(btnProcesar) {
                 })
             });
 
-            // Validación de red para evitar colapsos
+            // 🚨 VALIDACIÓN Y RASTREO DE ERRORES
             if (!respuesta.ok) {
+                // Si falla, le pedimos a Google la lista de modelos permitidos para tu cuenta y la imprimimos en consola
+                try {
+                    const listResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKeyLimpia}`);
+                    const listData = await listResponse.json();
+                    console.log("Modelos habilitados para tu llave:", listData);
+                } catch(e) {}
+                
                 const errorData = await respuesta.json();
                 throw new Error(`Error de API (${respuesta.status}): ${errorData.error?.message || 'Desconocido'}`);
-            }
-
-            const datos = await respuesta.json();
-            
-            // 🚨 NUEVO: Validación de estructura
-            if (!datos.candidates || datos.candidates.length === 0) {
-                throw new Error("La IA no devolvió una transcripción válida.");
             }
             
             // 4. Limpiamos la respuesta
