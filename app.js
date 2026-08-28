@@ -934,8 +934,8 @@ if(btnProcesar) {
             const nuevoId = inventarioCanciones.length > 0 ? inventarioCanciones[inventarioCanciones.length - 1].id + 1 : 1;
             cancionProcesada.id = nuevoId;
 
-            // Importamos 'db' desde el bloque inicial de Firebase en tu archivo
-            const nuevaCancionRef = dbRef(window.dbInstance, 'canciones/' + (nuevoId - 1)); // Firebase usa índice 0 para arrays
+            // 🚨 CORRECCIÓN: Guardamos en la raíz de la base de datos (Igual que tu importación manual)
+            const nuevaCancionRef = dbRef(window.dbInstance, (nuevoId - 1).toString()); 
             await set(nuevaCancionRef, cancionProcesada);
 
             mensajeEstado.style.color = "green";
