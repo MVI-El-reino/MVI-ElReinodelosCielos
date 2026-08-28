@@ -875,20 +875,33 @@ if(btnProcesar) {
 
             // Juntamos la instrucción con las imágenes
             const contenidos = [instruccionTexto, ...partesDeImagenes];
+            // Limpiamos la llave por si se copió con espacios invisibles
+            const apiKeyLimpia = GEMINI_API_KEY.trim();
 
             // 3. Enviamos a la API de Gemini 1.5 Flash
-            const respuesta = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+            const respuesta = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKeyLimpia}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     contents: [{ parts: contenidos }],
-                    generationConfig: { temperature: 0.2 } // Baja temperatura = respuestas más precisas
+                    generationConfig: { temperature: 0.2 } 
                 })
             });
 
+            // 🚨 NUEVO: Validación de red para evitar colapsos
+            if (!respuesta.ok) {
+                const errorData = await respuesta.json();
+                throw new Error(`Error de API (${respuesta.status}): ${errorData.error?.message || 'Desconocido'}`);
+            }
+
             const datos = await respuesta.json();
             
-            // 4. Limpiamos la respuesta (A veces la IA manda texto extra)
+            // 🚨 NUEVO: Validación de estructura
+            if (!datos.candidates || datos.candidates.length === 0) {
+                throw new Error("La IA no devolvió una transcripción válida.");
+            }
+            
+            // 4. Limpiamos la respuesta
             let textoJSON = datos.candidates[0].content.parts[0].text;
             textoJSON = textoJSON.replace(/```json/g, '').replace(/```/g, '').trim();
 
