@@ -622,9 +622,9 @@ if (btnExportarPDF) {
         areaImpresion.id = 'area-impresion-pdf';
 
       // ---------------------------------------------------------
-        // 🚨 NUEVO: CANDADO TIPOGRÁFICO PARA EL PDF
+        // CANDADO TIPOGRÁFICO PARA EL PDF
         // ---------------------------------------------------------
-        const estiloPDF = document.createElement('style');
+       const estiloPDF = document.createElement('style');
         estiloPDF.innerHTML = `
             @media print {
                 #area-impresion-pdf pre, 
@@ -633,6 +633,17 @@ if (btnExportarPDF) {
                     font-family: 'Courier New', Courier, monospace !important;
                     white-space: pre !important;
                     word-break: normal !important;
+                }
+                
+                /* 🚨 Oculta el comportamiento de scroll en el papel impreso */
+                #area-impresion-pdf .bloque-linea {
+                    overflow-x: hidden !important;
+                    overflow-y: hidden !important;
+                }
+                
+                /* 🚨 Fuerza a los navegadores webkit (Chrome/Safari) a desaparecer la barra gráfica */
+                #area-impresion-pdf ::-webkit-scrollbar {
+                    display: none !important;
                 }
             }
         `;
