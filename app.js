@@ -673,16 +673,16 @@ if (btnExportarPDF) {
                 if (cancion.id === 12 || cancion.titulo.includes("Alaba a Dios")) {
                     const estrofas = cancion.letra.split(/\n\s*\n/);
                     
-                    // Cortamos a machete: Las primeras 5 estrofas a la Hoja 1, el resto a la Hoja 2
                     const parte1 = estrofas.slice(0, 5).join('\n\n');
                     const parte2 = estrofas.slice(5).join('\n\n');
 
                     htmlCancion += `
-                        <div class="letra-doble-columna-gigante" style="font-family: 'Courier New', Courier, monospace; font-size: 13pt; line-height: 1.4;">
+                        <!-- 🚨 Ajustamos a 10pt para que no se corte en el papel -->
+                        <div class="letra-doble-columna-gigante" style="font-family: 'Courier New', Courier, monospace; font-size: 10pt; line-height: 1.4;">
                             ${procesarLetraYAcordes(parte1)}
                         </div>
                         
-                        <div class="letra-centrada" style="font-family: 'Courier New', Courier, monospace; font-size: 13.5pt; line-height: 1.3; page-break-before: always; padding-top: 15px;">
+                        <div class="letra-centrada" style="font-family: 'Courier New', Courier, monospace; font-size: 11pt; line-height: 1.3; page-break-before: always; padding-top: 15px;">
                             ${procesarLetraYAcordes(parte2)}
                         </div>
                     `;
@@ -708,27 +708,23 @@ if (btnExportarPDF) {
                    let claseColumna = '';
                     let estiloDinamico = '';
 
+                    // 🚨 NUEVOS TAMAÑOS: Reducimos un poco los puntos (pt) para que el texto no desborde la hoja
                     if (lineasVisuales <= 14) {
-                        // 🚨 NUEVO ESCALÓN: Canciones SÚPER cortas (Ej. Dame de beber)
-                        // Le damos prioridad absoluta. Letra grande y la empujamos hacia el centro de la hoja.
                         claseColumna = 'letra-centrada';
-                        estiloDinamico = "font-size: 16.5pt; line-height: 1.6; margin-top: 80px;";
+                        estiloDinamico = "font-size: 15pt; line-height: 1.6; margin-top: 80px;";
                     } else if (maxLongitudLinea > 50 && lineasVisuales <= 32) {
-                        // Canciones con frases muy largas pero que caben en 1 hoja
                         claseColumna = 'letra-centrada';
-                        estiloDinamico = "font-size: 13.5pt; line-height: 1.4; margin-top: 20px;";
+                        estiloDinamico = "font-size: 11.5pt; line-height: 1.4; margin-top: 20px;";
                     } else if (lineasVisuales > 32) {
-                        // Canciones largas: Doble columna para aprovechar espacio
+                        // Canciones largas (doble columna): 9.5pt es el tamaño perfecto para que no se corte
                         claseColumna = 'letra-doble-columna-equilibrada';
-                        estiloDinamico = "font-size: 13pt; line-height: 1.4;";
+                        estiloDinamico = "font-size: 9.5pt; line-height: 1.3;";
                     } else if (lineasVisuales > 22) {
-                        // Canciones "medianas" (Ej. Abre mis ojos)
                         claseColumna = 'letra-centrada';
-                        estiloDinamico = "font-size: 14.5pt; line-height: 1.3; margin-top: 15px;";
+                        estiloDinamico = "font-size: 13pt; line-height: 1.3; margin-top: 15px;";
                     } else {
-                        // Canciones cortas normales (entre 15 y 22 líneas)
                         claseColumna = 'letra-centrada';
-                        estiloDinamico = "font-size: 16pt; line-height: 1.4; margin-top: 30px;";
+                        estiloDinamico = "font-size: 14pt; line-height: 1.4; margin-top: 30px;";
                     }
 
                     htmlCancion += `
