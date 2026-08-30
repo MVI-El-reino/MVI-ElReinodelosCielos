@@ -975,6 +975,84 @@ if(btnProcesar) {
         }
     });
 }
+
+// ==========================================
+// 9. MODO EDICIÓN MANUAL DE CANCIONES
+// ==========================================
+const btnEditarCancion = document.getElementById('btn-editar-cancion');
+const contenedorLetra = document.getElementById('letra-cancion');
+const contenedorEditor = document.getElementById('contenedor-editor');
+const editorLetra = document.getElementById('editor-letra');
+const btnGuardarEdicion = document.getElementById('btn-guardar-edicion');
+const btnCancelarEdicion = document.getElementById('btn-cancelar-edicion');
+import { update as dbUpdate, ref as dbRefUpdate } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+if (btnEditarCancion) {
+    btnEditarCancion.addEventListener('click', () => {
+        // Solo permitimos editar si estamos en el catálogo principal (para evitar conflictos de transposición)
+        if (viendoListaDominical) {
+            alert("Para editar una canción, búscala en el Repertorio Disponible (No dentro de tu lista de reunión).");
+            return;
+        }
+
+        const cancion = inventarioCanciones.find(c => c.id === cancionActualId);
+        if (!cancion) return;
+
+        // Ocultamos la vista normal y los controles, mostramos el editor
+        contenedorLetra.style.display = 'none';
+        document.getElementById('controles-tono').style.display = 'none';
+        contenedorEditor.style.display = 'flex';
+        
+        // Cargamos la letra original cruda (con los corchetes) en la caja de texto
+        editorLetra.value = cancion.letra;
+    });
+}
+
+if (btnCancelarEdicion) {
+    btnCancelarEdicion.addEventListener('click', () => {
+        // Restauramos la vista sin guardar
+        contenedorEditor.style.display = 'none';
+        contenedorLetra.style.display = 'block';
+        document.getElementById('controles-tono').style.display = 'flex';
+    });
+}
+
+if (btnGuardarEdicion) {
+    btnGuardarEdicion.addEventListener('click', async () => {
+        const cancion = inventarioCanciones.find(c => c.id === cancionActualId);
+        if (!cancion) return;
+
+        const nuevaLetra = editorLetra.value;
+        btnGuardarEdicion.textContent = "Guardando...";
+        btnGuardarEdicion.disabled = true;
+
+        try {
+            // 1. Guardamos en Firebase (Usamos update para solo modificar la letra)
+            const cancionRef = dbRefUpdate(window.dbInstance, (cancion.id - 1).toString());
+            await dbUpdate(cancionRef, {
+                letra: nuevaLetra
+            });
+
+            // 2. Actualizamos la memoria local
+            cancion.letra = nuevaLetra;
+
+            // 3. Restauramos la vista y volvemos a renderizar
+            contenedorEditor.style.display = 'none';
+            contenedorLetra.style.display = 'block';
+            document.getElementById('controles-tono').style.display = 'flex';
+            
+            // Forzamos el renderizado para ver los cambios aplicados
+            renderizarVisorDerecho();
+
+        } catch (error) {
+            console.error("Error al guardar la edición:", error);
+            alert("Hubo un error al guardar en la nube. Revisa tu conexión.");
+        } finally {
+            btnGuardarEdicion.textContent = "💾 Guardar Cambios en la Nube";
+            btnGuardarEdicion.disabled = false;
+        }
+    });
+}
 // ==========================================
 // GENERADOR DE MINI-TECLADO HTML
 // ==========================================
