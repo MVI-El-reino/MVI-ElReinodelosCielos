@@ -17,7 +17,7 @@ window.cerrarDiccionario = cerrarDiccionario;
 // 2. INICIALIZACIÓN Y CONEXIÓN A FIREBASE (REALTIME DATABASE)
 // ==========================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBYrKSwxlndFu-1KI6MV3z4WwCnqPiLm6k",
