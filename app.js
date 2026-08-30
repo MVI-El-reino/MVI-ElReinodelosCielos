@@ -705,26 +705,35 @@ if (btnExportarPDF) {
                         else lineasVisuales += 1; 
                     });
 
-                   let claseColumna = '';
+                    let claseColumna = '';
                     let estiloDinamico = '';
 
-                    // 🚨 NUEVOS TAMAÑOS: Reducimos un poco los puntos (pt) para que el texto no desborde la hoja
+                    // 🚨 NUEVA LÓGICA INTELIGENTE DE COLUMNAS 🚨
                     if (lineasVisuales <= 14) {
+                        // 1. Canciones súper cortas
                         claseColumna = 'letra-centrada';
-                        estiloDinamico = "font-size: 15pt; line-height: 1.6; margin-top: 80px;";
-                    } else if (maxLongitudLinea > 50 && lineasVisuales <= 32) {
-                        claseColumna = 'letra-centrada';
-                        estiloDinamico = "font-size: 11.5pt; line-height: 1.4; margin-top: 20px;";
+                        estiloDinamico = "font-size: 15pt; line-height: 1.6; margin-top: 60px;";
+                        
+                    } else if (maxLongitudLinea > 42) {
+                        // 2. 🚨 CANCIONES CON FRASES ANCHAS: Prohibido usar 2 columnas 🚨
+                        claseColumna = 'letra-centrada'; 
+                        
+                        if (lineasVisuales > 35) {
+                            // Si es muy larga hacia abajo, bajamos un poquito la fuente para que pase suavemente a la hoja 2
+                            estiloDinamico = "font-size: 11pt; line-height: 1.4; margin-top: 15px;";
+                        } else {
+                            estiloDinamico = "font-size: 12.5pt; line-height: 1.4; margin-top: 15px;";
+                        }
+                        
                     } else if (lineasVisuales > 32) {
-                        // Canciones largas (doble columna): 9.5pt es el tamaño perfecto para que no se corte
+                        // 3. CANCIONES LARGAS PERO CON FRASES CORTITAS: Aquí SÍ usamos 2 columnas
                         claseColumna = 'letra-doble-columna-equilibrada';
-                        estiloDinamico = "font-size: 9.5pt; line-height: 1.3;";
-                    } else if (lineasVisuales > 22) {
-                        claseColumna = 'letra-centrada';
-                        estiloDinamico = "font-size: 13pt; line-height: 1.3; margin-top: 15px;";
+                        estiloDinamico = "font-size: 10pt; line-height: 1.3;";
+                        
                     } else {
+                        // 4. Canciones promedio (El estándar)
                         claseColumna = 'letra-centrada';
-                        estiloDinamico = "font-size: 14pt; line-height: 1.4; margin-top: 30px;";
+                        estiloDinamico = "font-size: 13.5pt; line-height: 1.4; margin-top: 20px;";
                     }
 
                     htmlCancion += `
@@ -733,7 +742,7 @@ if (btnExportarPDF) {
                         </div>
                     `;
                 }
-
+              
                 divCancion.innerHTML = htmlCancion;
                 areaImpresion.appendChild(divCancion);
             });
