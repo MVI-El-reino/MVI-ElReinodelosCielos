@@ -621,6 +621,23 @@ if (btnExportarPDF) {
         const areaImpresion = document.createElement('div');
         areaImpresion.id = 'area-impresion-pdf';
 
+      // ---------------------------------------------------------
+        // 🚨 NUEVO: CANDADO TIPOGRÁFICO PARA EL PDF
+        // ---------------------------------------------------------
+        const estiloPDF = document.createElement('style');
+        estiloPDF.innerHTML = `
+            @media print {
+                #area-impresion-pdf pre, 
+                #area-impresion-pdf .linea-acordes, 
+                #area-impresion-pdf .linea-letras {
+                    font-family: 'Courier New', Courier, monospace !important;
+                    white-space: pre !important;
+                    word-break: normal !important;
+                }
+            }
+        `;
+        areaImpresion.appendChild(estiloPDF);
+
         const diasOrden = ["Miércoles", "Viernes", "Domingo"];
         
         diasOrden.forEach(dia => {
