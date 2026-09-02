@@ -622,9 +622,9 @@ if (btnExportarPDF) {
         areaImpresion.id = 'area-impresion-pdf';
 
       // ---------------------------------------------------------
-        // CANDADO TIPOGRÁFICO PARA EL PDF
+        // 🚨 CANDADO TIPOGRÁFICO Y ANTI-CORTES PARA EL PDF
         // ---------------------------------------------------------
-       const estiloPDF = document.createElement('style');
+        const estiloPDF = document.createElement('style');
         estiloPDF.innerHTML = `
             @media print {
                 #area-impresion-pdf pre, 
@@ -635,19 +635,27 @@ if (btnExportarPDF) {
                     word-break: normal !important;
                 }
                 
-                /* 🚨 Oculta el comportamiento de scroll en el papel impreso */
+                /* Oculta el comportamiento de scroll en el papel impreso */
                 #area-impresion-pdf .bloque-linea {
                     overflow-x: hidden !important;
                     overflow-y: hidden !important;
                 }
                 
-                /* 🚨 Fuerza a los navegadores webkit (Chrome/Safari) a desaparecer la barra gráfica */
+                /* Fuerza a los navegadores a desaparecer la barra gráfica */
                 #area-impresion-pdf ::-webkit-scrollbar {
                     display: none !important;
+                }
+
+                /*NUEVO: PROHÍBE PARTIR LOS PÁRRAFOS A LA MITAD */
+                #area-impresion-pdf .estrofa-musical {
+                    break-inside: avoid !important;
+                    page-break-inside: avoid !important;
+                    margin-bottom: 20px !important; /* Espacio extra entre párrafos para que respire */
                 }
             }
         `;
         areaImpresion.appendChild(estiloPDF);
+        // ---------------------------------------------------------
 
         const diasOrden = ["Miércoles", "Viernes", "Domingo"];
         
@@ -671,69 +679,35 @@ if (btnExportarPDF) {
                 // 🚨 EXCEPCIÓN VIP: SOLO PARA "ALABA A DIOS" (ID: 12)
                 // ========================================================
                 if (cancion.id === 12 || cancion.titulo.includes("Alaba a Dios")) {
-                    const estrofas = cancion.letra.split(/\n\s*\n/);
-                    
-                    const parte1 = estrofas.slice(0, 5).join('\n\n');
-                    const parte2 = estrofas.slice(5).join('\n\n');
-
                     htmlCancion += `
-                        <!-- 🚨 Ajustamos a 10pt para que no se corte en el papel -->
-                        <div class="letra-doble-columna-gigante" style="font-family: 'Courier New', Courier, monospace; font-size: 10pt; line-height: 1.4;">
-                            ${procesarLetraYAcordes(parte1)}
-                        </div>
-                        
-                        <div class="letra-centrada" style="font-family: 'Courier New', Courier, monospace; font-size: 11pt; line-height: 1.3; page-break-before: always; padding-top: 15px;">
-                            ${procesarLetraYAcordes(parte2)}
+                        <div class="letra-centrada" style="font-family: 'Courier New', Courier, monospace; font-size: 14pt; font-weight: bold; line-height: 1.4; margin-top: 15px;">
+                            ${procesarLetraYAcordes(cancion.letra)}
                         </div>
                     `;
                 }
                 // ========================================================
-                // COMPORTAMIENTO NORMAL PARA EL RESTO DEL REPERTORIO
+                // MODO UNIVERSAL 1 COLUMNA (Ideal para leer en vivo sin zoom)
                 // ========================================================
                 else {
-                    let lineasVisuales = 0;
                     let maxLongitudLinea = 0;
 
+                    // Solo nos importa qué tan ancha es la frase más larga
                     cancion.letra.split('\n').forEach(l => {
-                        const linea = l.trim();
-                        const soloTexto = linea.replace(/\[.*?\]/g, ""); 
+                        const soloTexto = l.trim().replace(/\[.*?\]/g, ""); 
                         if (soloTexto.length > maxLongitudLinea) maxLongitudLinea = soloTexto.length;
-
-                        if (linea === "") lineasVisuales += 1; 
-                        else if (/^\[[^\[\]]+\]$/.test(linea)) lineasVisuales += 1.5; 
-                        else if (linea.includes('[')) lineasVisuales += 2; 
-                        else lineasVisuales += 1; 
                     });
 
-                    let claseColumna = '';
+                    let claseColumna = 'letra-centrada';
                     let estiloDinamico = '';
 
-                    // 🚨 NUEVA LÓGICA INTELIGENTE DE COLUMNAS 🚨
-                    if (lineasVisuales <= 14) {
-                        // 1. Canciones súper cortas
-                        claseColumna = 'letra-centrada';
-                        estiloDinamico = "font-size: 15pt; line-height: 1.6; margin-top: 60px;";
-                        
-                    } else if (maxLongitudLinea > 42) {
-                        // 2. 🚨 CANCIONES CON FRASES ANCHAS: Prohibido usar 2 columnas 🚨
-                        claseColumna = 'letra-centrada'; 
-                        
-                        if (lineasVisuales > 35) {
-                            // Si es muy larga hacia abajo, bajamos un poquito la fuente para que pase suavemente a la hoja 2
-                            estiloDinamico = "font-size: 11pt; line-height: 1.4; margin-top: 15px;";
-                        } else {
-                            estiloDinamico = "font-size: 12.5pt; line-height: 1.4; margin-top: 15px;";
-                        }
-                        
-                    } else if (lineasVisuales > 32) {
-                        // 3. CANCIONES LARGAS PERO CON FRASES CORTITAS: Aquí SÍ usamos 2 columnas
-                        claseColumna = 'letra-doble-columna-equilibrada';
-                        estiloDinamico = "font-size: 10pt; line-height: 1.3;";
-                        
+                    // Todo a 1 sola columna. Si la frase es larguísima, bajamos la fuente un pelín 
+                    // para que no toque los bordes, pero siempre gigante y en negritas.
+                    if (maxLongitudLinea > 55) {
+                        estiloDinamico = "font-size: 13pt; font-weight: bold; line-height: 1.4; margin-top: 15px;";
+                    } else if (maxLongitudLinea > 45) {
+                        estiloDinamico = "font-size: 15pt; font-weight: bold; line-height: 1.4; margin-top: 15px;";
                     } else {
-                        // 4. Canciones promedio (El estándar)
-                        claseColumna = 'letra-centrada';
-                        estiloDinamico = "font-size: 13.5pt; line-height: 1.4; margin-top: 20px;";
+                        estiloDinamico = "font-size: 17pt; font-weight: bold; line-height: 1.5; margin-top: 20px;";
                     }
 
                     htmlCancion += `
