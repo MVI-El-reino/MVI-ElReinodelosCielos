@@ -626,6 +626,12 @@ if (btnExportarPDF) {
         // ---------------------------------------------------------
         const estiloPDF = document.createElement('style');
         estiloPDF.innerHTML = `
+            /* 🚨 NUEVO: ESTABLECER MÁRGENES MÍNIMOS POR DEFECTO 🚨 */
+            @page {
+                size: auto;
+                margin: 5mm; /* Fuerza al navegador a usar el margen más pequeño posible */
+            }
+
             @media print {
                 #area-impresion-pdf pre, 
                 #area-impresion-pdf .linea-acordes, 
@@ -646,11 +652,11 @@ if (btnExportarPDF) {
                     display: none !important;
                 }
 
-                /*NUEVO: PROHÍBE PARTIR LOS PÁRRAFOS A LA MITAD */
+                /* PROHÍBE PARTIR LOS PÁRRAFOS A LA MITAD */
                 #area-impresion-pdf .estrofa-musical {
                     break-inside: avoid !important;
                     page-break-inside: avoid !important;
-                    margin-bottom: 20px !important; /* Espacio extra entre párrafos para que respire */
+                    margin-bottom: 20px !important;
                 }
             }
         `;
