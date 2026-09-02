@@ -1103,3 +1103,100 @@ function dibujarTecladoHTML(notasAcorde) {
     return html;
   
 }
+// ==========================================
+// 10. IA INTEGRADA AL MODO EDICIÓN (HÍBRIDO)
+// ==========================================
+const btnIAEdicion = document.getElementById('btn-ia-edicion');
+const inputInstruccionIA = document.getElementById('instruccion-ia-edicion');
+const inputImgEdicion = document.getElementById('input-img-edicion');
+const mensajeIAEdicion = document.getElementById('mensaje-ia-edicion');
+
+if (btnIAEdicion) {
+    btnIAEdicion.addEventListener('click', async () => {
+        const archivos = inputImgEdicion.files;
+        const instruccionExtra = inputInstruccionIA.value.trim();
+
+        if (archivos.length === 0) {
+            alert("Sube al menos una captura de la versión correcta para que la IA la procese.");
+            return;
+        }
+
+        btnIAEdicion.disabled = true;
+        mensajeIAEdicion.style.color = "#e67e22";
+        mensajeIAEdicion.textContent = "⏳ Analizando imágenes... (Esto reemplazará el texto de abajo)";
+
+        try {
+            // 1. Convertimos las imágenes
+            const promesasImagenes = Array.from(archivos).map(convertirABase64); // Usa la función que ya existe arriba
+            const partesDeImagenes = await Promise.all(promesasImagenes);
+            
+            const instruccionTexto = {
+                text: `Actúa como un transcriptor musical experto. Extrae la letra y los acordes de estas capturas para REEMPLAZAR una canción.
+                REGLAS ESTRICTAS:
+                1. Coloca los acordes EXACTAMENTE antes de la sílaba correspondiente usando corchetes: [Acorde]Sílaba.
+                2. Usa etiquetas para las partes de la canción (ej. [Verso], [Coro]).
+                3. DEVUELVE ÚNICA Y EXCLUSIVAMENTE EL TEXTO PURO, sin formato markdown, sin JSON, sin comillas.
+                4. INSTRUCCIÓN EXTRA: ${instruccionExtra ? instruccionExtra : 'Ninguna'}`
+            };
+
+            const contenidos = [instruccionTexto, ...partesDeImagenes];
+
+            // 2. Buscamos el modelo adecuado
+            const apiKeyLimpia = GEMINI_API_KEY.trim();
+            const listResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKeyLimpia}`);
+            const listData = await listResponse.json();
+            
+            const modelosValidos = listData.models.filter(m => m.supportedGenerationMethods && m.supportedGenerationMethods.includes("generateContent"));
+            let modeloIdeal = modelosValidos.find(m => m.name.includes("gemini-3.6-flash")) || 
+                              modelosValidos.find(m => m.name.includes("gemini-3.6-pro")) || 
+                              modelosValidos.find(m => m.name.includes("gemini"));
+
+            // 3. Enviamos a la API con ciclo de reintento
+            let respuesta;
+            let reintentos = 3;
+            
+            for (let i = 0; i < reintentos; i++) {
+                respuesta = await fetch(`https://generativelanguage.googleapis.com/v1beta/${modeloIdeal.name}:generateContent?key=${apiKeyLimpia}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: contenidos }],
+                        generationConfig: { temperature: 0.2 } 
+                    })
+                });
+
+                if (respuesta.status === 503) {
+                    mensajeIAEdicion.textContent = `⏳ Servidores ocupados. Reintentando... (${i + 1}/${reintentos})`;
+                    await new Promise(r => setTimeout(r, 2000));
+                } else {
+                    break;
+                }
+            }
+
+            if (!respuesta.ok) throw new Error("Fallo en la conexión con Google AI.");
+
+            const datos = await respuesta.json();
+            let textoGenerado = datos.candidates[0].content.parts[0].text;
+            
+            // Limpiamos los bloques de código si la IA los pone por accidente
+            textoGenerado = textoGenerado.replace(/```text/g, '').replace(/```/g, '').trim();
+
+            // 4. Inyectamos la nueva letra en el cuadro de texto manual
+            document.getElementById('editor-letra').value = textoGenerado;
+            
+            mensajeIAEdicion.style.color = "green";
+            mensajeIAEdicion.textContent = "✅ ¡Texto reemplazado! Revísalo y dale a 'Guardar Cambios'.";
+            
+            // Limpiamos los inputs
+            inputImgEdicion.value = ""; 
+            inputInstruccionIA.value = "";
+
+        } catch (error) {
+            console.error(error);
+            mensajeIAEdicion.style.color = "red";
+            mensajeIAEdicion.textContent = "❌ Error al procesar. Intenta de nuevo.";
+        } finally {
+            btnIAEdicion.disabled = false;
+        }
+    });
+}
