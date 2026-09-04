@@ -1008,41 +1008,72 @@ if(btnProcesar) {
           
             const cancionProcesada = JSON.parse(textoJSON);
 
-            // 5. Calculamos el nuevo ID y Guardamos en Firebase
-            const nuevoId = inventarioCanciones.length > 0 ? inventarioCanciones[inventarioCanciones.length - 1].id + 1 : 1;
-            cancionProcesada.id = nuevoId;
+            // =========================================================
+            // 🚨 NUEVO: SISTEMA ANTI-DUPLICADOS E INTERCEPCIÓN
+            // =========================================================
+            
+            // Función para quitar acentos y mayúsculas para comparar bien
+            const normalizar = (str) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+            const tituloNuevo = normalizar(cancionProcesada.titulo);
+            
+            // Buscamos si existe alguna canción con un título similar
+            const cancionExistente = inventarioCanciones.find(c => 
+                normalizar(c.titulo).includes(tituloNuevo) || tituloNuevo.includes(normalizar(c.titulo))
+            );
 
-            // Guardamos en la raíz de la base de datos
-            const nuevaCancionRef = dbRef(window.dbInstance, (nuevoId - 1).toString()); 
+            let idAGuardar;
+            let esActualizacion = false;
+
+            if (cancionExistente) {
+                // Si existe, le preguntamos al usuario qué hacer
+                const mensaje = `⚠️ ¡Ojo! Parece que ya existe una canción llamada:\n"${cancionExistente.titulo}"\n\n¿Quieres ACTUALIZAR la existente con esta nueva versión?\n\n• [Aceptar] = Sobrescribir la anterior\n• [Cancelar] = Guardar como una nueva copia`;
+                
+                if (confirm(mensaje)) {
+                    // El usuario eligió Aceptar (Actualizar)
+                    idAGuardar = cancionExistente.id;
+                    esActualizacion = true;
+                } else {
+                    // El usuario eligió Cancelar (Guardar copia nueva de todos modos)
+                    idAGuardar = inventarioCanciones.length > 0 ? inventarioCanciones[inventarioCanciones.length - 1].id + 1 : 1;
+                }
+            } else {
+                // La canción es 100% nueva
+                idAGuardar = inventarioCanciones.length > 0 ? inventarioCanciones[inventarioCanciones.length - 1].id + 1 : 1;
+            }
+
+            cancionProcesada.id = idAGuardar;
+
+            // 5. Guardamos en Firebase (La función 'set' sirve tanto para crear como para sobrescribir)
+            const nuevaCancionRef = dbRef(window.dbInstance, (idAGuardar - 1).toString()); 
             await set(nuevaCancionRef, cancionProcesada);
 
             mensajeEstado.style.color = "green";
-            mensajeEstado.textContent = "✅ ¡Canción agregada con éxito!";
+            mensajeEstado.textContent = esActualizacion ? "✅ ¡Canción actualizada con éxito!" : "✅ ¡Canción agregada con éxito!";
             
-            // ---------------------------------------------------------
-            // 🚨 NUEVO: AUTO-BÚSQUEDA Y APERTURA DE LA CANCIÓN
-            // ---------------------------------------------------------
+            // 6. Auto-Búsqueda y Apertura de la Canción
             setTimeout(() => {
-                // 1. Agregamos la canción a la memoria actual para no tener que recargar
-                inventarioCanciones.push(cancionProcesada);
+                if (esActualizacion) {
+                    // Si actualizamos, reemplazamos el dato viejo en la memoria local
+                    const index = inventarioCanciones.findIndex(c => c.id === idAGuardar);
+                    if(index !== -1) inventarioCanciones[index] = cancionProcesada;
+                } else {
+                    // Si es nueva, la empujamos al final de la lista
+                    inventarioCanciones.push(cancionProcesada);
+                }
 
-                // 2. Cerramos y limpiamos el panel de la IA
                 panelAdmin.style.display = 'none';
                 inputImagenes.value = "";
                 mensajeEstado.textContent = "";
 
-                // 3. Escribimos el nombre en el buscador automáticamente
                 const buscador = document.getElementById('buscador');
                 if (buscador) {
                     buscador.value = cancionProcesada.titulo;
-                    // Forzamos al buscador a "filtrar" la lista como si el usuario hubiera tecleado
                     buscador.dispatchEvent(new Event('input')); 
                 }
 
-                // 4. Mostramos la canción en el visor derecho instantáneamente
                 mostrarCancion(cancionProcesada.id, null);
 
-            }, 1500); // Esperamos 1.5 segundos para que el usuario alcance a leer el mensaje de éxito
+            }, 1500);
 
         } catch (error) {
             console.error(error);
@@ -1053,7 +1084,6 @@ if(btnProcesar) {
         }
     });
 }
-
 // ==========================================
 // 9. MODO EDICIÓN MANUAL DE CANCIONES
 // ==========================================
