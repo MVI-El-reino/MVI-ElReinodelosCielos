@@ -170,6 +170,11 @@ function ajustarEscalaLetra() {
     const contenedor = document.getElementById('letra-cancion');
     const visor = document.getElementById('visor-cancion');
     
+    if (!contenedor || !visor) return; // Escudo de seguridad por si no existen
+    
+    // 🚨 NUEVO: Anclamos el punto de escalado a la esquina superior izquierda
+    contenedor.style.transformOrigin = 'top left';
+    
     // Reseteamos escala para medir el ancho real sin restricciones
     contenedor.style.transform = 'scale(1)';
     
