@@ -313,8 +313,37 @@ function mostrarLista(canciones, esListaDominical = false) {
                         cancion.dia = e.target.value;
                         mostrarLista(listaDominical, true);
                     });
+                  // ------------------------------------------------
+                    // 🚨 NUEVO: Mini-Selector de Partes a Imprimir
+                    // ------------------------------------------------
+                    const selectModo = document.createElement('select');
+                    selectModo.className = 'select-modo-lista';
+                    selectModo.style.fontSize = '0.8rem';
+                    selectModo.style.padding = '2px';
+                    selectModo.style.borderRadius = '4px';
+                    
+                    const opcionesModo = [
+                        { valor: "completa", texto: "Completa" },
+                        { valor: "solo-coro", texto: "Solo Coro" },
+                        { valor: "verso-coro", texto: "Verso + Coro" }
+                    ];
+                    
+                    opcionesModo.forEach(opt => {
+                        const optionElement = document.createElement('option');
+                        optionElement.value = opt.valor;
+                        optionElement.textContent = opt.texto;
+                        // Si ya tenía un modo guardado, lo seleccionamos
+                        if (cancion.modoImpresion === opt.valor) optionElement.selected = true;
+                        selectModo.appendChild(optionElement);
+                    });
+
+                    selectModo.addEventListener('change', (e) => {
+                        cancion.modoImpresion = e.target.value;
+                    });
+                    // ------------------------------------------------
 
                     // Botón de eliminar (✖)
+                    divControles.appendChild(selectModo);
                     const btnEliminar = document.createElement('button');
                     btnEliminar.textContent = "✖";
                     btnEliminar.className = "btn-eliminar";
@@ -519,7 +548,8 @@ btnAgregar.addEventListener('click', () => {
             titulo: cancionBase.titulo,
             tono_original: transponerAcordeStr(cancionBase.tono_original, pasosActuales),
             letra: transponerLetraCruda(cancionBase.letra, pasosActuales),
-            dia: diaPorDefecto 
+            dia: diaPorDefecto,
+            modoImpresion: 'completa' //NUEVO: Valor por defecto
         };
         
         listaDominical.push(cancionClonada);
@@ -607,7 +637,34 @@ if(btnPantallaCompleta) {
         }
     });
 }
+// ==========================================
+// NUEVA FUNCIÓN: FILTRO DE SECCIONES PARA IMPRESIÓN
+// ==========================================
+function filtrarLetraPorSecciones(letraCruda, modo) {
+    if (!modo || modo === 'completa') return letraCruda;
 
+    // Partimos la canción en bloques usando los saltos de línea dobles
+    const estrofas = letraCruda.split(/\n\s*\n/);
+    let resultado = [];
+
+    estrofas.forEach(estrofa => {
+        // Leemos la primera línea del bloque para buscar la etiqueta (ej. [Coro])
+        const primeraLinea = estrofa.trim().split('\n')[0].toLowerCase();
+        
+        if (modo === 'solo-coro') {
+            if (primeraLinea.includes('[coro]')) resultado.push(estrofa);
+        } 
+        else if (modo === 'verso-coro') {
+            if (primeraLinea.includes('[verso') || primeraLinea.includes('[estrofa') || primeraLinea.includes('[coro]')) {
+                resultado.push(estrofa);
+            }
+        }
+    });
+
+    // 🚨 Seguridad: Si la canción no tenía etiquetas y el filtro la vació por accidente, 
+    // devolvemos la canción completa para que el PDF no salga en blanco.
+    return resultado.length > 0 ? resultado.join('\n\n') : letraCruda;
+}
 // ==========================================
 // 7. PROGRAMACIÓN DEL BOTÓN DE EXPORTACIÓN A PDF
 // ==========================================
@@ -669,6 +726,9 @@ if (btnExportarPDF) {
             const cancionesDelDia = listaDominical.filter(c => c.dia === dia);
             
             cancionesDelDia.forEach(cancion => {
+                
+                // 🚨 PASAMOS LA LETRA POR EL FILTRO ANTES DE ARMAR EL PDF
+                const letraAImprimir = filtrarLetraPorSecciones(cancion.letra, cancion.modoImpresion);
                 const divCancion = document.createElement('div');
                 divCancion.className = 'cancion-pdf';
 
@@ -687,7 +747,7 @@ if (btnExportarPDF) {
                 if (cancion.id === 12 || cancion.titulo.includes("Alaba a Dios")) {
                     htmlCancion += `
                         <div class="letra-centrada" style="font-family: 'Courier New', Courier, monospace; font-size: 14pt; font-weight: bold; line-height: 1.4; margin-top: 15px;">
-                            ${procesarLetraYAcordes(cancion.letra)}
+                            ${procesarLetraYAcordes(letraAImprimir)}
                         </div>
                     `;
                 }
@@ -698,7 +758,7 @@ if (btnExportarPDF) {
                     let maxLongitudLinea = 0;
 
                     // Solo nos importa qué tan ancha es la frase más larga
-                    cancion.letra.split('\n').forEach(l => {
+                    letraAImprimir.split('\n').forEach(l => {
                         const soloTexto = l.trim().replace(/\[.*?\]/g, ""); 
                         if (soloTexto.length > maxLongitudLinea) maxLongitudLinea = soloTexto.length;
                     });
@@ -718,7 +778,7 @@ if (btnExportarPDF) {
 
                     htmlCancion += `
                         <div class="${claseColumna}" style="font-family: 'Courier New', Courier, monospace; ${estiloDinamico}">
-                            ${procesarLetraYAcordes(cancion.letra)}
+                            ${procesarLetraYAcordes(letraAImprimir)}
                         </div>
                     `;
                 }
