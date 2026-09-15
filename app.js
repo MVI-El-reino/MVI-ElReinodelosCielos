@@ -492,15 +492,22 @@ function aplicarFiltros() {
     });
 
     if (ordenFechaActivado) {
-        // Ordena poniendo las más viejas primero (o las que nunca se han tocado)
+        // Ordena poniendo las más viejas primero
         cancionesFiltradas.sort((a, b) => {
+            // 🚨 NUEVO: Regla matemática corregida para que el navegador no se trabe
+            if (!a.ultima_vez_tocada && !b.ultima_vez_tocada) return 0; // Si ambas son nuevas, quedan igual
             if (!a.ultima_vez_tocada) return -1;
             if (!b.ultima_vez_tocada) return 1;
             return new Date(a.ultima_vez_tocada) - new Date(b.ultima_vez_tocada);
         });
-        btnOrdenarFecha.style.background = "#e67e22"; // Naranja indicando que está activo
+        
+        // Botón Activo
+        btnOrdenarFecha.style.background = "#e67e22"; 
+        btnOrdenarFecha.innerHTML = "✖ Quitar Filtro"; // 🚨 Cambiamos el texto
     } else {
+        // Botón Inactivo
         btnOrdenarFecha.style.background = "#34495e";
+        btnOrdenarFecha.innerHTML = "⏳ Ver Menos Tocadas"; // 🚨 Regresa al original
     }
 
     renderizarListaFiltrada(cancionesFiltradas);
