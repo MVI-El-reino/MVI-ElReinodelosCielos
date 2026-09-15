@@ -480,44 +480,46 @@ const filtroGeneral = document.getElementById('filtro-general');
 
 function aplicarFiltros() {
     const textoBusqueda = buscador.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    const opcionSeleccionada = filtroGeneral.value;
+    // Detectamos si usaste el menú unificado o el de tipos
+    const menuFiltro = document.getElementById('filtro-tipo') || document.getElementById('filtro-general');
+    const tipoSeleccionado = menuFiltro ? menuFiltro.value : "Todas";
     
-    // 1. Filtrado de Texto y Tipo (Júbilo/Adoración)
     let cancionesFiltradas = inventarioCanciones.filter(cancion => {
         const tituloNormalizado = cancion.titulo.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         const cumpleTexto = tituloNormalizado.includes(textoBusqueda);
         
         let cumpleTipo = true;
-        if (opcionSeleccionada === "jubilo") cumpleTipo = cancion.tipo === "Júbilo";
-        if (opcionSeleccionada === "adoracion") cumpleTipo = cancion.tipo === "Adoración";
+        if (tipoSeleccionado.includes("jubilo") || tipoSeleccionado === "Júbilo") cumpleTipo = cancion.tipo === "Júbilo";
+        if (tipoSeleccionado.includes("adoracion") || tipoSeleccionado === "Adoración") cumpleTipo = cancion.tipo === "Adoración";
         
         return cumpleTexto && cumpleTipo;
     });
 
-    // 2. Lógica de Ordenamiento y Cambio de Color del Menú
-    if (opcionSeleccionada === "menos-tocadas") {
+    if (ordenFechaActivado) {
+        // Ordena poniendo las menos tocadas arriba
         cancionesFiltradas.sort((a, b) => {
             if (!a.ultima_vez_tocada && !b.ultima_vez_tocada) return 0;
-            if (!a.ultima_vez_tocada) return -1; // Las que nunca se han tocado van primero
+            if (!a.ultima_vez_tocada) return -1;
             if (!b.ultima_vez_tocada) return 1;
             return new Date(a.ultima_vez_tocada) - new Date(b.ultima_vez_tocada);
         });
-        filtroGeneral.style.background = "#e67e22"; // Naranja
         
-    } else if (opcionSeleccionada === "mas-recientes") {
-        cancionesFiltradas.sort((a, b) => {
-            if (!a.ultima_vez_tocada && !b.ultima_vez_tocada) return 0;
-            if (!a.ultima_vez_tocada) return 1; // Las viejas hasta el fondo
-            if (!b.ultima_vez_tocada) return -1;
-            return new Date(b.ultima_vez_tocada) - new Date(a.ultima_vez_tocada);
-        });
-        filtroGeneral.style.background = "#e74c3c"; // Rojo
+        btnOrdenarFecha.style.background = "#e67e22"; 
+        btnOrdenarFecha.innerHTML = "✖ Quitar Filtro"; 
         
+        // Dibuja la lista con los puntos verdes y fechas
+        renderizarListaFiltrada(cancionesFiltradas);
     } else {
-        // Para "todas", "jubilo" y "adoracion", ordenamos alfabéticamente
+        // Orden alfabético por defecto
         cancionesFiltradas.sort((a, b) => a.titulo.localeCompare(b.titulo));
-        filtroGeneral.style.background = "#34495e"; // Azul oscuro original
+        
+        btnOrdenarFecha.style.background = "#34495e";
+        btnOrdenarFecha.innerHTML = "⏳ Ver Menos Tocadas"; 
+        
+        // 🚨 Dibuja la lista LIMPIA (sin fechas, estado original)
+        mostrarLista(cancionesFiltradas); 
     }
+}
 
     // 3. Pintamos el resultado
     renderizarListaFiltrada(cancionesFiltradas);
@@ -534,14 +536,15 @@ if (btnOrdenarFecha) {
 }
 
 function renderizarListaFiltrada(lista) {
-    const contenedor = document.getElementById('lista-canciones');
+    // 🚨 EL ERROR ESTABA AQUÍ: Ahora apunta a 'contenedor-lista' correctamente
+    const contenedor = document.getElementById('contenedor-lista'); 
     contenedor.innerHTML = '';
     
     lista.forEach(cancion => {
-        const div = document.createElement('div');
-        div.className = 'item-cancion';
+        // Usamos <li> para mantener las propiedades de scroll de tu CSS
+        const li = document.createElement('li'); 
+        li.style.cursor = 'pointer';
         
-        // Calculamos el semáforo de tiempo
         let indicadorTiempo = "";
         if (cancion.ultima_vez_tocada) {
             const dias = Math.floor((new Date() - new Date(cancion.ultima_vez_tocada)) / (1000 * 60 * 60 * 24));
@@ -549,14 +552,15 @@ function renderizarListaFiltrada(lista) {
             else if (dias < 45) indicadorTiempo = "🟡 Hace un mes";
             else indicadorTiempo = "🟢 Hace mucho";
         } else {
-            indicadorTiempo = "🟢 Nueva/No registrada";
+            indicadorTiempo = "Nueva/No registrada";
         }
 
         const tag = cancion.tipo && cancion.tipo !== "Sin clasificar" ? ` <span style="font-size:0.7rem; background:#9b59b6; color:white; padding:2px 6px; border-radius:4px;">${cancion.tipo}</span>` : "";
         
-        div.innerHTML = `<strong>${cancion.titulo}</strong>${tag} <br><span style="font-size: 0.75rem; color: #7f8c8d;">${indicadorTiempo}</span>`;
-        div.onclick = () => mostrarCancion(cancion.id, div);
-        contenedor.appendChild(div);
+        li.innerHTML = `<div style="line-height: 1.4;"><strong>${cancion.titulo}</strong>${tag} <br><span style="font-size: 0.75rem; color: #7f8c8d;">${indicadorTiempo}</span></div>`;
+        li.onclick = () => mostrarCancion(cancion.id, null);
+        
+        contenedor.appendChild(li);
     });
 }
 
