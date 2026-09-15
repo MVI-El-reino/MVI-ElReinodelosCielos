@@ -476,61 +476,58 @@ function limpiarTexto(texto) {
 // 🚨 MOTOR DE BÚSQUEDA Y FILTRADO UNIFICADO
 // ==========================================
 const buscador = document.getElementById('buscador');
-const filtroGeneral = document.getElementById('filtro-general');
+const filtroGeneral = document.getElementById('filtro-general'); // 🚨 Nuestro nuevo menú único
 
 function aplicarFiltros() {
     const textoBusqueda = buscador.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    // Detectamos si usaste el menú unificado o el de tipos
-    const menuFiltro = document.getElementById('filtro-tipo') || document.getElementById('filtro-general');
-    const tipoSeleccionado = menuFiltro ? menuFiltro.value : "Todas";
     
+    // Obtenemos qué opción se eligió en el menú (si no hay nada, por defecto es "todas")
+    const opcionSeleccionada = filtroGeneral ? filtroGeneral.value : "todas";
+    
+    // 1. Filtramos por el texto escrito y por el tipo musical (Júbilo/Adoración)
     let cancionesFiltradas = inventarioCanciones.filter(cancion => {
         const tituloNormalizado = cancion.titulo.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         const cumpleTexto = tituloNormalizado.includes(textoBusqueda);
         
         let cumpleTipo = true;
-        if (tipoSeleccionado.includes("jubilo") || tipoSeleccionado === "Júbilo") cumpleTipo = cancion.tipo === "Júbilo";
-        if (tipoSeleccionado.includes("adoracion") || tipoSeleccionado === "Adoración") cumpleTipo = cancion.tipo === "Adoración";
+        if (opcionSeleccionada === "jubilo") cumpleTipo = cancion.tipo === "Júbilo";
+        if (opcionSeleccionada === "adoracion") cumpleTipo = cancion.tipo === "Adoración";
         
         return cumpleTexto && cumpleTipo;
     });
 
-    if (ordenFechaActivado) {
-        // Ordena poniendo las menos tocadas arriba
+    // 2. Ordenamos mágicamente la lista y cambiamos el color del menú
+    if (opcionSeleccionada === "menos-tocadas") {
         cancionesFiltradas.sort((a, b) => {
             if (!a.ultima_vez_tocada && !b.ultima_vez_tocada) return 0;
-            if (!a.ultima_vez_tocada) return -1;
+            if (!a.ultima_vez_tocada) return -1; // Las que nunca se han tocado van primero
             if (!b.ultima_vez_tocada) return 1;
             return new Date(a.ultima_vez_tocada) - new Date(b.ultima_vez_tocada);
         });
+        if (filtroGeneral) filtroGeneral.style.background = "#e67e22"; // Color Naranja
         
-        btnOrdenarFecha.style.background = "#e67e22"; 
-        btnOrdenarFecha.innerHTML = "✖ Quitar Filtro"; 
+    } else if (opcionSeleccionada === "mas-recientes") {
+        cancionesFiltradas.sort((a, b) => {
+            if (!a.ultima_vez_tocada && !b.ultima_vez_tocada) return 0;
+            if (!a.ultima_vez_tocada) return 1; // Las viejas hasta el fondo
+            if (!b.ultima_vez_tocada) return -1;
+            return new Date(b.ultima_vez_tocada) - new Date(a.ultima_vez_tocada);
+        });
+        if (filtroGeneral) filtroGeneral.style.background = "#e74c3c"; // Color Rojo
         
-        // Dibuja la lista con los puntos verdes y fechas
-        renderizarListaFiltrada(cancionesFiltradas);
     } else {
-        // Orden alfabético por defecto
+        // Orden alfabético normal para "todas", "jubilo", y "adoracion"
         cancionesFiltradas.sort((a, b) => a.titulo.localeCompare(b.titulo));
-        
-        btnOrdenarFecha.style.background = "#34495e";
-        btnOrdenarFecha.innerHTML = "⏳ Ver Menos Tocadas"; 
-        
-        // 🚨 Dibuja la lista LIMPIA (sin fechas, estado original)
-        renderizarListaFiltrada(cancionesFiltradas);
+        if (filtroGeneral) filtroGeneral.style.background = "#34495e"; // Color Azul original
     }
+
+    // 3. Pintamos en pantalla usando la función de scroll que ya corregimos
+    renderizarListaFiltrada(cancionesFiltradas);
 }
 
-
-// Escuchamos los cambios tanto del teclado como del menú
+// 🚨 Escuchamos los cambios tanto del teclado como del menú
 if (buscador) buscador.addEventListener('input', aplicarFiltros);
 if (filtroGeneral) filtroGeneral.addEventListener('change', aplicarFiltros);
-if (btnOrdenarFecha) {
-    btnOrdenarFecha.addEventListener('click', () => {
-        ordenFechaActivado = !ordenFechaActivado;
-        aplicarFiltros();
-    });
-}
 
 function renderizarListaFiltrada(lista) {
     // 🚨 EL ERROR ESTABA AQUÍ: Ahora apunta a 'contenedor-lista' correctamente
