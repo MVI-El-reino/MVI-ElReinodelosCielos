@@ -11,7 +11,19 @@
 
     <header>
         <h1>Plataforma Levitas</h1>
-        <input type="text" id="buscador" placeholder="Buscar alabanza...">
+        <!-- 🚨 NUEVO: Panel de Búsqueda y Filtrado -->
+            <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+                <input type="text" id="buscador" placeholder="🔍 Buscar alabanza..." style="flex: 2; padding: 12px; font-size: 1.1rem; border-radius: 8px; border: 1px solid #ddd; min-width: 200px;">
+                
+                <select id="filtro-tipo" style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #ddd; min-width: 120px;">
+                    <option value="Todas">Todas</option>
+                    <option value="Júbilo">🔥 Júbilo</option>
+                    <option value="Adoración">🕊️ Adoración</option>
+                </select>
+
+                <button id="btn-ordenar-fecha" style="background: #34495e; color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold;">⏳ Ver Menos Tocadas</button>
+            </div>
+        
         <button id="btn-ver-lista">Ver mi lista (0)</button>
         <button id="btn-exportar-pdf" style="display: none; background-color: #2ecc71; color: white;">Exportar lista a PDF</button>
         <!-- Botón para abrir el panel (Agregalo junto a tus otros botones del header) -->
@@ -64,6 +76,15 @@
 
             <!-- Contenedor del Editor Híbrido (Manual + IA) -->
             <div id="contenedor-editor" style="display: none; width: 100%; flex-direction: column; margin-top: 20px;">
+                <!-- 🚨 NUEVO: Etiqueta de la Canción -->
+                <div style="margin-bottom: 15px;">
+                    <label for="editor-tipo" style="font-weight: bold; color: var(--azul-marino);">Tipo de Alabanza:</label>
+                    <select id="editor-tipo" style="width: 100%; padding: 10px; border: 2px solid var(--dorado); border-radius: 8px; font-size: 1.1rem; margin-top: 5px;">
+                        <option value="Sin clasificar">Sin clasificar</option>
+                        <option value="Júbilo">Júbilo (Rápida)</option>
+                        <option value="Adoración">Adoración (Lenta)</option>
+                    </select>
+                </div>
                 
                 <p style="color: #555; margin-bottom: 10px; font-weight: bold;">Modo Edición: Mueve los acordes entre corchetes [ ] a la sílaba exacta donde quieres que caigan.</p>
                 
