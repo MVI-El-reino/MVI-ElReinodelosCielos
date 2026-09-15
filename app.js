@@ -472,40 +472,75 @@ function limpiarTexto(texto) {
         .toLowerCase();
 }
 
-// Buscador Inteligente (Busca en título y letra, ignorando acentos y acordes)
-document.getElementById('buscador').addEventListener('input', (evento) => {
+// ==========================================
+// 🚨 MOTOR DE BÚSQUEDA Y FILTRADO MULTIPLE
+// ==========================================
+const buscador = document.getElementById('buscador');
+const filtroTipo = document.getElementById('filtro-tipo');
+const btnOrdenarFecha = document.getElementById('btn-ordenar-fecha');
+let ordenFechaActivado = false;
+
+function aplicarFiltros() {
+    const textoBusqueda = buscador.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const tipoSeleccionado = filtroTipo.value;
     
-    // 1. AUTO-RETORNO: Si busca algo mientras ve la Lista Dominical, 
-    // lo regresamos automáticamente al repertorio general para que no se "trabe".
-    if (viendoListaDominical) {
-        viendoListaDominical = false;
-        const btnVerLista = document.getElementById('btn-ver-lista');
-        btnVerLista.textContent = `Ver mis listas (${listaDominical.length})`;
-        btnVerLista.style.backgroundColor = "var(--dorado)";
-        document.querySelector('#lista-canciones h2').textContent = "Repertorio Disponible";
-        
-        const btnExportarPDF = document.getElementById('btn-exportar-pdf');
-        if (btnExportarPDF) btnExportarPDF.style.display = 'none';
+    let cancionesFiltradas = inventarioCanciones.filter(cancion => {
+        const tituloNormalizado = cancion.titulo.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        const cumpleTexto = tituloNormalizado.includes(textoBusqueda);
+        const cumpleTipo = tipoSeleccionado === "Todas" || cancion.tipo === tipoSeleccionado;
+        return cumpleTexto && cumpleTipo;
+    });
+
+    if (ordenFechaActivado) {
+        // Ordena poniendo las más viejas primero (o las que nunca se han tocado)
+        cancionesFiltradas.sort((a, b) => {
+            if (!a.ultima_vez_tocada) return -1;
+            if (!b.ultima_vez_tocada) return 1;
+            return new Date(a.ultima_vez_tocada) - new Date(b.ultima_vez_tocada);
+        });
+        btnOrdenarFecha.style.background = "#e67e22"; // Naranja indicando que está activo
+    } else {
+        btnOrdenarFecha.style.background = "#34495e";
     }
 
-    const textoBusqueda = limpiarTexto(evento.target.value);
-    
-    const filtradas = inventarioCanciones.filter(cancion => {
-        // 2. ESCUDO PROTECTOR: Añadimos ( || "" ) por si en el JSON olvidaste 
-        // poner la letra o el título de alguna alabanza. Así la app no colapsa.
-        const tituloLimpio = limpiarTexto(cancion.titulo || "");
-        const letraOriginal = cancion.letra || ""; 
-        
-        // Quitamos los acordes y limpiamos el texto
-        const letraSinAcordes = letraOriginal.replace(/\[.*?\]/g, "");
-        const letraLimpia = limpiarTexto(letraSinAcordes);
+    renderizarListaFiltrada(cancionesFiltradas);
+}
 
-        // Verificamos coincidencias
-        return tituloLimpio.includes(textoBusqueda) || letraLimpia.includes(textoBusqueda);
+if (buscador) buscador.addEventListener('input', aplicarFiltros);
+if (filtroTipo) filtroTipo.addEventListener('change', aplicarFiltros);
+if (btnOrdenarFecha) {
+    btnOrdenarFecha.addEventListener('click', () => {
+        ordenFechaActivado = !ordenFechaActivado;
+        aplicarFiltros();
     });
+}
+
+function renderizarListaFiltrada(lista) {
+    const contenedor = document.getElementById('lista-canciones');
+    contenedor.innerHTML = '';
     
-    mostrarLista(filtradas, false);
-});
+    lista.forEach(cancion => {
+        const div = document.createElement('div');
+        div.className = 'item-cancion';
+        
+        // Calculamos el semáforo de tiempo
+        let indicadorTiempo = "";
+        if (cancion.ultima_vez_tocada) {
+            const dias = Math.floor((new Date() - new Date(cancion.ultima_vez_tocada)) / (1000 * 60 * 60 * 24));
+            if (dias < 14) indicadorTiempo = "🔴 Reciente";
+            else if (dias < 45) indicadorTiempo = "🟡 Hace un mes";
+            else indicadorTiempo = "🟢 Hace mucho";
+        } else {
+            indicadorTiempo = "🟢 Nueva/No registrada";
+        }
+
+        const tag = cancion.tipo && cancion.tipo !== "Sin clasificar" ? ` <span style="font-size:0.7rem; background:#9b59b6; color:white; padding:2px 6px; border-radius:4px;">${cancion.tipo}</span>` : "";
+        
+        div.innerHTML = `<strong>${cancion.titulo}</strong>${tag} <br><span style="font-size: 0.75rem; color: #7f8c8d;">${indicadorTiempo}</span>`;
+        div.onclick = () => mostrarCancion(cancion.id, div);
+        contenedor.appendChild(div);
+    });
+}
 
 
 // Botones de Transposición
@@ -1089,6 +1124,7 @@ const contenedorEditor = document.getElementById('contenedor-editor');
 const editorLetra = document.getElementById('editor-letra');
 const btnGuardarEdicion = document.getElementById('btn-guardar-edicion');
 const btnCancelarEdicion = document.getElementById('btn-cancelar-edicion');
+const editorTipo = document.getElementById('editor-tipo');
 import { update as dbUpdate, ref as dbRefUpdate } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 if (btnEditarCancion) {
@@ -1106,7 +1142,7 @@ if (btnEditarCancion) {
         contenedorLetra.style.display = 'none';
         document.getElementById('controles-tono').style.display = 'none';
         contenedorEditor.style.display = 'flex';
-        
+        editorTipo.value = cancion.tipo || "Sin clasificar";
         // Cargamos la letra original cruda (con los corchetes) en la caja de texto
         editorLetra.value = cancion.letra;
     });
@@ -1131,11 +1167,45 @@ if (btnGuardarEdicion) {
         btnGuardarEdicion.disabled = true;
 
         try {
-            // 1. Guardamos en Firebase (Usamos update para solo modificar la letra)
+            // Extraemos los valores de las 3 cajas del editor
+            const nuevoTitulo = document.getElementById('editor-titulo').value.trim();
+            const nuevaLetra = document.getElementById('editor-letra').value;
+            const nuevoTipo = document.getElementById('editor-tipo').value;
+
+            if (nuevoTitulo === "") {
+                alert("El título no puede estar vacío.");
+                return;
+            }
+
+            // 1. Guardamos en Firebase (Actualizamos letra, título Y tipo de alabanza)
             const cancionRef = dbRefUpdate(window.dbInstance, (cancion.id - 1).toString());
             await dbUpdate(cancionRef, {
-                letra: nuevaLetra
+                titulo: nuevoTitulo,
+                letra: nuevaLetra,
+                tipo: nuevoTipo
             });
+
+            // 2. Actualizamos la memoria local (Para que se vea el cambio sin recargar la página)
+            cancion.titulo = nuevoTitulo;
+            cancion.letra = nuevaLetra;
+            cancion.tipo = nuevoTipo;
+
+            // 3. Forzamos al buscador a actualizar la lista de la izquierda
+            const buscador = document.getElementById('buscador');
+            if (buscador) buscador.dispatchEvent(new Event('input')); 
+
+            // 4. Restauramos la vista cerrando el editor
+            contenedorEditor.style.display = 'none';
+            contenedorLetra.style.display = 'block';
+            document.getElementById('controles-tono').style.display = 'flex';
+            
+            // Forzamos el renderizado de la canción para ver los cambios
+            renderizarVisorDerecho();
+
+        } catch (error) {
+            console.error("Error al guardar la edición:", error);
+            alert("Hubo un error al guardar los cambios.");
+        }
 
             // 2. Actualizamos la memoria local
             cancion.letra = nuevaLetra;
