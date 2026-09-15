@@ -473,48 +473,59 @@ function limpiarTexto(texto) {
 }
 
 // ==========================================
-// 🚨 MOTOR DE BÚSQUEDA Y FILTRADO MULTIPLE
+// 🚨 MOTOR DE BÚSQUEDA Y FILTRADO UNIFICADO
 // ==========================================
 const buscador = document.getElementById('buscador');
-const filtroTipo = document.getElementById('filtro-tipo');
-const btnOrdenarFecha = document.getElementById('btn-ordenar-fecha');
-let ordenFechaActivado = false;
+const filtroGeneral = document.getElementById('filtro-general');
 
 function aplicarFiltros() {
     const textoBusqueda = buscador.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    const tipoSeleccionado = filtroTipo.value;
+    const opcionSeleccionada = filtroGeneral.value;
     
+    // 1. Filtrado de Texto y Tipo (Júbilo/Adoración)
     let cancionesFiltradas = inventarioCanciones.filter(cancion => {
         const tituloNormalizado = cancion.titulo.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         const cumpleTexto = tituloNormalizado.includes(textoBusqueda);
-        const cumpleTipo = tipoSeleccionado === "Todas" || cancion.tipo === tipoSeleccionado;
+        
+        let cumpleTipo = true;
+        if (opcionSeleccionada === "jubilo") cumpleTipo = cancion.tipo === "Júbilo";
+        if (opcionSeleccionada === "adoracion") cumpleTipo = cancion.tipo === "Adoración";
+        
         return cumpleTexto && cumpleTipo;
     });
 
-    if (ordenFechaActivado) {
-        // Ordena poniendo las más viejas primero
+    // 2. Lógica de Ordenamiento y Cambio de Color del Menú
+    if (opcionSeleccionada === "menos-tocadas") {
         cancionesFiltradas.sort((a, b) => {
-            // 🚨 NUEVO: Regla matemática corregida para que el navegador no se trabe
-            if (!a.ultima_vez_tocada && !b.ultima_vez_tocada) return 0; // Si ambas son nuevas, quedan igual
-            if (!a.ultima_vez_tocada) return -1;
+            if (!a.ultima_vez_tocada && !b.ultima_vez_tocada) return 0;
+            if (!a.ultima_vez_tocada) return -1; // Las que nunca se han tocado van primero
             if (!b.ultima_vez_tocada) return 1;
             return new Date(a.ultima_vez_tocada) - new Date(b.ultima_vez_tocada);
         });
+        filtroGeneral.style.background = "#e67e22"; // Naranja
         
-        // Botón Activo
-        btnOrdenarFecha.style.background = "#e67e22"; 
-        btnOrdenarFecha.innerHTML = "✖ Quitar Filtro"; // 🚨 Cambiamos el texto
+    } else if (opcionSeleccionada === "mas-recientes") {
+        cancionesFiltradas.sort((a, b) => {
+            if (!a.ultima_vez_tocada && !b.ultima_vez_tocada) return 0;
+            if (!a.ultima_vez_tocada) return 1; // Las viejas hasta el fondo
+            if (!b.ultima_vez_tocada) return -1;
+            return new Date(b.ultima_vez_tocada) - new Date(a.ultima_vez_tocada);
+        });
+        filtroGeneral.style.background = "#e74c3c"; // Rojo
+        
     } else {
-        // Botón Inactivo
-        btnOrdenarFecha.style.background = "#34495e";
-        btnOrdenarFecha.innerHTML = "⏳ Ver Menos Tocadas"; // 🚨 Regresa al original
+        // Para "todas", "jubilo" y "adoracion", ordenamos alfabéticamente
+        cancionesFiltradas.sort((a, b) => a.titulo.localeCompare(b.titulo));
+        filtroGeneral.style.background = "#34495e"; // Azul oscuro original
     }
 
+    // 3. Pintamos el resultado
     renderizarListaFiltrada(cancionesFiltradas);
 }
 
+// Escuchamos los cambios tanto del teclado como del menú
 if (buscador) buscador.addEventListener('input', aplicarFiltros);
-if (filtroTipo) filtroTipo.addEventListener('change', aplicarFiltros);
+if (filtroGeneral) filtroGeneral.addEventListener('change', aplicarFiltros);
 if (btnOrdenarFecha) {
     btnOrdenarFecha.addEventListener('click', () => {
         ordenFechaActivado = !ordenFechaActivado;
