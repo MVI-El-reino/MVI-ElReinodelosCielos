@@ -75,8 +75,18 @@
             <div id="letra-cancion"></div>
 
             <!-- Contenedor del Editor Híbrido (Manual + IA) -->
+            <!-- Contenedor del Editor Híbrido -->
             <div id="contenedor-editor" style="display: none; width: 100%; flex-direction: column; margin-top: 20px;">
-                <!-- 🚨 NUEVO: Etiqueta de la Canción -->
+                
+                <p style="color: #555; margin-bottom: 10px; font-weight: bold;">Modo Edición: Modifica el título, el tipo o los acordes.</p>
+                
+                <!-- 🚨 CAJA 1: TÍTULO -->
+                <div style="margin-bottom: 15px;">
+                    <label for="editor-titulo" style="font-weight: bold; color: var(--azul-marino);">Título de la Canción:</label>
+                    <input type="text" id="editor-titulo" style="width: 100%; padding: 10px; border: 2px solid var(--dorado); border-radius: 8px; font-size: 1.2rem; font-weight: bold; margin-top: 5px; color: var(--azul-marino);">
+                </div>
+
+                <!-- 🚨 CAJA 2: TIPO DE ALABANZA -->
                 <div style="margin-bottom: 15px;">
                     <label for="editor-tipo" style="font-weight: bold; color: var(--azul-marino);">Tipo de Alabanza:</label>
                     <select id="editor-tipo" style="width: 100%; padding: 10px; border: 2px solid var(--dorado); border-radius: 8px; font-size: 1.1rem; margin-top: 5px;">
