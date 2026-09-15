@@ -517,13 +517,10 @@ function aplicarFiltros() {
         btnOrdenarFecha.innerHTML = "⏳ Ver Menos Tocadas"; 
         
         // 🚨 Dibuja la lista LIMPIA (sin fechas, estado original)
-        mostrarLista(cancionesFiltradas); 
+        renderizarListaFiltrada(cancionesFiltradas);
     }
 }
 
-    // 3. Pintamos el resultado
-    renderizarListaFiltrada(cancionesFiltradas);
-}
 
 // Escuchamos los cambios tanto del teclado como del menú
 if (buscador) buscador.addEventListener('input', aplicarFiltros);
