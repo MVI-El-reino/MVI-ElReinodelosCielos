@@ -1181,7 +1181,6 @@ if (btnGuardarEdicion) {
         const cancion = inventarioCanciones.find(c => c.id === cancionActualId);
         if (!cancion) return;
 
-        const nuevaLetra = editorLetra.value;
         btnGuardarEdicion.textContent = "Guardando...";
         btnGuardarEdicion.disabled = true;
 
@@ -1193,6 +1192,8 @@ if (btnGuardarEdicion) {
 
             if (nuevoTitulo === "") {
                 alert("El título no puede estar vacío.");
+                btnGuardarEdicion.textContent = "Guardar Cambios";
+                btnGuardarEdicion.disabled = false;
                 return;
             }
 
@@ -1223,25 +1224,10 @@ if (btnGuardarEdicion) {
 
         } catch (error) {
             console.error("Error al guardar la edición:", error);
-            alert("Hubo un error al guardar los cambios.");
-        }
-
-            // 2. Actualizamos la memoria local
-            cancion.letra = nuevaLetra;
-
-            // 3. Restauramos la vista y volvemos a renderizar
-            contenedorEditor.style.display = 'none';
-            contenedorLetra.style.display = 'block';
-            document.getElementById('controles-tono').style.display = 'flex';
-            
-            // Forzamos el renderizado para ver los cambios aplicados
-            renderizarVisorDerecho();
-
-        } catch (error) {
-            console.error("Error al guardar la edición:", error);
             alert("Hubo un error al guardar en la nube. Revisa tu conexión.");
         } finally {
-            btnGuardarEdicion.textContent = "💾 Guardar Cambios en la Nube";
+            // Restauramos el botón a su estado normal pase lo que pase
+            btnGuardarEdicion.textContent = "Guardar Cambios";
             btnGuardarEdicion.disabled = false;
         }
     });
