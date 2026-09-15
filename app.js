@@ -530,15 +530,14 @@ if (buscador) buscador.addEventListener('input', aplicarFiltros);
 if (filtroGeneral) filtroGeneral.addEventListener('change', aplicarFiltros);
 
 function renderizarListaFiltrada(lista) {
-    // 🚨 EL ERROR ESTABA AQUÍ: Ahora apunta a 'contenedor-lista' correctamente
     const contenedor = document.getElementById('contenedor-lista'); 
     contenedor.innerHTML = '';
     
     lista.forEach(cancion => {
-        // Usamos <li> para mantener las propiedades de scroll de tu CSS
         const li = document.createElement('li'); 
         li.style.cursor = 'pointer';
         
+        // Semáforo de fechas
         let indicadorTiempo = "";
         if (cancion.ultima_vez_tocada) {
             const dias = Math.floor((new Date() - new Date(cancion.ultima_vez_tocada)) / (1000 * 60 * 60 * 24));
@@ -546,10 +545,19 @@ function renderizarListaFiltrada(lista) {
             else if (dias < 45) indicadorTiempo = "🟡 Hace un mes";
             else indicadorTiempo = "🟢 Hace mucho";
         } else {
-            indicadorTiempo = "Nueva/No registrada";
+            indicadorTiempo = "🟢 Nueva/No registrada";
         }
 
-        const tag = cancion.tipo && cancion.tipo !== "Sin clasificar" ? ` <span style="font-size:0.7rem; background:#9b59b6; color:white; padding:2px 6px; border-radius:4px;">${cancion.tipo}</span>` : "";
+        // 🚨 NUEVO: Detector automático de colores para las etiquetas
+        let colorEtiqueta = "#9b59b6"; // Morado elegante por defecto (Adoración)
+        if (cancion.tipo === "Júbilo") {
+            colorEtiqueta = "#e67e22"; // Naranja vibrante para Júbilo
+        }
+
+        // Dibujamos la etiqueta aplicando el color que se haya detectado arriba
+        const tag = cancion.tipo && cancion.tipo !== "Sin clasificar" 
+            ? ` <span style="font-size:0.7rem; background:${colorEtiqueta}; color:white; padding:2px 6px; border-radius:4px;">${cancion.tipo}</span>` 
+            : "";
         
         li.innerHTML = `<div style="line-height: 1.4;"><strong>${cancion.titulo}</strong>${tag} <br><span style="font-size: 0.75rem; color: #7f8c8d;">${indicadorTiempo}</span></div>`;
         li.onclick = () => mostrarCancion(cancion.id, null);
@@ -557,7 +565,6 @@ function renderizarListaFiltrada(lista) {
         contenedor.appendChild(li);
     });
 }
-
 
 // Botones de Transposición
 document.getElementById('subir-tono').addEventListener('click', () => {
