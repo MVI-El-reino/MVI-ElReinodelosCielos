@@ -754,8 +754,27 @@ if (btnExportarPDF) {
             }
         `;
         areaImpresion.appendChild(estiloPDF);
-        // ---------------------------------------------------------
+        // =========================================================
+        // 🚨 AUTOMATIZACIÓN DE DÍA POR CANTIDAD DE CANCIONES (NUEVO)
+        // =========================================================
+        let diaDeducido = "domingo"; 
+        if (listaDominical.length <= 4) {
+            diaDeducido = "viernes";
+        }
+        
+        const fechaExacta = calcularFechaDelServicio(diaDeducido);
 
+        // Guardamos la fecha en Firebase para toda la lista
+        listaDominical.forEach(async (cancion) => {
+            const cancionRef = dbRefUpdate(window.dbInstance, (cancion.id - 1).toString());
+            await dbUpdate(cancionRef, { ultima_vez_tocada: fechaExacta });
+            
+            const index = inventarioCanciones.findIndex(c => c.id === cancion.id);
+            if(index !== -1) inventarioCanciones[index].ultima_vez_tocada = fechaExacta;
+        });
+        // =========================================================
+
+        // ---------------------------------------------------------
         const diasOrden = ["Miércoles", "Viernes", "Domingo"];
         
         diasOrden.forEach(dia => {
