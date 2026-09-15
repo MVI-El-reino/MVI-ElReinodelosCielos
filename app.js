@@ -1148,7 +1148,7 @@ import { update as dbUpdate, ref as dbRefUpdate } from "https://www.gstatic.com/
 
 if (btnEditarCancion) {
     btnEditarCancion.addEventListener('click', () => {
-        // Solo permitimos editar si estamos en el catálogo principal (para evitar conflictos de transposición)
+        // Solo permitimos editar si estamos en el catálogo principal
         if (viendoListaDominical) {
             alert("Para editar una canción, búscala en el Repertorio Disponible (No dentro de tu lista de reunión).");
             return;
@@ -1157,12 +1157,14 @@ if (btnEditarCancion) {
         const cancion = inventarioCanciones.find(c => c.id === cancionActualId);
         if (!cancion) return;
 
-        // Ocultamos la vista normal y los controles, mostramos el editor
+        // Ocultamos la vista normal y mostramos el editor
         contenedorLetra.style.display = 'none';
         document.getElementById('controles-tono').style.display = 'none';
         contenedorEditor.style.display = 'flex';
+        
+        // 🚨 CARGAMOS LOS DATOS EN LAS 3 CAJAS
+        document.getElementById('editor-titulo').value = cancion.titulo;
         editorTipo.value = cancion.tipo || "Sin clasificar";
-        // Cargamos la letra original cruda (con los corchetes) en la caja de texto
         editorLetra.value = cancion.letra;
     });
 }
