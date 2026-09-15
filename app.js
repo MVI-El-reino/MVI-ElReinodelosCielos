@@ -684,14 +684,14 @@ if (btnExportarPDF) {
         areaImpresion.id = 'area-impresion-pdf';
 
       // ---------------------------------------------------------
-        // 🚨 CANDADO TIPOGRÁFICO Y ANTI-CORTES PARA EL PDF
+        // CANDADO TIPOGRÁFICO Y ANTI-CORTES PARA EL PDF
         // ---------------------------------------------------------
         const estiloPDF = document.createElement('style');
         estiloPDF.innerHTML = `
-            /* 🚨 NUEVO: ESTABLECER MÁRGENES MÍNIMOS POR DEFECTO 🚨 */
+            /* FORMATO "TABLET/CELULAR" PARA EL PDF 🚨 */
             @page {
-                size: auto;
-                margin: 5mm; /* Fuerza al navegador a usar el margen más pequeño posible */
+                size: A5 portrait; /* Cambiamos a A5 para que no se achique en los celulares */
+                margin: 4mm;
             }
 
             @media print {
@@ -703,18 +703,14 @@ if (btnExportarPDF) {
                     word-break: normal !important;
                 }
                 
-                /* Oculta el comportamiento de scroll en el papel impreso */
+                /* (El resto de tus reglas de ocultar scroll se quedan igual...) */
                 #area-impresion-pdf .bloque-linea {
                     overflow-x: hidden !important;
                     overflow-y: hidden !important;
                 }
-                
-                /* Fuerza a los navegadores a desaparecer la barra gráfica */
                 #area-impresion-pdf ::-webkit-scrollbar {
                     display: none !important;
                 }
-
-                /* PROHÍBE PARTIR LOS PÁRRAFOS A LA MITAD */
                 #area-impresion-pdf .estrofa-musical {
                     break-inside: avoid !important;
                     page-break-inside: avoid !important;
