@@ -11,15 +11,20 @@
 
     <header>
         <h1>Plataforma Levitas</h1>
-        <!-- 🚨 NUEVO: Panel de Búsqueda y Filtrado -->
+            
             <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
-                <input type="text" id="buscador" placeholder="🔍 Buscar alabanza..." style="flex: 2; padding: 12px; font-size: 1.1rem; border-radius: 8px; border: 1px solid #ddd; min-width: 200px;">
                 
-                <select id="filtro-tipo" style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #ddd; min-width: 120px;">
-                    <option value="Todas">Todas</option>
-                    <option value="Júbilo">🔥 Júbilo</option>
-                    <option value="Adoración">🕊️ Adoración</option>
+                <input type="text" id="buscador" placeholder="Buscar alabanza..." style="flex: 2; padding: 12px; font-size: 1.1rem; border-radius: 8px; border: 1px solid #ddd; min-width: 200px;">
+                
+                <select id="filtro-general" style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #ddd; min-width: 180px; background-color: #34495e; color: white; font-weight: bold; cursor: pointer;">
+                    <option value="todas">🔤 Todas (Alfabético)</option>
+                    <option value="jubilo"> Solo Júbilo</option>
+                    <option value="adoracion"> Solo Adoración</option>
+                    <option value="menos-tocadas"> Menos Tocadas (Todas)</option>
+                    <option value="mas-recientes"> Más Recientes (Todas)</option>
                 </select>
+
+            </div>
 
                 <button id="btn-ordenar-fecha" style="background: #34495e; color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold;">⏳ Ver Menos Tocadas</button>
             </div>
@@ -74,7 +79,6 @@
 
             <div id="letra-cancion"></div>
 
-            <!-- Contenedor del Editor Híbrido (Manual + IA) -->
             <!-- Contenedor del Editor Híbrido -->
             <div id="contenedor-editor" style="display: none; width: 100%; flex-direction: column; margin-top: 20px;">
                 
