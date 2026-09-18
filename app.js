@@ -1123,17 +1123,26 @@ if(btnProcesar) {
             const cancionProcesada = JSON.parse(textoJSON);
 
             // =========================================================
-            // 🚨 NUEVO: SISTEMA ANTI-DUPLICADOS E INTERCEPCIÓN
+            // 🚨 NUEVO: SISTEMA ANTI-DUPLICADOS MEJORADO (Detecta por la base del título)
             // =========================================================
             
-            // Función para quitar acentos y mayúsculas para comparar bien
-            const normalizar = (str) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-            const tituloNuevo = normalizar(cancionProcesada.titulo);
+            // Función para limpiar texto y quitar el autor (todo lo que esté después de un guion)
+            const limpiarTituloBase = (str) => {
+                let limpio = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+                // Si el título tiene un guion (ej. "Canción - Autor"), nos quedamos solo con "Canción"
+                if (limpio.includes('-')) {
+                    limpio = limpio.split('-')[0];
+                }
+                return limpio.trim(); // Quitamos espacios extra al principio o final
+            };
+
+            const tituloBaseNuevo = limpiarTituloBase(cancionProcesada.titulo);
             
-            // Buscamos si existe alguna canción con un título similar
-            const cancionExistente = inventarioCanciones.find(c => 
-                normalizar(c.titulo).includes(tituloNuevo) || tituloNuevo.includes(normalizar(c.titulo))
-            );
+            // Buscamos si existe alguna canción cuya base sea idéntica
+            const cancionExistente = inventarioCanciones.find(c => {
+                const tituloBaseExistente = limpiarTituloBase(c.titulo);
+                return tituloBaseExistente === tituloBaseNuevo;
+            });
 
             let idAGuardar;
             let esActualizacion = false;
@@ -1429,6 +1438,59 @@ if (btnIAEdicion) {
             mensajeIAEdicion.textContent = "❌ Error al procesar. Intenta de nuevo.";
         } finally {
             btnIAEdicion.disabled = false;
+        }
+    });
+}
+
+// ==========================================
+// 🚨 NUEVA FUNCIÓN: ELIMINAR CANCIÓN DEFINITIVAMENTE
+// ==========================================
+const btnEliminarCancion = document.getElementById('btn-eliminar-cancion');
+import { remove as dbRemove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+if (btnEliminarCancion) {
+    btnEliminarCancion.addEventListener('click', async () => {
+        // Bloqueamos la eliminación si están viendo la lista de un culto
+        if (viendoListaDominical) {
+            alert("Para eliminar una canción definitivamente, primero búscala en el Repertorio Disponible.");
+            return;
+        }
+
+        const cancion = inventarioCanciones.find(c => c.id === cancionActualId);
+        if (!cancion) return;
+
+        // Doble confirmación de seguridad
+        const confirmacion = confirm(`⚠️ ¿Estás completamente seguro de que quieres ELIMINAR "${cancion.titulo}"?\n\nEsta acción borrará la canción de la base de datos y no se puede deshacer.`);
+        
+        if (confirmacion) {
+            btnEliminarCancion.textContent = "Borrando...";
+            btnEliminarCancion.disabled = true;
+
+            try {
+                // 1. Apuntamos al ID exacto de la canción en Firebase y lo destruimos
+                const cancionRef = dbRefUpdate(window.dbInstance, (cancion.id - 1).toString());
+                await dbRemove(cancionRef);
+
+                // 2. La borramos de la memoria local para que desaparezca al instante
+                inventarioCanciones = inventarioCanciones.filter(c => c.id !== cancion.id);
+
+                // 3. Forzamos al buscador a refrescar la lista de la izquierda
+                const buscador = document.getElementById('buscador');
+                if (buscador) buscador.dispatchEvent(new Event('input'));
+
+                // 4. Limpiamos la pantalla derecha (el visor)
+                limpaVisorDerecho();
+                
+                alert("✅ Canción eliminada con éxito.");
+
+            } catch (error) {
+                console.error("Error al eliminar la canción:", error);
+                alert("Hubo un error al intentar eliminar la canción de la nube. Revisa tu conexión.");
+            } finally {
+                // Restauramos el botón por si acaso
+                btnEliminarCancion.innerHTML = "🗑️ Eliminar";
+                btnEliminarCancion.disabled = false;
+            }
         }
     });
 }
