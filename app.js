@@ -535,7 +535,12 @@ function renderizarListaFiltrada(lista) {
     
     lista.forEach(cancion => {
         const li = document.createElement('li'); 
-        li.style.cursor = 'pointer';
+        // 🚨 NUEVO: Flexbox para empujar el calendario hacia la derecha
+        li.style.display = 'flex';
+        li.style.justifyContent = 'space-between';
+        li.style.alignItems = 'center';
+        li.style.borderBottom = '1px solid #334'; // Una línea muy sutil para separar canciones
+        li.style.padding = '8px 0';
         
         // Semáforo de fechas
         let indicadorTiempo = "";
@@ -548,19 +553,55 @@ function renderizarListaFiltrada(lista) {
             indicadorTiempo = "🟢 Nueva/No registrada";
         }
 
-        // 🚨 NUEVO: Detector automático de colores para las etiquetas
-        let colorEtiqueta = "#9b59b6"; // Morado elegante por defecto (Adoración)
+        // Detector de colores
+        let colorEtiqueta = "#9b59b6"; 
         if (cancion.tipo === "Júbilo") {
-            colorEtiqueta = "#e67e22"; // Naranja vibrante para Júbilo
+            colorEtiqueta = "#e67e22"; 
         }
 
-        // Dibujamos la etiqueta aplicando el color que se haya detectado arriba
         const tag = cancion.tipo && cancion.tipo !== "Sin clasificar" 
             ? ` <span style="font-size:0.7rem; background:${colorEtiqueta}; color:white; padding:2px 6px; border-radius:4px;">${cancion.tipo}</span>` 
             : "";
         
-        li.innerHTML = `<div style="line-height: 1.4;"><strong>${cancion.titulo}</strong>${tag} <br><span style="font-size: 0.75rem; color: #7f8c8d;">${indicadorTiempo}</span></div>`;
-        li.onclick = () => mostrarCancion(cancion.id, null);
+        // 🚨 NUEVA ESTRUCTURA: Texto (Izquierda) | Calendario (Derecha)
+        li.innerHTML = `
+            <div class="info-click" style="line-height: 1.4; flex: 1; cursor: pointer; padding-right: 10px;">
+                <strong>${cancion.titulo}</strong>${tag} <br>
+                <span style="font-size: 0.75rem; color: #7f8c8d;">${indicadorTiempo}</span>
+            </div>
+            <div title="Modificar fecha manualmente">
+                <input type="date" class="input-fecha-manual" value="${cancion.ultima_vez_tocada || ''}" style="font-size: 0.75rem; padding: 4px; border: 1px solid #ddd; border-radius: 5px; background: #fff; cursor: pointer; outline: none; color: #333; max-width: 110px;">
+            </div>
+        `;
+        
+        // Al hacer clic SOLO en el texto, abrimos la canción (así evitamos que se abra al usar el calendario)
+        li.querySelector('.info-click').onclick = () => mostrarCancion(cancion.id, null);
+        
+        // 🚨 GUARDADO MANUAL: Al cambiar la fecha en el calendario
+        const inputFecha = li.querySelector('.input-fecha-manual');
+        inputFecha.addEventListener('change', async (e) => {
+            const nuevaFecha = e.target.value; 
+            
+            try {
+                // Usamos las funciones de Firebase que ya están importadas en tu archivo
+                const cancionRef = dbRefUpdate(window.dbInstance, (cancion.id - 1).toString());
+                await dbUpdate(cancionRef, { ultima_vez_tocada: nuevaFecha });
+                
+                // Actualizamos la memoria
+                cancion.ultima_vez_tocada = nuevaFecha;
+                
+                // Efecto visual: El cuadrito se pinta de verde un momento para confirmar el guardado
+                inputFecha.style.background = "#d4edda"; 
+                inputFecha.style.borderColor = "#28a745";
+                
+                // Refrescamos la lista en 1 segundo para que el texto "Reciente/Hace un mes" se recalcule
+                setTimeout(() => aplicarFiltros(), 1000); 
+
+            } catch (error) {
+                console.error("Error al actualizar fecha manual:", error);
+                alert("No se pudo guardar la fecha manual. Revisa tu conexión a internet.");
+            }
+        });
         
         contenedor.appendChild(li);
     });
