@@ -1135,25 +1135,42 @@ if(btnProcesar) {
             const cancionProcesada = JSON.parse(textoJSON);
 
             // =========================================================
-            // 🚨 NUEVO: SISTEMA ANTI-DUPLICADOS MEJORADO (Detecta por la base del título)
+            // 🚨 NUEVO: SISTEMA ANTI-DUPLICADOS 
             // =========================================================
             
-            // Función para limpiar texto y quitar el autor (todo lo que esté después de un guion)
-            const limpiarTituloBase = (str) => {
+            // 1. Desarmamos el título: Sacamos las palabras, las ordenamos y las unimos
+            const obtenerPalabrasClave = (str) => {
                 let limpio = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-                // Si el título tiene un guion (ej. "Canción - Autor"), nos quedamos solo con "Canción"
-                if (limpio.includes('-')) {
-                    limpio = limpio.split('-')[0];
-                }
-                return limpio.trim(); // Quitamos espacios extra al principio o final
+                limpio = limpio.replace(/[^a-z0-9\s]/g, " "); // Cambia guiones y paréntesis por espacios
+                // Nos quedamos solo con palabras de más de 2 letras y las ordenamos alfabéticamente
+                return limpio.split(/\s+/).filter(palabra => palabra.length > 2).sort().join(" ");
             };
 
-            const tituloBaseNuevo = limpiarTituloBase(cancionProcesada.titulo);
+            // 2. Extraemos la primera frase real de la canción (ignorando acordes y saltos vacíos)
+            const obtenerPrimeraLinea = (letra) => {
+                if (!letra) return "";
+                let letraLimpia = letra.replace(/\[.*?\]/g, ""); // Borra todos los [Acordes]
+                // Buscamos la primera línea que tenga texto real
+                let lineas = letraLimpia.split('\n')
+                                        .map(l => l.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))
+                                        .filter(l => l.length > 5 && !l.includes("verso") && !l.includes("coro")); 
+                return lineas.length > 0 ? lineas[0] : "";
+            };
+
+            const tituloClaveNuevo = obtenerPalabrasClave(cancionProcesada.titulo);
+            const primeraLineaNueva = obtenerPrimeraLinea(cancionProcesada.letra);
             
-            // Buscamos si existe alguna canción cuya base sea idéntica
+            // 3. Comparamos contra todo el inventario guardado
             const cancionExistente = inventarioCanciones.find(c => {
-                const tituloBaseExistente = limpiarTituloBase(c.titulo);
-                return tituloBaseExistente === tituloBaseNuevo;
+                const tituloClaveExistente = obtenerPalabrasClave(c.titulo);
+                const primeraLineaExistente = obtenerPrimeraLinea(c.letra);
+                
+                // Es duplicado si las palabras del título coinciden (sin importar el orden)
+                const coincidenTitulos = (tituloClaveExistente === tituloClaveNuevo);
+                // O si la primera frase cantada es idéntica
+                const coincidenLetras = (primeraLineaExistente !== "" && primeraLineaExistente === primeraLineaNueva);
+
+                return coincidenTitulos || coincidenLetras;
             });
 
             let idAGuardar;
@@ -1161,7 +1178,7 @@ if(btnProcesar) {
 
             if (cancionExistente) {
                 // Si existe, le preguntamos al usuario qué hacer
-                const mensaje = `⚠️ ¡Ojo! Parece que ya existe una canción llamada:\n"${cancionExistente.titulo}"\n\n¿Quieres ACTUALIZAR la existente con esta nueva versión?\n\n• [Aceptar] = Sobrescribir la anterior\n• [Cancelar] = Guardar como una nueva copia`;
+                const mensaje = `⚠️ ¡Ojo! Parece que ya existe una canción parecida:\n"${cancionExistente.titulo}"\n\n¿Quieres ACTUALIZAR la existente con esta nueva versión?\n\n• [Aceptar] = Sobrescribir la anterior\n• [Cancelar] = Guardar como una nueva copia`;
                 
                 if (confirm(mensaje)) {
                     // El usuario eligió Aceptar (Actualizar)
