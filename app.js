@@ -408,6 +408,14 @@ function renderizarVisorDerecho() {
     document.getElementById('controles-tono').style.display = 'flex';
     document.getElementById('tono-actual').innerHTML = `Tono: <span style="color:#E67E22;">${tonoMostrado}</span>`;
     
+    // 🚨 NUEVO: Si el editor está abierto, actualizamos las cajas dinámicamente
+    const contenedorEditor = document.getElementById('contenedor-editor');
+    if (contenedorEditor && contenedorEditor.style.display === 'flex') {
+        document.getElementById('editor-titulo').value = cancion.titulo;
+        document.getElementById('editor-tipo').value = cancion.tipo || "Sin clasificar";
+        document.getElementById('editor-letra').value = cancion.letra;
+    }
+
     // 🚨 SEGURIDAD: Buscamos el elemento primero
     const contenedorLetra = document.getElementById('letra-cancion');
     
@@ -428,9 +436,7 @@ function renderizarVisorDerecho() {
             contenedorLetra.classList.remove('letra-doble-columna');
         }
         
-        // 🚨 AGREGAMOS LA CLASE PARA EL ESCALADO QUE QUERÍAS
         contenedorLetra.classList.add('letra-escalable');
-        
         contenedorLetra.innerHTML = procesarLetraYAcordes(letraTranspuesta);
         letraActual = letraTranspuesta;
         
@@ -457,6 +463,12 @@ function limpaVisorDerecho() {
     document.getElementById('titulo-cancion').textContent = 'Selecciona una alabanza';
     document.getElementById('controles-tono').style.display = 'none';
     document.getElementById('letra-cancion').innerHTML = '';
+    
+    // 🚨 NUEVO: Asegurarnos de cerrar el editor si cambiamos a otra vista
+    const contenedorEditor = document.getElementById('contenedor-editor');
+    const contenedorLetra = document.getElementById('letra-cancion');
+    if (contenedorEditor) contenedorEditor.style.display = 'none';
+    if (contenedorLetra) contenedorLetra.style.display = 'block';
 }
 
 // ==========================================
