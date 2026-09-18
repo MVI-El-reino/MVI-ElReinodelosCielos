@@ -1210,10 +1210,18 @@ if(btnProcesar) {
 
             }, 1500);
 
-        } catch (error) {
+            } catch (error) {
             console.error(error);
-            mensajeEstado.style.color = "red";
-            mensajeEstado.textContent = "❌ Error al procesar. Revisa la consola.";
+            
+            // 🚨 NUEVO: Mensaje personalizado si Google está saturado (Error 503)
+            if (error.message && error.message.includes("503")) {
+                mensajeEstado.style.color = "#e67e22"; // Naranja de advertencia
+                mensajeEstado.textContent = "⏳ Servidores de IA ocupados. Por favor, intenta procesar de nuevo.";
+            } else {
+                // Mensaje original para otros errores (ej. sin internet o foto borrosa)
+                mensajeEstado.style.color = "red";
+                mensajeEstado.textContent = "❌ Error al procesar. Revisa la consola.";
+            }
         } finally {
             btnProcesar.disabled = false;
         }
