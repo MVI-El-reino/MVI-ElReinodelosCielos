@@ -825,27 +825,45 @@ if (btnExportarPDF) {
         const areaImpresion = document.createElement('div');
         areaImpresion.id = 'area-impresion-pdf';
 
-      // ---------------------------------------------------------
-        // CANDADO TIPOGRÁFICO Y ANTI-CORTES PARA EL PDF
+    // ---------------------------------------------------------
+        // 🚨 CANDADO TIPOGRÁFICO Y ANTI-CORTES PARA EL PDF
         // ---------------------------------------------------------
         const estiloPDF = document.createElement('style');
         estiloPDF.innerHTML = `
-            /* FORMATO "TABLET/CELULAR" PARA EL PDF 🚨 */
             @page {
-                size: A5 portrait; /* Cambiamos a A5 para que no se achique en los celulares */
+                size: A5 portrait; 
                 margin: 4mm;
             }
 
             @media print {
+                /* 1. FORZAR SALTO DE PÁGINA: Cada canción inicia en una hoja limpia */
+                .cancion-pdf {
+                    page-break-after: always !important;
+                    break-after: page !important;
+                }
+
+                /* 2. ETIQUETAS VISIBLES: Resaltamos [Coro], [Verso], etc. */
+                #area-impresion-pdf .marcador-seccion {
+                    font-family: 'Segoe UI', sans-serif !important;
+                    background-color: #e0e0e0 !important;
+                    color: #333 !important;
+                    padding: 3px 8px !important;
+                    border-radius: 4px !important;
+                    font-weight: bold !important;
+                    font-size: 0.85em !important; /* Ligeramente más pequeño que la letra, pero muy visible */
+                    display: inline-block;
+                    margin-bottom: 5px;
+                }
+
                 #area-impresion-pdf pre, 
                 #area-impresion-pdf .linea-acordes, 
                 #area-impresion-pdf .linea-letras {
                     font-family: 'Courier New', Courier, monospace !important;
                     white-space: pre !important;
                     word-break: normal !important;
+                    margin: 0 !important;
                 }
                 
-                /* (El resto de tus reglas de ocultar scroll se quedan igual...) */
                 #area-impresion-pdf .bloque-linea {
                     overflow-x: hidden !important;
                     overflow-y: hidden !important;
@@ -853,6 +871,8 @@ if (btnExportarPDF) {
                 #area-impresion-pdf ::-webkit-scrollbar {
                     display: none !important;
                 }
+                
+                /* Mantiene los acordes pegados a su letra si hay salto de página */
                 #area-impresion-pdf .estrofa-musical {
                     break-inside: avoid !important;
                     page-break-inside: avoid !important;
@@ -871,30 +891,24 @@ if (btnExportarPDF) {
         
         const fechaExacta = calcularFechaDelServicio(diaDeducido);
 
-        // Guardamos la fecha en Firebase para toda la lista
         listaDominical.forEach(async (cancion) => {
             const cancionRef = dbRefUpdate(window.dbInstance, (cancion.id - 1).toString());
             await dbUpdate(cancionRef, { ultima_vez_tocada: fechaExacta });
-            
             const index = inventarioCanciones.findIndex(c => c.id === cancion.id);
             if(index !== -1) inventarioCanciones[index].ultima_vez_tocada = fechaExacta;
         });
         // =========================================================
 
-        // ---------------------------------------------------------
         const diasOrden = ["Miércoles", "Viernes", "Domingo"];
         
         diasOrden.forEach(dia => {
             const cancionesDelDia = listaDominical.filter(c => c.dia === dia);
             
             cancionesDelDia.forEach(cancion => {
-                
-                // 🚨 PASAMOS LA LETRA POR EL FILTRO ANTES DE ARMAR EL PDF
                 const letraAImprimir = filtrarLetraPorSecciones(cancion.letra, cancion.modoImpresion);
                 const divCancion = document.createElement('div');
                 divCancion.className = 'cancion-pdf';
 
-                // 1. Construimos el HTML base (Título y Tono)
                 let htmlCancion = `
                     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #D4AF37; margin-bottom: 15px; padding-bottom: 5px;">
                         <h2 style="margin: 0; border: none; padding: 0; font-size: 26pt;">${cancion.titulo}</h2>
@@ -903,47 +917,29 @@ if (btnExportarPDF) {
                     <div class="tono-pdf" style="font-size: 15pt; margin-bottom: 20px; text-align: center;">Tono para la alabanza: ${cancion.tono_original}</div>
                 `;
 
-               // ========================================================
-                // 🚨 EXCEPCIÓN VIP: SOLO PARA "ALABA A DIOS" (ID: 12)
-                // ========================================================
-                if (cancion.id === 12 || cancion.titulo.includes("Alaba a Dios")) {
-                    htmlCancion += `
-                        <div class="letra-centrada" style="font-family: 'Courier New', Courier, monospace; font-size: 14pt; font-weight: bold; line-height: 1.4; margin-top: 15px;">
-                            ${procesarLetraYAcordes(letraAImprimir)}
-                        </div>
-                    `;
+                // 🚨 REGRESAMOS AL MODO DE FUENTES GIGANTES
+                let maxLongitudLinea = 0;
+                letraAImprimir.split('\n').forEach(l => {
+                    const soloTexto = l.trim().replace(/\[.*?\]/g, ""); 
+                    if (soloTexto.length > maxLongitudLinea) maxLongitudLinea = soloTexto.length;
+                });
+
+                let estiloDinamico = '';
+
+                // Textos inmensos para que no haya que forzar la vista ni hacer zoom
+                if (maxLongitudLinea > 55) {
+                    estiloDinamico = "font-size: 13pt; font-weight: bold; line-height: 1.4; margin-top: 15px;";
+                } else if (maxLongitudLinea > 45) {
+                    estiloDinamico = "font-size: 15pt; font-weight: bold; line-height: 1.4; margin-top: 15px;";
+                } else {
+                    estiloDinamico = "font-size: 17pt; font-weight: bold; line-height: 1.5; margin-top: 20px;";
                 }
-                // ========================================================
-                // MODO UNIVERSAL 1 COLUMNA (Ideal para leer en vivo sin zoom)
-                // ========================================================
-                else {
-                    let maxLongitudLinea = 0;
 
-                    // Solo nos importa qué tan ancha es la frase más larga
-                    letraAImprimir.split('\n').forEach(l => {
-                        const soloTexto = l.trim().replace(/\[.*?\]/g, ""); 
-                        if (soloTexto.length > maxLongitudLinea) maxLongitudLinea = soloTexto.length;
-                    });
-
-                    let claseColumna = 'letra-centrada';
-                    let estiloDinamico = '';
-
-                    // Todo a 1 sola columna. Si la frase es larguísima, bajamos la fuente un pelín 
-                    // para que no toque los bordes, pero siempre gigante y en negritas.
-                    if (maxLongitudLinea > 55) {
-                        estiloDinamico = "font-size: 13pt; font-weight: bold; line-height: 1.4; margin-top: 15px;";
-                    } else if (maxLongitudLinea > 45) {
-                        estiloDinamico = "font-size: 15pt; font-weight: bold; line-height: 1.4; margin-top: 15px;";
-                    } else {
-                        estiloDinamico = "font-size: 17pt; font-weight: bold; line-height: 1.5; margin-top: 20px;";
-                    }
-
-                    htmlCancion += `
-                        <div class="${claseColumna}" style="font-family: 'Courier New', Courier, monospace; ${estiloDinamico}">
-                            ${procesarLetraYAcordes(letraAImprimir)}
-                        </div>
-                    `;
-                }
+                htmlCancion += `
+                    <div class="letra-centrada" style="font-family: 'Courier New', Courier, monospace; ${estiloDinamico}">
+                        ${procesarLetraYAcordes(letraAImprimir)}
+                    </div>
+                `;
               
                 divCancion.innerHTML = htmlCancion;
                 areaImpresion.appendChild(divCancion);
