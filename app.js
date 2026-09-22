@@ -492,14 +492,17 @@ const filtroGeneral = document.getElementById('filtro-general'); // 🚨 Nuestro
 
 function aplicarFiltros() {
     const textoBusqueda = buscador.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    
-    // Obtenemos qué opción se eligió en el menú (si no hay nada, por defecto es "todas")
     const opcionSeleccionada = filtroGeneral ? filtroGeneral.value : "todas";
     
-    // 1. Filtramos por el texto escrito y por el tipo musical (Júbilo/Adoración)
+    // 1. Filtramos escaneando TÍTULO y LETRA
     let cancionesFiltradas = inventarioCanciones.filter(cancion => {
+        // Limpiamos el título
         const tituloNormalizado = cancion.titulo.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        const cumpleTexto = tituloNormalizado.includes(textoBusqueda);
+        // Limpiamos la letra (el '|| ""' es un escudo por si alguna canción nueva aún no tiene letra)
+        const letraNormalizada = (cancion.letra || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        
+        // 🚨 NUEVO: Comprueba si lo que escribiste está en el título O (||) en la letra
+        const cumpleTexto = tituloNormalizado.includes(textoBusqueda) || letraNormalizada.includes(textoBusqueda);
         
         let cumpleTipo = true;
         if (opcionSeleccionada === "jubilo") cumpleTipo = cancion.tipo === "Júbilo";
@@ -512,28 +515,27 @@ function aplicarFiltros() {
     if (opcionSeleccionada === "menos-tocadas") {
         cancionesFiltradas.sort((a, b) => {
             if (!a.ultima_vez_tocada && !b.ultima_vez_tocada) return 0;
-            if (!a.ultima_vez_tocada) return -1; // Las que nunca se han tocado van primero
+            if (!a.ultima_vez_tocada) return -1; 
             if (!b.ultima_vez_tocada) return 1;
             return new Date(a.ultima_vez_tocada) - new Date(b.ultima_vez_tocada);
         });
-        if (filtroGeneral) filtroGeneral.style.background = "#e67e22"; // Color Naranja
+        if (filtroGeneral) filtroGeneral.style.background = "#e67e22"; 
         
     } else if (opcionSeleccionada === "mas-recientes") {
         cancionesFiltradas.sort((a, b) => {
             if (!a.ultima_vez_tocada && !b.ultima_vez_tocada) return 0;
-            if (!a.ultima_vez_tocada) return 1; // Las viejas hasta el fondo
+            if (!a.ultima_vez_tocada) return 1; 
             if (!b.ultima_vez_tocada) return -1;
             return new Date(b.ultima_vez_tocada) - new Date(a.ultima_vez_tocada);
         });
-        if (filtroGeneral) filtroGeneral.style.background = "#e74c3c"; // Color Rojo
+        if (filtroGeneral) filtroGeneral.style.background = "#e74c3c"; 
         
     } else {
-        // Orden alfabético normal para "todas", "jubilo", y "adoracion"
         cancionesFiltradas.sort((a, b) => a.titulo.localeCompare(b.titulo));
-        if (filtroGeneral) filtroGeneral.style.background = "#34495e"; // Color Azul original
+        if (filtroGeneral) filtroGeneral.style.background = "#34495e"; 
     }
 
-    // 3. Pintamos en pantalla usando la función de scroll que ya corregimos
+    // 3. Pintamos en pantalla
     renderizarListaFiltrada(cancionesFiltradas);
 }
 
