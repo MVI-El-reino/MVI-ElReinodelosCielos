@@ -781,6 +781,35 @@ function filtrarLetraPorSecciones(letraCruda, modo) {
     // devolvemos la canción completa para que el PDF no salga en blanco.
     return resultado.length > 0 ? resultado.join('\n\n') : letraCruda;
 }
+
+// ==========================================
+// CALCULADORA DE FECHAS AUTOMÁTICA PARA EL PDF
+// ==========================================
+function calcularFechaDelServicio(diaObjetivo) {
+    const diasSemana = { "domingo": 0, "lunes": 1, "martes": 2, "miércoles": 3, "jueves": 4, "viernes": 5, "sábado": 6 };
+    const hoy = new Date();
+    const diaActual = hoy.getDay();
+    
+    // Si por alguna razón escriben mal el día, lo mandamos al domingo por defecto
+    const diaBuscado = diasSemana[diaObjetivo.toLowerCase()] !== undefined ? diasSemana[diaObjetivo.toLowerCase()] : 0;
+    
+    let diasFaltantes = diaBuscado - diaActual;
+    
+    // Si el día ya pasó en esta semana, saltamos a la fecha de la próxima semana
+    if (diasFaltantes < 0) {
+        diasFaltantes += 7; 
+    }
+    
+    const fechaServicio = new Date(hoy);
+    fechaServicio.setDate(hoy.getDate() + diasFaltantes);
+    
+    // Devolvemos la fecha en el formato estándar YYYY-MM-DD
+    const year = fechaServicio.getFullYear();
+    const month = String(fechaServicio.getMonth() + 1).padStart(2, '0');
+    const day = String(fechaServicio.getDate()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}`;
+}
 // ==========================================
 // 7. PROGRAMACIÓN DEL BOTÓN DE EXPORTACIÓN A PDF
 // ==========================================
