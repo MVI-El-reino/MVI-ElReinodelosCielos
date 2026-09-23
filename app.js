@@ -825,24 +825,23 @@ if (btnExportarPDF) {
         const areaImpresion = document.createElement('div');
         areaImpresion.id = 'area-impresion-pdf';
 
-    // ---------------------------------------------------------
-        // 🚨 CANDADO TIPOGRÁFICO Y ANTI-CORTES PARA EL PDF
+            // ---------------------------------------------------------
+        // 🚨 CANDADO TIPOGRÁFICO Y EXPANSIÓN DE MÁRGENES
         // ---------------------------------------------------------
         const estiloPDF = document.createElement('style');
         estiloPDF.innerHTML = `
             @page {
-                size: A5 portrait; 
-                margin: 4mm;
+                size: A4 portrait; /* Usamos A4 para aprovechar el estándar de las tablets */
+                margin: 4mm; /* Márgenes mínimos para usar toda la pantalla */
             }
 
             @media print {
-                /* 1. FORZAR SALTO DE PÁGINA: Cada canción inicia en una hoja limpia */
                 .cancion-pdf {
                     page-break-after: always !important;
                     break-after: page !important;
+                    width: 100% !important;
                 }
 
-                /* 2. ETIQUETAS VISIBLES: Resaltamos [Coro], [Verso], etc. */
                 #area-impresion-pdf .marcador-seccion {
                     font-family: 'Segoe UI', sans-serif !important;
                     background-color: #e0e0e0 !important;
@@ -850,7 +849,7 @@ if (btnExportarPDF) {
                     padding: 3px 8px !important;
                     border-radius: 4px !important;
                     font-weight: bold !important;
-                    font-size: 0.85em !important; /* Ligeramente más pequeño que la letra, pero muy visible */
+                    font-size: 0.85em !important;
                     display: inline-block;
                     margin-bottom: 5px;
                 }
@@ -868,11 +867,11 @@ if (btnExportarPDF) {
                     overflow-x: hidden !important;
                     overflow-y: hidden !important;
                 }
+                
                 #area-impresion-pdf ::-webkit-scrollbar {
                     display: none !important;
                 }
                 
-                /* Mantiene los acordes pegados a su letra si hay salto de página */
                 #area-impresion-pdf .estrofa-musical {
                     break-inside: avoid !important;
                     page-break-inside: avoid !important;
@@ -881,8 +880,7 @@ if (btnExportarPDF) {
             }
         `;
         areaImpresion.appendChild(estiloPDF);
-        // =========================================================
-        // 🚨 AUTOMATIZACIÓN DE DÍA POR CANTIDAD DE CANCIONES (NUEVO)
+
         // =========================================================
         let diaDeducido = "domingo"; 
         if (listaDominical.length <= 4) {
@@ -914,10 +912,10 @@ if (btnExportarPDF) {
                         <h2 style="margin: 0; border: none; padding: 0; font-size: 26pt;">${cancion.titulo}</h2>
                         <span style="font-family: 'Segoe UI', sans-serif; font-weight: bold; background-color: #0A192F; color: #D4AF37; padding: 8px 16px; border-radius: 4px; font-size: 12pt; text-transform: uppercase; letter-spacing: 1px;">REUNIÓN: ${cancion.dia}</span>
                     </div>
-                    <div class="tono-pdf" style="font-size: 15pt; margin-bottom: 20px; text-align: center;">Tono para la alabanza: ${cancion.tono_original}</div>
+                    <div class="tono-pdf" style="font-size: 15pt; margin-bottom: 20px; text-align: center; font-weight: bold;">Tono: ${cancion.tono_original}</div>
                 `;
 
-                // 🚨 REGRESAMOS AL MODO DE FUENTES GIGANTES
+                // 🚨 ESCALADO AGRESIVO PARA RELLENAR LOS BORDES BLANCOS
                 let maxLongitudLinea = 0;
                 letraAImprimir.split('\n').forEach(l => {
                     const soloTexto = l.trim().replace(/\[.*?\]/g, ""); 
@@ -926,17 +924,20 @@ if (btnExportarPDF) {
 
                 let estiloDinamico = '';
 
-                // Textos inmensos para que no haya que forzar la vista ni hacer zoom
+                // Tamaños masivos para expandir las canciones de frases cortas
                 if (maxLongitudLinea > 55) {
-                    estiloDinamico = "font-size: 13pt; font-weight: bold; line-height: 1.4; margin-top: 15px;";
+                    estiloDinamico = "font-size: 14pt; font-weight: bold; line-height: 1.3;";
                 } else if (maxLongitudLinea > 45) {
-                    estiloDinamico = "font-size: 15pt; font-weight: bold; line-height: 1.4; margin-top: 15px;";
+                    estiloDinamico = "font-size: 17pt; font-weight: bold; line-height: 1.3;";
+                } else if (maxLongitudLinea > 35) {
+                    estiloDinamico = "font-size: 21pt; font-weight: bold; line-height: 1.3;";
                 } else {
-                    estiloDinamico = "font-size: 17pt; font-weight: bold; line-height: 1.5; margin-top: 20px;";
+                    estiloDinamico = "font-size: 26pt; font-weight: bold; line-height: 1.3;";
                 }
 
+                // 🚨 Quitamos la clase 'letra-centrada' y forzamos el 100% de ancho con alineación a la izquierda
                 htmlCancion += `
-                    <div class="letra-centrada" style="font-family: 'Courier New', Courier, monospace; ${estiloDinamico}">
+                    <div style="font-family: 'Courier New', Courier, monospace; width: 100%; text-align: left; padding-left: 10px; ${estiloDinamico}">
                         ${procesarLetraYAcordes(letraAImprimir)}
                     </div>
                 `;
@@ -950,7 +951,8 @@ if (btnExportarPDF) {
 
         setTimeout(() => {
             window.print();
-        }, 100);
+        }, 150);
+
     });
 }
 // Función para mostrar el diccionario como "página extra"
