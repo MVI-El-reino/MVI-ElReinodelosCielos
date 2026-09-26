@@ -825,14 +825,15 @@ if (btnExportarPDF) {
         const areaImpresion = document.createElement('div');
         areaImpresion.id = 'area-impresion-pdf';
 
-            // ---------------------------------------------------------
-        // 🚨 CANDADO TIPOGRÁFICO Y EXPANSIÓN DE MÁRGENES
+                    // ---------------------------------------------------------
+        // 🚨 CANDADO TIPOGRÁFICO Y AUTO-ESCALADO MATEMÁTICO
         // ---------------------------------------------------------
         const estiloPDF = document.createElement('style');
         estiloPDF.innerHTML = `
+            /* 🚨 VOLVEMOS A A5: Es el secreto para que las tablets no achiquen la página */
             @page {
-                size: A4 portrait; /* Usamos A4 para aprovechar el estándar de las tablets */
-                margin: 4mm; /* Márgenes mínimos para usar toda la pantalla */
+                size: A5 portrait; 
+                margin: 5mm; 
             }
 
             @media print {
@@ -909,35 +910,28 @@ if (btnExportarPDF) {
 
                 let htmlCancion = `
                     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #D4AF37; margin-bottom: 15px; padding-bottom: 5px;">
-                        <h2 style="margin: 0; border: none; padding: 0; font-size: 26pt;">${cancion.titulo}</h2>
-                        <span style="font-family: 'Segoe UI', sans-serif; font-weight: bold; background-color: #0A192F; color: #D4AF37; padding: 8px 16px; border-radius: 4px; font-size: 12pt; text-transform: uppercase; letter-spacing: 1px;">REUNIÓN: ${cancion.dia}</span>
+                        <h2 style="margin: 0; border: none; padding: 0; font-size: 22pt;">${cancion.titulo}</h2>
+                        <span style="font-family: 'Segoe UI', sans-serif; font-weight: bold; background-color: #0A192F; color: #D4AF37; padding: 6px 12px; border-radius: 4px; font-size: 10pt; text-transform: uppercase;">${cancion.dia}</span>
                     </div>
-                    <div class="tono-pdf" style="font-size: 15pt; margin-bottom: 20px; text-align: center; font-weight: bold;">Tono: ${cancion.tono_original}</div>
+                    <div class="tono-pdf" style="font-size: 14pt; margin-bottom: 15px; text-align: center; font-weight: bold;">Tono: ${cancion.tono_original}</div>
                 `;
 
-                // 🚨 ESCALADO AGRESIVO PARA RELLENAR LOS BORDES BLANCOS
-                let maxLongitudLinea = 0;
+                // 🚨 FÓRMULA MATEMÁTICA DE AUTO-ESCALADO AL ANCHO DE LA PANTALLA
+                let maxLongitudLinea = 20; // Un mínimo de seguridad
                 letraAImprimir.split('\n').forEach(l => {
                     const soloTexto = l.trim().replace(/\[.*?\]/g, ""); 
                     if (soloTexto.length > maxLongitudLinea) maxLongitudLinea = soloTexto.length;
                 });
 
-                let estiloDinamico = '';
+                // Dividimos el ancho ideal de la hoja (600 puntos virtuales) entre el número de letras.
+                // Usamos Math.max y Math.min para asegurar que la fuente nunca baje de 11pt ni pase de 26pt.
+                let tamañoCalculado = Math.floor(600 / maxLongitudLinea);
+                tamañoCalculado = Math.max(11, Math.min(26, tamañoCalculado));
 
-                // Tamaños masivos para expandir las canciones de frases cortas
-                if (maxLongitudLinea > 55) {
-                    estiloDinamico = "font-size: 14pt; font-weight: bold; line-height: 1.3;";
-                } else if (maxLongitudLinea > 45) {
-                    estiloDinamico = "font-size: 17pt; font-weight: bold; line-height: 1.3;";
-                } else if (maxLongitudLinea > 35) {
-                    estiloDinamico = "font-size: 21pt; font-weight: bold; line-height: 1.3;";
-                } else {
-                    estiloDinamico = "font-size: 26pt; font-weight: bold; line-height: 1.3;";
-                }
+                let estiloDinamico = `font-size: ${tamañoCalculado}pt; font-weight: bold; line-height: 1.3;`;
 
-                // 🚨 Quitamos la clase 'letra-centrada' y forzamos el 100% de ancho con alineación a la izquierda
                 htmlCancion += `
-                    <div style="font-family: 'Courier New', Courier, monospace; width: 100%; text-align: left; padding-left: 10px; ${estiloDinamico}">
+                    <div style="font-family: 'Courier New', Courier, monospace; width: 100%; text-align: left; padding-left: 5px; ${estiloDinamico}">
                         ${procesarLetraYAcordes(letraAImprimir)}
                     </div>
                 `;
@@ -952,7 +946,6 @@ if (btnExportarPDF) {
         setTimeout(() => {
             window.print();
         }, 150);
-
     });
 }
 // Función para mostrar el diccionario como "página extra"
